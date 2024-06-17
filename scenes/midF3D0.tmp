@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://cp5m5oa4d0g1f"]
+
+[ext_resource type="Script" path="res://scripts/MIDI.gd" id="1_3ll4w"]
+[ext_resource type="Shader" path="res://shaders/midi_visualize.gdshader" id="2_r8vcl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l76lk"]
+render_priority = 0
+shader = ExtResource("2_r8vcl")
+shader_parameter/color = Color(1, 0, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_1fx4f"]
+
+[node name="MIDI" type="Node3D"]
+
+[node name="Notes" type="Node3D" parent="."]
+script = ExtResource("1_3ll4w")
+note_material = SubResource("ShaderMaterial_l76lk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_1fx4f")

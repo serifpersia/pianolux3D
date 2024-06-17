@@ -1,0 +1,44 @@
+[gd_scene load_steps=9 format=3 uid="uid://cp5m5oa4d0g1f"]
+
+[ext_resource type="Script" path="res://scripts/MIDI.gd" id="1_3ll4w"]
+[ext_resource type="Shader" path="res://shaders/midi_visualize.gdshader" id="2_r8vcl"]
+[ext_resource type="Script" path="res://scripts/VirtualKeyboard.gd" id="3_vqo6j"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cq8pi"]
+render_priority = 1
+shader = ExtResource("2_r8vcl")
+shader_parameter/color = Color(0.333333, 1, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i73c4"]
+render_priority = 0
+shader = ExtResource("2_r8vcl")
+shader_parameter/color = Color(0.263333, 0.79, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iclya"]
+render_priority = 0
+shader = ExtResource("2_r8vcl")
+shader_parameter/color = Color(1, 1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nexqk"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_57o1v"]
+material = SubResource("StandardMaterial3D_nexqk")
+size = Vector2(40, 40)
+
+[node name="MIDI" type="Node3D"]
+
+[node name="Notes" type="Node3D" parent="."]
+visible = false
+script = ExtResource("1_3ll4w")
+note_material = SubResource("ShaderMaterial_cq8pi")
+black_key_material = SubResource("ShaderMaterial_i73c4")
+
+[node name="VirtualKeyboard" type="Node3D" parent="."]
+script = ExtResource("3_vqo6j")
+note_material = SubResource("ShaderMaterial_iclya")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(5.70104, 0, 0, 0, 2.27401, 0, 0, 0, 1, 0, 0, 0)
+visible = false
+mesh = SubResource("QuadMesh_57o1v")

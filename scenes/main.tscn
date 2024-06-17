@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://kf6tjtr76ly2"]
+
+[ext_resource type="Script" path="res://scripts/MIDI.gd" id="1_6x78b"]
+[ext_resource type="Shader" path="res://shaders/midi_visualize.gdshader" id="2_v7ec7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y1iih"]
+render_priority = 0
+shader = ExtResource("2_v7ec7")
+shader_parameter/color = Color(0, 0, 1, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_pxhi1"]
+material = SubResource("ShaderMaterial_y1iih")
+size = Vector2(40, 22)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h4ksh"]
+render_priority = 0
+shader = ExtResource("2_v7ec7")
+shader_parameter/color = Color(0.592157, 0.807843, 0.372549, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2sxra"]
+render_priority = 0
+shader = ExtResource("2_v7ec7")
+shader_parameter/color = Color(0.407843, 0.631373, 0.184314, 1)
+
+[node name="main" type="Node3D"]
+
+[node name="MIDI" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -14)
+
+[node name="BG" type="MeshInstance3D" parent="MIDI"]
+mesh = SubResource("QuadMesh_pxhi1")
+
+[node name="MIDI_Notes" type="Node3D" parent="MIDI"]
+script = ExtResource("1_6x78b")
+note_material = SubResource("ShaderMaterial_h4ksh")
+black_key_material = SubResource("ShaderMaterial_2sxra")
+
+[node name="Camera3D" type="Camera3D" parent="."]
