@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://scripts/VirtualKeyboard.gd" id="3_vqo6j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cq8pi"]
-render_priority = 1
+render_priority = 0
 shader = ExtResource("2_r8vcl")
 shader_parameter/color = Color(0.333333, 1, 0, 1)
 
