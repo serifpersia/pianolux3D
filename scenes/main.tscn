@@ -1,41 +1,88 @@
-[gd_scene load_steps=13 format=3 uid="uid://kf6tjtr76ly2"]
+[gd_scene load_steps=14 format=3 uid="uid://kf6tjtr76ly2"]
 
 [ext_resource type="Script" path="res://scripts/MIDI.gd" id="1_6x78b"]
-[ext_resource type="Shader" path="res://shaders/outline.gdshader" id="2_yd744"]
 [ext_resource type="Shader" path="res://shaders/midi_visualize.gdshader" id="3_kmtgo"]
+[ext_resource type="Shader" path="res://shaders/keys_shader.gdshader" id="3_y86uq"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vdoyr"]
-albedo_color = Color(0, 0, 0, 1)
+[sub_resource type="Shader" id="Shader_p6it0"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.2.2.stable's StandardMaterial3D.
+
+shader_type spatial;
+render_mode unshaded;
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color,filter_linear_mipmap,repeat_enable;
+uniform float point_size : hint_range(0,128);
+uniform float roughness : hint_range(0,1);
+uniform sampler2D texture_metallic : hint_default_white,filter_linear_mipmap,repeat_enable;
+uniform vec4 metallic_texture_channel;
+uniform sampler2D texture_roughness : hint_roughness_r,filter_linear_mipmap,repeat_enable;
+uniform float specular;
+uniform float metallic;
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+uniform vec3 uv2_scale;
+uniform vec3 uv2_offset;
+
+
+void vertex() {
+	UV=UV*uv1_scale.xy+uv1_offset.xy;
+}
+
+
+
+
+
+
+void fragment() {
+	vec2 base_uv = UV;
+	vec4 albedo_tex = texture(texture_albedo,base_uv);
+	ALBEDO = albedo.rgb * albedo_tex.rgb;
+	float metallic_tex = dot(texture(texture_metallic,base_uv),metallic_texture_channel);
+	METALLIC = metallic_tex * metallic;
+	vec4 roughness_texture_channel = vec4(1.0,0.0,0.0,0.0);
+	float roughness_tex = dot(texture(texture_roughness,base_uv),roughness_texture_channel);
+	ROUGHNESS = roughness_tex * roughness;
+	SPECULAR = specular;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fij82"]
+render_priority = 0
+shader = SubResource("Shader_p6it0")
+shader_parameter/albedo = Color(0, 0, 0, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
 
 [sub_resource type="QuadMesh" id="QuadMesh_pxhi1"]
-material = SubResource("StandardMaterial3D_vdoyr")
+material = SubResource("ShaderMaterial_fij82")
 size = Vector2(44, 25)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_adpxw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dheyt"]
 render_priority = 0
-shader = ExtResource("2_yd744")
-shader_parameter/outline_color = Color(0.6716, 0.92, 0.4232, 1)
-shader_parameter/outline_width = 3.0
-shader_parameter/constant_width = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8sd8g"]
-render_priority = 0
-next_pass = SubResource("ShaderMaterial_adpxw")
 shader = ExtResource("3_kmtgo")
 shader_parameter/color = Color(0.592157, 0.807843, 0.372549, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ij5sg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pvpki"]
 render_priority = 0
-shader = ExtResource("2_yd744")
-shader_parameter/outline_color = Color(0.6716, 0.92, 0.4232, 1)
-shader_parameter/outline_width = 3.0
-shader_parameter/constant_width = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0nw0e"]
-render_priority = 0
-next_pass = SubResource("ShaderMaterial_ij5sg")
 shader = ExtResource("3_kmtgo")
 shader_parameter/color = Color(0.407843, 0.631373, 0.184314, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_km6p5"]
+render_priority = 0
+shader = ExtResource("3_y86uq")
+shader_parameter/color = Color(0.47, 0.47, 0.47, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r14j2"]
+render_priority = 0
+shader = ExtResource("3_y86uq")
+shader_parameter/color = null
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_0wcgy"]
 
@@ -46,7 +93,12 @@ sky_material = SubResource("PhysicalSkyMaterial_0wcgy")
 background_mode = 2
 sky = SubResource("Sky_8shi4")
 glow_enabled = true
-glow_bloom = 0.58
+glow_levels/1 = 4.43
+glow_levels/2 = 0.85
+glow_levels/3 = 0.0
+glow_levels/5 = 0.0
+glow_strength = 1.1
+glow_bloom = 0.26
 glow_blend_mode = 1
 
 [node name="main" type="Node3D"]
@@ -55,13 +107,15 @@ glow_blend_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
 
 [node name="BG" type="MeshInstance3D" parent="MIDI"]
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
 mesh = SubResource("QuadMesh_pxhi1")
 
 [node name="MIDI_Notes" type="Node3D" parent="MIDI"]
 script = ExtResource("1_6x78b")
-note_material = SubResource("ShaderMaterial_8sd8g")
-black_key_material = SubResource("ShaderMaterial_0nw0e")
+white_note_material = SubResource("ShaderMaterial_dheyt")
+black_note_material = SubResource("ShaderMaterial_pvpki")
+white_key_meterial = SubResource("ShaderMaterial_km6p5")
+black_key_material = SubResource("ShaderMaterial_r14j2")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 
