@@ -1,7 +1,50 @@
-[gd_scene load_steps=14 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=16 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/MIDI.gd" id="1_3ll4w"]
+[ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="1_7mq6q"]
 [ext_resource type="Shader" path="res://shaders/outline.gdshader" id="1_17uim"]
+[ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_jo87c"]
+[ext_resource type="Material" uid="uid://dxoey040t634h" path="res://materials/white_note_no_outline_mat.tres" id="2_473y8"]
+[ext_resource type="Material" uid="uid://che5eiuay5aby" path="res://materials/white_key_mat.tres" id="2_upvwc"]
+[ext_resource type="Material" uid="uid://qnj37138s6ar" path="res://materials/black_note_no_outline_mat.tres" id="3_0tisb"]
+[ext_resource type="Material" uid="uid://xdabkcdm3c8g" path="res://materials/black_key_mat.tres" id="3_mcpll"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bohv6"]
+render_priority = 0
+shader = ExtResource("1_17uim")
+shader_parameter/border_width = 0.06
+shader_parameter/color = Color(1.5, 1.5, 1.5, 1)
+shader_parameter/pattern = null
+shader_parameter/line_number = null
+shader_parameter/line_sharpness = null
+shader_parameter/pulse = null
+shader_parameter/pulse_speed = null
+shader_parameter/line_movement = null
+shader_parameter/line_movement_speed = null
+shader_parameter/wave = null
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_huirt"]
+next_pass = SubResource("ShaderMaterial_bohv6")
+albedo_color = Color(0.622, 1.25, 0, 1)
+emission_energy_multiplier = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s0uqs"]
+render_priority = 0
+shader = ExtResource("1_17uim")
+shader_parameter/border_width = 0.06
+shader_parameter/color = Color(1.25, 1.25, 1.25, 1)
+shader_parameter/pattern = null
+shader_parameter/line_number = null
+shader_parameter/line_sharpness = null
+shader_parameter/pulse = null
+shader_parameter/pulse_speed = null
+shader_parameter/line_movement = null
+shader_parameter/line_movement_speed = null
+shader_parameter/wave = null
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iwvbm"]
+next_pass = SubResource("ShaderMaterial_s0uqs")
+albedo_color = Color(0.504, 1.012, 0, 1)
 
 [sub_resource type="Shader" id="Shader_p6it0"]
 code = "// NOTE: Shader automatically converted from Godot Engine 4.2.2.stable's StandardMaterial3D.
@@ -63,65 +106,54 @@ shader_parameter/uv2_offset = Vector3(0, 0, 0)
 material = SubResource("ShaderMaterial_fij82")
 size = Vector2(44, 25)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bohv6"]
-render_priority = 0
-shader = ExtResource("1_17uim")
-shader_parameter/border_width = 0.1
-shader_parameter/color = Color(0.51, 0.789, 0.23, 1)
-shader_parameter/pattern = null
-shader_parameter/line_number = null
-shader_parameter/line_sharpness = null
-shader_parameter/pulse = null
-shader_parameter/pulse_speed = null
-shader_parameter/line_movement = null
-shader_parameter/line_movement_speed = null
-shader_parameter/wave = null
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_huirt"]
-next_pass = SubResource("ShaderMaterial_bohv6")
-albedo_color = Color(0.74, 1.01, 0.466, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s0uqs"]
-render_priority = 0
-shader = ExtResource("1_17uim")
-shader_parameter/border_width = 0.15
-shader_parameter/color = Color(0.407843, 0.631373, 0.184314, 1)
-shader_parameter/pattern = null
-shader_parameter/line_number = null
-shader_parameter/line_sharpness = null
-shader_parameter/pulse = null
-shader_parameter/pulse_speed = null
-shader_parameter/line_movement = null
-shader_parameter/line_movement_speed = null
-shader_parameter/wave = null
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iwvbm"]
-next_pass = SubResource("ShaderMaterial_s0uqs")
-albedo_color = Color(0.51, 0.789, 0.23, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nrcod"]
-albedo_color = Color(0.74, 1.01, 0.466, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_exysg"]
-albedo_color = Color(0.51, 0.789, 0.23, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v0655"]
-albedo_color = Color(0.69, 0.69, 0.69, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0lbpf"]
-albedo_color = Color(0, 0, 0, 1)
-
 [node name="MIDI" type="Node3D"]
+script = ExtResource("1_jo87c")
 
-[node name="BG" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.999999, -0.00138441, 0.000171221, 0.00138439, 0.999999, 6.06062e-05, -0.000171307, -6.03616e-05, 1, 0, 0, -0.1)
-mesh = SubResource("QuadMesh_pxhi1")
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ToggleKeyboard" type="CheckButton" parent="CanvasLayer"]
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 228.0
+offset_bottom = 81.0
+button_pressed = true
+text = "Virtual Keyboard"
+
+[node name="ToggleMIDI" type="CheckButton" parent="CanvasLayer"]
+offset_left = 65.0
+offset_top = 100.0
+offset_right = 200.0
+offset_bottom = 131.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+button_pressed = true
+text = "MIDI Notes"
+
+[node name="ToggleBG" type="CheckButton" parent="CanvasLayer"]
+offset_left = 65.0
+offset_top = 150.0
+offset_right = 206.0
+offset_bottom = 181.0
+button_pressed = true
+text = "Background"
+
+[node name="Virtual_Keyboard" type="Node3D" parent="."]
+transform = Transform3D(1, 1.48077e-11, 0, 1.62279e-11, 1, 0, 1.45519e-11, 3.63798e-12, 1, 1.81899e-12, 0, 0)
+script = ExtResource("1_7mq6q")
+white_key_meterial = ExtResource("2_upvwc")
+black_key_material = ExtResource("3_mcpll")
 
 [node name="MIDI_Notes" type="Node3D" parent="."]
 script = ExtResource("1_3ll4w")
 white_note_material = SubResource("StandardMaterial3D_huirt")
 black_note_material = SubResource("StandardMaterial3D_iwvbm")
-white_note_material_no_outline = SubResource("StandardMaterial3D_nrcod")
-black_note_material_no_outline = SubResource("StandardMaterial3D_exysg")
-white_key_meterial = SubResource("StandardMaterial3D_v0655")
-black_key_material = SubResource("StandardMaterial3D_0lbpf")
+white_note_material_no_outline = ExtResource("2_473y8")
+black_note_material_no_outline = ExtResource("3_0tisb")
+
+[node name="BG" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.999999, -0.00138441, 0.000171221, 0.00138439, 0.999999, 6.06062e-05, -0.000171307, -6.03616e-05, 1, 0, 0, -0.1)
+mesh = SubResource("QuadMesh_pxhi1")
+
+[connection signal="toggled" from="CanvasLayer/ToggleKeyboard" to="." method="_on_toggle_keyboard_toggled"]
+[connection signal="toggled" from="CanvasLayer/ToggleMIDI" to="." method="_on_toggle_midi_toggled"]
+[connection signal="toggled" from="CanvasLayer/ToggleBG" to="." method="_on_toggle_bg_toggled"]
