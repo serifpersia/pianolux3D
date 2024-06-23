@@ -6,7 +6,7 @@ extends Node3D
 @export var speed_multiplier : float = 10.0
 
 var display_range = 42.75
-var note_range = 57.925
+var note_range = 58.0
 var note_width = display_range / note_range
 
 func _ready():

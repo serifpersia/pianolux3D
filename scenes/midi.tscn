@@ -110,19 +110,20 @@ size = Vector2(44, 25)
 script = ExtResource("1_jo87c")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="ToggleKeyboard" type="CheckButton" parent="CanvasLayer"]
-offset_left = 50.0
+offset_left = 25.0
 offset_top = 50.0
-offset_right = 228.0
+offset_right = 203.0
 offset_bottom = 81.0
 button_pressed = true
 text = "Virtual Keyboard"
 
 [node name="ToggleMIDI" type="CheckButton" parent="CanvasLayer"]
-offset_left = 65.0
+offset_left = 25.0
 offset_top = 100.0
-offset_right = 200.0
+offset_right = 160.0
 offset_bottom = 131.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -130,12 +131,28 @@ button_pressed = true
 text = "MIDI Notes"
 
 [node name="ToggleBG" type="CheckButton" parent="CanvasLayer"]
-offset_left = 65.0
+offset_left = 25.0
 offset_top = 150.0
-offset_right = 206.0
+offset_right = 166.0
 offset_bottom = 181.0
 button_pressed = true
 text = "Background"
+
+[node name="ColorPicker_White_Key" type="ColorPickerButton" parent="CanvasLayer"]
+offset_left = 25.0
+offset_top = 200.0
+offset_right = 126.0
+offset_bottom = 231.0
+text = "Color Picker"
+color = Color(0.622, 1.25, 0, 1)
+
+[node name="ColorPicker_Black_Key" type="ColorPickerButton" parent="CanvasLayer"]
+offset_left = 130.0
+offset_top = 200.0
+offset_right = 231.0
+offset_bottom = 231.0
+text = "Color Picker"
+color = Color(0.504, 1.012, 0, 1)
 
 [node name="Virtual_Keyboard" type="Node3D" parent="."]
 transform = Transform3D(1, 1.48077e-11, 0, 1.62279e-11, 1, 0, 1.45519e-11, 3.63798e-12, 1, 1.81899e-12, 0, 0)
