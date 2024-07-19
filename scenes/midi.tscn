@@ -110,7 +110,6 @@ size = Vector2(44, 25)
 script = ExtResource("1_jo87c")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="ToggleKeyboard" type="CheckButton" parent="CanvasLayer"]
 offset_left = 25.0
@@ -153,6 +152,29 @@ offset_right = 231.0
 offset_bottom = 231.0
 text = "Color Picker"
 color = Color(0.504, 1.012, 0, 1)
+
+[node name="Position_Label" type="Label" parent="CanvasLayer"]
+offset_left = 25.0
+offset_top = 283.0
+offset_right = 254.0
+offset_bottom = 306.0
+text = "Position: X = 0.0 Y = 0.0 Z = 0.0
+"
+
+[node name="Rotation_Label" type="Label" parent="CanvasLayer"]
+offset_left = 25.0
+offset_top = 306.0
+offset_right = 258.0
+offset_bottom = 329.0
+text = "Rotation: X = 0.0 Y = 0.0 Z = 0.0
+"
+
+[node name="Mode_Label" type="Label" parent="CanvasLayer"]
+offset_left = 25.0
+offset_top = 260.0
+offset_right = 258.0
+offset_bottom = 283.0
+text = "Mode: Position Z"
 
 [node name="Virtual_Keyboard" type="Node3D" parent="."]
 transform = Transform3D(1, 1.48077e-11, 0, 1.62279e-11, 1, 0, 1.45519e-11, 3.63798e-12, 1, 1.81899e-12, 0, 0)
