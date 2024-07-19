@@ -1,9 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=17 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/MIDI.gd" id="1_3ll4w"]
 [ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="1_7mq6q"]
 [ext_resource type="Shader" path="res://shaders/outline.gdshader" id="1_17uim"]
 [ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_jo87c"]
+[ext_resource type="Script" path="res://scripts/midi_transformer.gd" id="1_wr4lx"]
 [ext_resource type="Material" uid="uid://dxoey040t634h" path="res://materials/white_note_no_outline_mat.tres" id="2_473y8"]
 [ext_resource type="Material" uid="uid://che5eiuay5aby" path="res://materials/white_key_mat.tres" id="2_upvwc"]
 [ext_resource type="Material" uid="uid://qnj37138s6ar" path="res://materials/black_note_no_outline_mat.tres" id="3_0tisb"]
@@ -106,12 +107,17 @@ shader_parameter/uv2_offset = Vector3(0, 0, 0)
 material = SubResource("ShaderMaterial_fij82")
 size = Vector2(44, 25)
 
-[node name="MIDI" type="Node3D"]
+[node name="MIDI_Pivot" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.5, -16)
+script = ExtResource("1_wr4lx")
+
+[node name="MIDI" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.5, 0)
 script = ExtResource("1_jo87c")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="MIDI"]
 
-[node name="ToggleKeyboard" type="CheckButton" parent="CanvasLayer"]
+[node name="ToggleKeyboard" type="CheckButton" parent="MIDI/CanvasLayer"]
 offset_left = 25.0
 offset_top = 50.0
 offset_right = 203.0
@@ -119,80 +125,93 @@ offset_bottom = 81.0
 button_pressed = true
 text = "Virtual Keyboard"
 
-[node name="ToggleMIDI" type="CheckButton" parent="CanvasLayer"]
+[node name="ToggleMIDI" type="CheckButton" parent="MIDI/CanvasLayer"]
 offset_left = 25.0
-offset_top = 100.0
+offset_top = 81.0
 offset_right = 160.0
-offset_bottom = 131.0
+offset_bottom = 112.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 button_pressed = true
 text = "MIDI Notes"
 
-[node name="ToggleBG" type="CheckButton" parent="CanvasLayer"]
+[node name="ToggleBG" type="CheckButton" parent="MIDI/CanvasLayer"]
 offset_left = 25.0
-offset_top = 150.0
+offset_top = 112.0
 offset_right = 166.0
-offset_bottom = 181.0
+offset_bottom = 143.0
 button_pressed = true
 text = "Background"
 
-[node name="ColorPicker_White_Key" type="ColorPickerButton" parent="CanvasLayer"]
+[node name="ColorPicker_White_Key" type="ColorPickerButton" parent="MIDI/CanvasLayer"]
 offset_left = 25.0
-offset_top = 200.0
+offset_top = 158.0
 offset_right = 126.0
-offset_bottom = 231.0
+offset_bottom = 189.0
 text = "Color Picker"
 color = Color(0.622, 1.25, 0, 1)
 
-[node name="ColorPicker_Black_Key" type="ColorPickerButton" parent="CanvasLayer"]
-offset_left = 130.0
-offset_top = 200.0
-offset_right = 231.0
-offset_bottom = 231.0
+[node name="ColorPicker_Black_Key" type="ColorPickerButton" parent="MIDI/CanvasLayer"]
+offset_left = 126.0
+offset_top = 158.0
+offset_right = 227.0
+offset_bottom = 189.0
 text = "Color Picker"
 color = Color(0.504, 1.012, 0, 1)
 
-[node name="Position_Label" type="Label" parent="CanvasLayer"]
+[node name="HowToTransform" type="Label" parent="MIDI/CanvasLayer"]
 offset_left = 25.0
-offset_top = 283.0
+offset_top = 204.0
+offset_right = 336.0
+offset_bottom = 305.0
+text = "Press A S D  to select Position Axis Mode
+Press Q W E to select Rotation Axis Mode
+Press R to reset to default
+Press ,  . to change value"
+
+[node name="Mode_Label" type="Label" parent="MIDI/CanvasLayer"]
+offset_left = 25.0
+offset_top = 320.0
+offset_right = 258.0
+offset_bottom = 343.0
+text = "Mode: Position Z"
+
+[node name="Position_Label" type="Label" parent="MIDI/CanvasLayer"]
+offset_left = 25.0
+offset_top = 343.0
 offset_right = 254.0
-offset_bottom = 306.0
+offset_bottom = 366.0
 text = "Position: X = 0.0 Y = 0.0 Z = 0.0
 "
 
-[node name="Rotation_Label" type="Label" parent="CanvasLayer"]
+[node name="Rotation_Label" type="Label" parent="MIDI/CanvasLayer"]
 offset_left = 25.0
-offset_top = 306.0
+offset_top = 366.0
 offset_right = 258.0
-offset_bottom = 329.0
+offset_bottom = 389.0
 text = "Rotation: X = 0.0 Y = 0.0 Z = 0.0
 "
 
-[node name="Mode_Label" type="Label" parent="CanvasLayer"]
-offset_left = 25.0
-offset_top = 260.0
-offset_right = 258.0
-offset_bottom = 283.0
-text = "Mode: Position Z"
-
-[node name="Virtual_Keyboard" type="Node3D" parent="."]
+[node name="Virtual_Keyboard" type="Node3D" parent="MIDI"]
 transform = Transform3D(1, 1.48077e-11, 0, 1.62279e-11, 1, 0, 1.45519e-11, 3.63798e-12, 1, 1.81899e-12, 0, 0)
 script = ExtResource("1_7mq6q")
 white_key_meterial = ExtResource("2_upvwc")
 black_key_material = ExtResource("3_mcpll")
 
-[node name="MIDI_Notes" type="Node3D" parent="."]
+[node name="MIDI_Notes" type="Node3D" parent="MIDI"]
 script = ExtResource("1_3ll4w")
 white_note_material = SubResource("StandardMaterial3D_huirt")
 black_note_material = SubResource("StandardMaterial3D_iwvbm")
 white_note_material_no_outline = ExtResource("2_473y8")
 black_note_material_no_outline = ExtResource("3_0tisb")
 
-[node name="BG" type="MeshInstance3D" parent="."]
+[node name="BG" type="MeshInstance3D" parent="MIDI"]
 transform = Transform3D(0.999999, -0.00138441, 0.000171221, 0.00138439, 0.999999, 6.06062e-05, -0.000171307, -6.03616e-05, 1, 0, 0, -0.1)
 mesh = SubResource("QuadMesh_pxhi1")
 
-[connection signal="toggled" from="CanvasLayer/ToggleKeyboard" to="." method="_on_toggle_keyboard_toggled"]
-[connection signal="toggled" from="CanvasLayer/ToggleMIDI" to="." method="_on_toggle_midi_toggled"]
-[connection signal="toggled" from="CanvasLayer/ToggleBG" to="." method="_on_toggle_bg_toggled"]
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="toggled" from="MIDI/CanvasLayer/ToggleKeyboard" to="MIDI" method="_on_toggle_keyboard_toggled"]
+[connection signal="toggled" from="MIDI/CanvasLayer/ToggleMIDI" to="MIDI" method="_on_toggle_midi_toggled"]
+[connection signal="toggled" from="MIDI/CanvasLayer/ToggleBG" to="MIDI" method="_on_toggle_bg_toggled"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
