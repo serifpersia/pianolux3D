@@ -17,7 +17,7 @@ func _ready():
 	timer.start()
 	update_labels()
 
-func _process(delta):
+func _process(_delta):
 	# Handle input for mode selection
 	if Input.is_action_just_pressed("ui_q"):
 		mode = "rotate_x"
@@ -41,9 +41,9 @@ func _process(delta):
 		reset_to_default()
 
 func _on_timer_timeout():
-	if Input.is_action_pressed("ui_upp"):
+	if Input.is_action_pressed("ui_increase"):
 		handle_movement_or_rotation(1)
-	elif Input.is_action_pressed("ui_downn"):
+	elif Input.is_action_pressed("ui_decrease"):
 		handle_movement_or_rotation(-1)
 
 func handle_movement_or_rotation(direction):

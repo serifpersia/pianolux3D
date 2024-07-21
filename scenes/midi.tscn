@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=18 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/MIDI.gd" id="1_3ll4w"]
 [ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="1_7mq6q"]
@@ -9,6 +9,7 @@
 [ext_resource type="Material" uid="uid://che5eiuay5aby" path="res://materials/white_key_mat.tres" id="2_upvwc"]
 [ext_resource type="Material" uid="uid://qnj37138s6ar" path="res://materials/black_note_no_outline_mat.tres" id="3_0tisb"]
 [ext_resource type="Material" uid="uid://xdabkcdm3c8g" path="res://materials/black_key_mat.tres" id="3_mcpll"]
+[ext_resource type="PackedScene" uid="uid://dtacf6kg6rwxg" path="res://scenes/spiral_particles.tscn" id="10_e3ntp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bohv6"]
 render_priority = 0
@@ -204,6 +205,7 @@ white_note_material = SubResource("StandardMaterial3D_huirt")
 black_note_material = SubResource("StandardMaterial3D_iwvbm")
 white_note_material_no_outline = ExtResource("2_473y8")
 black_note_material_no_outline = ExtResource("3_0tisb")
+particle_scene = ExtResource("10_e3ntp")
 
 [node name="BG" type="MeshInstance3D" parent="MIDI"]
 transform = Transform3D(0.999999, -0.00138441, 0.000171221, 0.00138439, 0.999999, 6.06062e-05, -0.000171307, -6.03616e-05, 1, 0, 0, -0.1)
