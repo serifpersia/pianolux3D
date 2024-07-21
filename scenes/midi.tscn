@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=21 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/MIDI.gd" id="1_3ll4w"]
 [ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="1_7mq6q"]
@@ -9,9 +9,17 @@
 [ext_resource type="Material" uid="uid://che5eiuay5aby" path="res://materials/white_key_mat.tres" id="2_upvwc"]
 [ext_resource type="Material" uid="uid://qnj37138s6ar" path="res://materials/black_note_no_outline_mat.tres" id="3_0tisb"]
 [ext_resource type="Material" uid="uid://xdabkcdm3c8g" path="res://materials/black_key_mat.tres" id="3_mcpll"]
+[ext_resource type="PackedScene" path="res://scenes/serial_list.tscn" id="3_y44n4"]
+[ext_resource type="PackedScene" path="res://scenes/open_close.tscn" id="4_pgseb"]
 [ext_resource type="PackedScene" uid="uid://dtacf6kg6rwxg" path="res://scenes/spiral_particles.tscn" id="10_e3ntp"]
 [ext_resource type="Material" uid="uid://b5qeey5ruelw1" path="res://materials/particles_mat.tres" id="10_mr4d0"]
 [ext_resource type="Material" uid="uid://c87r7xa3yubcp" path="res://materials/bg_mat.tres" id="12_70sax"]
+[ext_resource type="Script" path="res://scripts/serial.gd" id="13_0vjy6"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_pxhi1"]
+material = ExtResource("12_70sax")
+size = Vector2(44, 21)
+center_offset = Vector3(0, 1.815, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bohv6"]
 render_priority = 0
@@ -49,66 +57,6 @@ shader_parameter/wave = null
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iwvbm"]
 next_pass = SubResource("ShaderMaterial_s0uqs")
 albedo_color = Color(0.504, 1.012, 0, 1)
-
-[sub_resource type="Shader" id="Shader_p6it0"]
-code = "// NOTE: Shader automatically converted from Godot Engine 4.2.2.stable's StandardMaterial3D.
-
-shader_type spatial;
-render_mode unshaded;
-uniform vec4 albedo : source_color;
-uniform sampler2D texture_albedo : source_color,filter_linear_mipmap,repeat_enable;
-uniform float point_size : hint_range(0,128);
-uniform float roughness : hint_range(0,1);
-uniform sampler2D texture_metallic : hint_default_white,filter_linear_mipmap,repeat_enable;
-uniform vec4 metallic_texture_channel;
-uniform sampler2D texture_roughness : hint_roughness_r,filter_linear_mipmap,repeat_enable;
-uniform float specular;
-uniform float metallic;
-uniform vec3 uv1_scale;
-uniform vec3 uv1_offset;
-uniform vec3 uv2_scale;
-uniform vec3 uv2_offset;
-
-
-void vertex() {
-	UV=UV*uv1_scale.xy+uv1_offset.xy;
-}
-
-
-
-
-
-
-void fragment() {
-	vec2 base_uv = UV;
-	vec4 albedo_tex = texture(texture_albedo,base_uv);
-	ALBEDO = albedo.rgb * albedo_tex.rgb;
-	float metallic_tex = dot(texture(texture_metallic,base_uv),metallic_texture_channel);
-	METALLIC = metallic_tex * metallic;
-	vec4 roughness_texture_channel = vec4(1.0,0.0,0.0,0.0);
-	float roughness_tex = dot(texture(texture_roughness,base_uv),roughness_texture_channel);
-	ROUGHNESS = roughness_tex * roughness;
-	SPECULAR = specular;
-}
-"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fij82"]
-render_priority = 0
-shader = SubResource("Shader_p6it0")
-shader_parameter/albedo = Color(0, 0, 0, 1)
-shader_parameter/point_size = 1.0
-shader_parameter/roughness = 1.0
-shader_parameter/metallic_texture_channel = null
-shader_parameter/specular = 0.5
-shader_parameter/metallic = 0.0
-shader_parameter/uv1_scale = Vector3(1, 1, 1)
-shader_parameter/uv1_offset = Vector3(0, 0, 0)
-shader_parameter/uv2_scale = Vector3(1, 1, 1)
-shader_parameter/uv2_offset = Vector3(0, 0, 0)
-
-[sub_resource type="QuadMesh" id="QuadMesh_pxhi1"]
-material = SubResource("ShaderMaterial_fij82")
-size = Vector2(44, 25)
 
 [node name="MIDI_Pivot" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.5, -16)
@@ -248,8 +196,31 @@ offset_bottom = -341.0
 grow_horizontal = 2
 grow_vertical = 2
 max_value = 1.0
-step = 0.1
+step = 0.05
 value = 1.0
+
+[node name="SerialList" parent="MIDI/CanvasLayer" instance=ExtResource("3_y44n4")]
+offset_left = 24.0
+offset_top = 504.0
+offset_right = 144.0
+offset_bottom = 524.0
+
+[node name="OpenClose" parent="MIDI/CanvasLayer" instance=ExtResource("4_pgseb")]
+offset_left = 152.0
+offset_top = 504.0
+offset_right = 232.0
+offset_bottom = 535.0
+
+[node name="Serial" type="Control" parent="MIDI"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("13_0vjy6")
+
+[node name="BG" type="MeshInstance3D" parent="MIDI"]
+visible = false
+mesh = SubResource("QuadMesh_pxhi1")
 
 [node name="Virtual_Keyboard" type="Node3D" parent="MIDI"]
 transform = Transform3D(1, 1.48077e-11, 0, 1.62279e-11, 1, 0, 1.45519e-11, 3.63798e-12, 1, 1.81899e-12, 0, 0)
@@ -267,13 +238,10 @@ particles_material = ExtResource("10_mr4d0")
 bg_material = ExtResource("12_70sax")
 particle_scene = ExtResource("10_e3ntp")
 
-[node name="BG" type="MeshInstance3D" parent="MIDI"]
-transform = Transform3D(0.999999, -0.00138441, 0.000171221, 0.00138439, 0.999999, 6.06062e-05, -0.000171307, -6.03616e-05, 1, 0, 0, -0.1)
-visible = false
-material_override = ExtResource("12_70sax")
-mesh = SubResource("QuadMesh_pxhi1")
-
 [node name="Timer" type="Timer" parent="."]
+
+[node name="SerialTimer" type="Timer" parent="."]
+wait_time = 0.5
 
 [connection signal="toggled" from="MIDI/CanvasLayer/ToggleKeyboard" to="MIDI" method="_on_toggle_keyboard_toggled"]
 [connection signal="toggled" from="MIDI/CanvasLayer/ToggleParticles" to="MIDI" method="_on_toggle_particles_toggled"]
@@ -283,4 +251,7 @@ mesh = SubResource("QuadMesh_pxhi1")
 [connection signal="pressed" from="MIDI/CanvasLayer/ClearBGImage_Button" to="MIDI/MIDI_Notes" method="_on_clear_bg_image_button_pressed"]
 [connection signal="file_selected" from="MIDI/CanvasLayer/FileDialog" to="MIDI/MIDI_Notes" method="_on_file_dialog_file_selected"]
 [connection signal="value_changed" from="MIDI/CanvasLayer/BGTransparency_Slider" to="MIDI/MIDI_Notes" method="_on_bg_transparency_slider_value_changed"]
+[connection signal="item_selected" from="MIDI/CanvasLayer/SerialList" to="MIDI/Serial" method="_on_serial_list_item_selected"]
+[connection signal="toggled" from="MIDI/CanvasLayer/OpenClose" to="MIDI/Serial" method="_on_open_close_toggled"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="SerialTimer" to="MIDI/Serial" method="_on_serial_timer_timeout"]

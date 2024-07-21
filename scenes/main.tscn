@@ -20,4 +20,3 @@ glow_hdr_threshold = 0.39
 environment = SubResource("Environment_kd4jh")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.906308, 0.422618, 0, -0.422618, 0.906308, 0, 0, 0)

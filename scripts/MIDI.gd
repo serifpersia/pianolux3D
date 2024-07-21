@@ -5,8 +5,9 @@ extends Node3D
 
 @export var white_note_material_no_outline : Material
 @export var black_note_material_no_outline : Material
+
 @export var particles_material : StandardMaterial3D
-@export var bg_material : StandardMaterial3D
+@export var bg_material : Material
 
 @export var base_speed_multiplier : float = 16.0
 @export var particle_scene : PackedScene # Add a variable to hold the particle scene
@@ -25,6 +26,8 @@ var speed_multiplier
 @onready var bg_transparency_slider = $"../CanvasLayer/BGTransparency_Slider"
 @onready var bg = $"../BG"
 @onready var toggle_bg = $"../CanvasLayer/ToggleBG"
+
+@onready var serial = $"../Serial"
 
 var notes = []
 var notes_on = {}
@@ -51,13 +54,18 @@ func _input(event):
 			notes_on[event.pitch] = true
 			update_key_material(event.pitch, true)
 			spawn_particle(event.pitch) # Spawn particle when note is pressed
+			send_serial(1)
 		elif event.message == MIDI_MESSAGE_NOTE_OFF:
 			notes_on.erase(event.pitch)
 			update_key_material(event.pitch, false)
 			stop_particle(event.pitch) # Stop particle when note is released
+			send_serial(0)
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed and event.position.y > 545:
 			canvas_layer.visible = not canvas_layer.visible
+
+func send_serial(value):
+	serial.send_led_command(value)
 
 func update_key_material(pitch, is_note_on):
 	var keys = virtual_keyboard.get_children()
@@ -104,7 +112,7 @@ func spawn_notes():
 		box.mesh = capsule
 		var x_offset = virtual_keyboard.calculate_x_offset(note)
 		var width = virtual_keyboard.note_width if not virtual_keyboard.is_black_key(note) else virtual_keyboard.note_width * 0.65
-		var z_position = 0.1 if virtual_keyboard.is_black_key(note) else 0.0  # Slightly in front for black keys
+		var z_position = 0.2 if virtual_keyboard.is_black_key(note) else 0.1  # Slightly in front for black keys
 		box.position = Vector3(x_offset - virtual_keyboard.display_range / 2, -8.5, z_position)
 		box.scale = Vector3(width, note_height, note_depth)
 		box.material_override = black_note_material if virtual_keyboard.is_black_key(note) else white_note_material
@@ -129,7 +137,7 @@ func spawn_particle(pitch):
 	if Global.particles_state:
 		var particle_instance = particle_scene.instantiate()
 		var x_offset = virtual_keyboard.calculate_x_offset(pitch)
-		particle_instance.position = Vector3(x_offset - virtual_keyboard.display_range / 2, -8.5, 0.2)
+		particle_instance.position = Vector3(x_offset - virtual_keyboard.display_range / 2, -8.5, 0.3)
 		add_child(particle_instance)
 		particle_instance.emitting = true
 		active_particles[pitch] = particle_instance
@@ -139,16 +147,15 @@ func stop_particle(pitch):
 		var particle_instance = active_particles[pitch]
 		particle_instance.emitting = false
 		
-		if Global.particles_state:
-			# Set a timer to remove the particle instance after its lifetime
-			var timer = Timer.new()
-			timer.one_shot = true
-			timer.wait_time = particle_instance.lifetime  # Set wait_time to the particle's lifetime
-			timer.connect("timeout", Callable(self, "_remove_particle_instance").bind(particle_instance))
-			add_child(timer)
-			timer.start()
+		# Set a timer to remove the particle instance after its lifetime
+		var timer = Timer.new()
+		timer.one_shot = true
+		timer.wait_time = particle_instance.lifetime  # Set wait_time to the particle's lifetime
+		timer.connect("timeout", Callable(self, "_remove_particle_instance").bind(particle_instance))
+		add_child(timer)
+		timer.start()
 			
-			active_particles.erase(pitch)
+		active_particles.erase(pitch)
 
 func _remove_particle_instance(particle_instance):
 	if particle_instance and particle_instance.get_parent():
@@ -157,7 +164,6 @@ func _remove_particle_instance(particle_instance):
 
 func _on_change_bg_image_button_pressed():
 	file_dialog.popup()
-	#bg_material.albedo_texture
 
 
 func _on_file_dialog_file_selected(path):

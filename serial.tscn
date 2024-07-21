@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://4astw60ph3x"]
+
+[ext_resource type="Script" path="res://scripts/serial.gd" id="1_8cr82"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_8cr82")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

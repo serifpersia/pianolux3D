@@ -21,7 +21,7 @@ func create_midi_keyboard():
 		var key = MeshInstance3D.new()
 		var mesh = BoxMesh.new()
 		key.mesh = mesh
-		var z_position = 0.1 if is_black_key(note) else 0.0
+		var z_position = 0.2 if is_black_key(note) else 0.1
 		var x_offset = calculate_x_offset(note)
 		var y_offset = -9.65 if is_black_key(note) else -10.4145
 		key.position = Vector3(x_offset - display_range / 2, y_offset, z_position)
