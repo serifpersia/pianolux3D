@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=20 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/MIDI.gd" id="1_3ll4w"]
 [ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="1_7mq6q"]
@@ -10,6 +10,8 @@
 [ext_resource type="Material" uid="uid://qnj37138s6ar" path="res://materials/black_note_no_outline_mat.tres" id="3_0tisb"]
 [ext_resource type="Material" uid="uid://xdabkcdm3c8g" path="res://materials/black_key_mat.tres" id="3_mcpll"]
 [ext_resource type="PackedScene" uid="uid://dtacf6kg6rwxg" path="res://scenes/spiral_particles.tscn" id="10_e3ntp"]
+[ext_resource type="Material" uid="uid://b5qeey5ruelw1" path="res://materials/particles_mat.tres" id="10_mr4d0"]
+[ext_resource type="Material" uid="uid://c87r7xa3yubcp" path="res://materials/bg_mat.tres" id="12_70sax"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bohv6"]
 render_priority = 0
@@ -126,6 +128,15 @@ offset_bottom = 81.0
 button_pressed = true
 text = "Virtual Keyboard"
 
+[node name="ToggleParticles" type="CheckButton" parent="MIDI/CanvasLayer"]
+offset_left = 26.0
+offset_top = 199.0
+offset_right = 141.0
+offset_bottom = 230.0
+button_pressed = true
+text = "Particles
+"
+
 [node name="ToggleMIDI" type="CheckButton" parent="MIDI/CanvasLayer"]
 offset_left = 25.0
 offset_top = 81.0
@@ -141,57 +152,104 @@ offset_left = 25.0
 offset_top = 112.0
 offset_right = 166.0
 offset_bottom = 143.0
-button_pressed = true
 text = "Background"
 
 [node name="ColorPicker_White_Key" type="ColorPickerButton" parent="MIDI/CanvasLayer"]
 offset_left = 25.0
-offset_top = 158.0
+offset_top = 245.0
 offset_right = 126.0
-offset_bottom = 189.0
+offset_bottom = 276.0
 text = "Color Picker"
 color = Color(0.622, 1.25, 0, 1)
 
 [node name="ColorPicker_Black_Key" type="ColorPickerButton" parent="MIDI/CanvasLayer"]
-offset_left = 126.0
-offset_top = 158.0
-offset_right = 227.0
-offset_bottom = 189.0
+offset_left = 125.0
+offset_top = 245.0
+offset_right = 226.0
+offset_bottom = 276.0
 text = "Color Picker"
 color = Color(0.504, 1.012, 0, 1)
 
 [node name="HowToTransform" type="Label" parent="MIDI/CanvasLayer"]
 offset_left = 25.0
-offset_top = 204.0
-offset_right = 336.0
-offset_bottom = 305.0
+offset_top = 291.0
+offset_right = 340.0
+offset_bottom = 392.0
 text = "Press A S D  to select Position Axis Mode
 Press Q W E to select Rotation Axis Mode
 Press R to reset to default
 Press ,  . to change value"
 
+[node name="HowToTransform2" type="Label" parent="MIDI/CanvasLayer"]
+offset_left = 32.0
+offset_top = 174.0
+offset_right = 164.0
+offset_bottom = 197.0
+text = "BG Transparency
+"
+
 [node name="Mode_Label" type="Label" parent="MIDI/CanvasLayer"]
-offset_left = 25.0
-offset_top = 320.0
-offset_right = 258.0
-offset_bottom = 343.0
+offset_left = 24.0
+offset_top = 407.0
+offset_right = 153.0
+offset_bottom = 430.0
 text = "Mode: Position Z"
 
 [node name="Position_Label" type="Label" parent="MIDI/CanvasLayer"]
-offset_left = 25.0
-offset_top = 343.0
-offset_right = 254.0
-offset_bottom = 366.0
+offset_left = 24.0
+offset_top = 430.0
+offset_right = 253.0
+offset_bottom = 453.0
 text = "Position: X = 0.0 Y = 0.0 Z = 0.0
 "
 
 [node name="Rotation_Label" type="Label" parent="MIDI/CanvasLayer"]
-offset_left = 25.0
-offset_top = 366.0
-offset_right = 258.0
-offset_bottom = 389.0
+offset_left = 24.0
+offset_top = 453.0
+offset_right = 257.0
+offset_bottom = 476.0
 text = "Rotation: X = 0.0 Y = 0.0 Z = 0.0
 "
+
+[node name="ChangeBGImage_Button" type="Button" parent="MIDI/CanvasLayer"]
+offset_left = 31.0
+offset_top = 143.0
+offset_right = 175.0
+offset_bottom = 174.0
+text = "Change BG Image
+"
+
+[node name="ClearBGImage_Button" type="Button" parent="MIDI/CanvasLayer"]
+offset_left = 180.0
+offset_top = 143.0
+offset_right = 324.0
+offset_bottom = 174.0
+text = "Clear BG Image
+"
+
+[node name="FileDialog" type="FileDialog" parent="MIDI/CanvasLayer"]
+title = "Open a File"
+initial_position = 4
+size = Vector2i(640, 480)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.png", "*.jpg", "*.jpeg", "*.bmp")
+
+[node name="BGTransparency_Slider" type="HSlider" parent="MIDI/CanvasLayer"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 166.0
+offset_top = -366.0
+offset_right = -1596.0
+offset_bottom = -341.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 1.0
+step = 0.1
+value = 1.0
 
 [node name="Virtual_Keyboard" type="Node3D" parent="MIDI"]
 transform = Transform3D(1, 1.48077e-11, 0, 1.62279e-11, 1, 0, 1.45519e-11, 3.63798e-12, 1, 1.81899e-12, 0, 0)
@@ -205,15 +263,24 @@ white_note_material = SubResource("StandardMaterial3D_huirt")
 black_note_material = SubResource("StandardMaterial3D_iwvbm")
 white_note_material_no_outline = ExtResource("2_473y8")
 black_note_material_no_outline = ExtResource("3_0tisb")
+particles_material = ExtResource("10_mr4d0")
+bg_material = ExtResource("12_70sax")
 particle_scene = ExtResource("10_e3ntp")
 
 [node name="BG" type="MeshInstance3D" parent="MIDI"]
 transform = Transform3D(0.999999, -0.00138441, 0.000171221, 0.00138439, 0.999999, 6.06062e-05, -0.000171307, -6.03616e-05, 1, 0, 0, -0.1)
+visible = false
+material_override = ExtResource("12_70sax")
 mesh = SubResource("QuadMesh_pxhi1")
 
 [node name="Timer" type="Timer" parent="."]
 
 [connection signal="toggled" from="MIDI/CanvasLayer/ToggleKeyboard" to="MIDI" method="_on_toggle_keyboard_toggled"]
+[connection signal="toggled" from="MIDI/CanvasLayer/ToggleParticles" to="MIDI" method="_on_toggle_particles_toggled"]
 [connection signal="toggled" from="MIDI/CanvasLayer/ToggleMIDI" to="MIDI" method="_on_toggle_midi_toggled"]
 [connection signal="toggled" from="MIDI/CanvasLayer/ToggleBG" to="MIDI" method="_on_toggle_bg_toggled"]
+[connection signal="pressed" from="MIDI/CanvasLayer/ChangeBGImage_Button" to="MIDI/MIDI_Notes" method="_on_change_bg_image_button_pressed"]
+[connection signal="pressed" from="MIDI/CanvasLayer/ClearBGImage_Button" to="MIDI/MIDI_Notes" method="_on_clear_bg_image_button_pressed"]
+[connection signal="file_selected" from="MIDI/CanvasLayer/FileDialog" to="MIDI/MIDI_Notes" method="_on_file_dialog_file_selected"]
+[connection signal="value_changed" from="MIDI/CanvasLayer/BGTransparency_Slider" to="MIDI/MIDI_Notes" method="_on_bg_transparency_slider_value_changed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

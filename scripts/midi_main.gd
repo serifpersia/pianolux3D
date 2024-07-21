@@ -12,3 +12,8 @@ func _on_toggle_midi_toggled(toggled_on):
 
 func _on_toggle_bg_toggled(toggled_on):
 	bg.visible = toggled_on
+
+
+func _on_toggle_particles_toggled(toggled_on):
+	Global.particles_state = toggled_on
+	print(Global.particles_state)

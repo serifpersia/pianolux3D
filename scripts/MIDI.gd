@@ -5,6 +5,8 @@ extends Node3D
 
 @export var white_note_material_no_outline : Material
 @export var black_note_material_no_outline : Material
+@export var particles_material : StandardMaterial3D
+@export var bg_material : StandardMaterial3D
 
 @export var base_speed_multiplier : float = 16.0
 @export var particle_scene : PackedScene # Add a variable to hold the particle scene
@@ -16,6 +18,13 @@ var speed_multiplier
 
 @onready var color_picker_white_key = $"../CanvasLayer/ColorPicker_White_Key"
 @onready var color_picker_black_key = $"../CanvasLayer/ColorPicker_Black_Key"
+
+@onready var change_bg_image_button = $"../CanvasLayer/ChangeBGImage_Button"
+@onready var file_dialog = $"../CanvasLayer/FileDialog"
+
+@onready var bg_transparency_slider = $"../CanvasLayer/BGTransparency_Slider"
+@onready var bg = $"../BG"
+@onready var toggle_bg = $"../CanvasLayer/ToggleBG"
 
 var notes = []
 var notes_on = {}
@@ -47,7 +56,7 @@ func _input(event):
 			update_key_material(event.pitch, false)
 			stop_particle(event.pitch) # Stop particle when note is released
 	if event is InputEventMouseButton:
-		if event.pressed and event.position.y > 545:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed and event.position.y > 545:
 			canvas_layer.visible = not canvas_layer.visible
 
 func update_key_material(pitch, is_note_on):
@@ -83,6 +92,7 @@ func check_color_change(color_picker, var_name, label):
 			if label == "White key":
 				white_note_material.albedo_color = current_color
 				white_note_material_no_outline.albedo_color = current_color
+				particles_material.albedo_color = current_color
 			elif label == "Black key":
 				black_note_material_no_outline.albedo_color = current_color
 				black_note_material.albedo_color = current_color
@@ -115,17 +125,61 @@ func despawn_notes():
 func spawn_particle(pitch):
 	if not particle_scene:
 		return
-
-	var particle_instance = particle_scene.instantiate()
-	var x_offset = virtual_keyboard.calculate_x_offset(pitch)
-	particle_instance.position = Vector3(x_offset - virtual_keyboard.display_range / 2, -8.5, 0)
-	add_child(particle_instance)
-	particle_instance.emitting = true
-	active_particles[pitch] = particle_instance
+		
+	if Global.particles_state:
+		var particle_instance = particle_scene.instantiate()
+		var x_offset = virtual_keyboard.calculate_x_offset(pitch)
+		particle_instance.position = Vector3(x_offset - virtual_keyboard.display_range / 2, -8.5, 0.2)
+		add_child(particle_instance)
+		particle_instance.emitting = true
+		active_particles[pitch] = particle_instance
 
 func stop_particle(pitch):
 	if pitch in active_particles:
 		var particle_instance = active_particles[pitch]
 		particle_instance.emitting = false
+		
+		if Global.particles_state:
+			# Set a timer to remove the particle instance after its lifetime
+			var timer = Timer.new()
+			timer.one_shot = true
+			timer.wait_time = particle_instance.lifetime  # Set wait_time to the particle's lifetime
+			timer.connect("timeout", Callable(self, "_remove_particle_instance").bind(particle_instance))
+			add_child(timer)
+			timer.start()
+			
+			active_particles.erase(pitch)
+
+func _remove_particle_instance(particle_instance):
+	if particle_instance and particle_instance.get_parent():
 		particle_instance.queue_free()
-		active_particles.erase(pitch)
+
+
+func _on_change_bg_image_button_pressed():
+	file_dialog.popup()
+	#bg_material.albedo_texture
+
+
+func _on_file_dialog_file_selected(path):
+	var image = Image.new()
+	
+	image.load(path)
+	
+	var image_texture = ImageTexture.new()
+	
+	image_texture.set_image(image)
+	
+	bg_material.albedo_color.a = 1
+	bg_material.albedo_texture = image_texture
+	
+	bg_transparency_slider.value = 1
+	toggle_bg.button_pressed = true
+
+
+func _on_clear_bg_image_button_pressed():
+	bg_material.albedo_texture = null
+	toggle_bg.button_pressed = false
+
+
+func _on_bg_transparency_slider_value_changed(value):
+	bg_material.albedo_color.a = value
