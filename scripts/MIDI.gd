@@ -54,18 +54,19 @@ func _input(event):
 			notes_on[event.pitch] = true
 			update_key_material(event.pitch, true)
 			spawn_particle(event.pitch) # Spawn particle when note is pressed
-			send_serial(1)
+			var notePushed
+			notePushed = serial.map_midi_note_to_led(event.pitch,21,108,176,1)
+			serial.send_command_default_note_on(notePushed)
 		elif event.message == MIDI_MESSAGE_NOTE_OFF:
 			notes_on.erase(event.pitch)
 			update_key_material(event.pitch, false)
 			stop_particle(event.pitch) # Stop particle when note is released
-			send_serial(0)
+			var notePushed
+			notePushed = serial.map_midi_note_to_led(event.pitch,21,108,176,1)
+			serial.send_command_note_off(notePushed)
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed and event.position.y > 545:
 			canvas_layer.visible = not canvas_layer.visible
-
-func send_serial(value):
-	serial.send_led_command(value)
 
 func update_key_material(pitch, is_note_on):
 	var keys = virtual_keyboard.get_children()
@@ -87,23 +88,6 @@ func _process(delta):
 	spawn_notes()
 	move_notes(delta)
 	despawn_notes()
-	check_color_change(color_picker_white_key, previous_white_color, "White key")
-	check_color_change(color_picker_black_key, previous_black_color, "Black key")
-
-func check_color_change(color_picker, var_name, label):
-	if color_picker.color_changed:
-		var current_color = color_picker.color
-		if current_color != var_name:
-			print(label, "color: ", current_color)
-			var_name = current_color
-			
-			if label == "White key":
-				white_note_material.albedo_color = current_color
-				white_note_material_no_outline.albedo_color = current_color
-				particles_material.albedo_color = current_color
-			elif label == "Black key":
-				black_note_material_no_outline.albedo_color = current_color
-				black_note_material.albedo_color = current_color
 
 func spawn_notes():
 	for note in notes_on.keys():
@@ -189,3 +173,14 @@ func _on_clear_bg_image_button_pressed():
 
 func _on_bg_transparency_slider_value_changed(value):
 	bg_material.albedo_color.a = value
+
+
+func _on_color_picker_white_key_color_changed(color):
+	white_note_material.albedo_color = color
+	white_note_material_no_outline.albedo_color = color
+	particles_material.albedo_color = color
+	serial.send_command_update_color(color)	
+
+func _on_color_picker_black_key_color_changed(color):
+	black_note_material.albedo_color = color
+	black_note_material_no_outline.albedo_color = color

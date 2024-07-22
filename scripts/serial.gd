@@ -4,9 +4,6 @@ var serial = SerialPort.new()
 var port
 var baudrate = 115200
 
-var is_led_on = false
-
-@onready var timer = $"../../SerialTimer"
 @onready var serial_list = $"../CanvasLayer/SerialList"
 @onready var open_close = $"../CanvasLayer/OpenClose"
 
@@ -43,8 +40,19 @@ func send_command(command_byte: int, args: Array):
 	serial.write_raw(message)
 
 
+func gamma_correction(value: float, gamma: float) -> int:
+	return int(pow(clamp(value, 0.0, 1.0), gamma) * 255)
+
 func send_command_update_color(c: Color):
-	send_command(COMMAND_SET_GLOBAL_COLOR, [int(c.r * 255), int(c.g * 255), int(c.b * 255)])
+	var gamma = 5.0
+	
+	# Apply gamma correction and clamp the values
+	var r = gamma_correction(c.r, gamma)
+	var g = gamma_correction(c.g, gamma)
+	var b = gamma_correction(c.b, gamma)
+
+	print('Input color: ', c, 'Output color: ', r, ' ', g, ' ', b)
+	send_command(COMMAND_SET_GLOBAL_COLOR, [r, g, b])
 
 func send_command_default_note_on(note: int):
 	send_command(COMMAND_NOTE_ON_DEFAULT, [note])
@@ -102,6 +110,14 @@ func send_command_set_guide(current_array: int, hue: int, saturation: int, brigh
 func send_command_set_led_visualizer(effect: int, color_hue: int):
 	send_command(COMMAND_SET_LED_VISUALIZER, [effect, color_hue])
 
+
+var transposition : int = 0
+
+func map_midi_note_to_led(midi_note: int, lowest_note: int, highest_note: int, strip_led_number: int, out_min: int) -> int:
+	midi_note -= transposition
+	var out_max = out_min + strip_led_number - 1
+	var mapped_led = (midi_note - lowest_note) * float(out_max - out_min) / float(highest_note - lowest_note)
+	return int(mapped_led) + out_min
 	
 func _ready():
 	var ports_info = SerialPort.list_ports()
@@ -111,33 +127,11 @@ func _ready():
 		serial_list.select(0)
 		
 	update_serial()
-	timer.start()
-
-
-func send_led_command(turn_on: bool):
-	var command = PackedByteArray()
-	# Use 1 for true, 0 for false
-	if turn_on:
-		command.append(1)
-	else:
-		command.append(0)
-	
-	if serial.is_open():
-		serial.write_raw(command)
-		print("Sent command:", turn_on if true else false)
 
 func _exit_tree():
 	# Ensure we close the serial port when exiting the scene tree
 	if serial.is_open():
 		serial.close()
-
-
-func _on_serial_timer_timeout():
-	# Toggle LED state
-	if serial.is_open():
-		#send_led_command(not is_led_on)
-		#is_led_on = not is_led_on
-		pass
 
 func update_serial():
 	port = serial_list.get_item_text(serial_list.selected)

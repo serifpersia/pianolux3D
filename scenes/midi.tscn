@@ -9,8 +9,8 @@
 [ext_resource type="Material" uid="uid://che5eiuay5aby" path="res://materials/white_key_mat.tres" id="2_upvwc"]
 [ext_resource type="Material" uid="uid://qnj37138s6ar" path="res://materials/black_note_no_outline_mat.tres" id="3_0tisb"]
 [ext_resource type="Material" uid="uid://xdabkcdm3c8g" path="res://materials/black_key_mat.tres" id="3_mcpll"]
-[ext_resource type="PackedScene" path="res://scenes/serial_list.tscn" id="3_y44n4"]
-[ext_resource type="PackedScene" path="res://scenes/open_close.tscn" id="4_pgseb"]
+[ext_resource type="PackedScene" uid="uid://bjgxxihfcew33" path="res://scenes/serial_list.tscn" id="3_y44n4"]
+[ext_resource type="PackedScene" uid="uid://b8sjcwx28odsw" path="res://scenes/open_close.tscn" id="4_pgseb"]
 [ext_resource type="PackedScene" uid="uid://dtacf6kg6rwxg" path="res://scenes/spiral_particles.tscn" id="10_e3ntp"]
 [ext_resource type="Material" uid="uid://b5qeey5ruelw1" path="res://materials/particles_mat.tres" id="10_mr4d0"]
 [ext_resource type="Material" uid="uid://c87r7xa3yubcp" path="res://materials/bg_mat.tres" id="12_70sax"]
@@ -240,13 +240,12 @@ particle_scene = ExtResource("10_e3ntp")
 
 [node name="Timer" type="Timer" parent="."]
 
-[node name="SerialTimer" type="Timer" parent="."]
-wait_time = 0.5
-
 [connection signal="toggled" from="MIDI/CanvasLayer/ToggleKeyboard" to="MIDI" method="_on_toggle_keyboard_toggled"]
 [connection signal="toggled" from="MIDI/CanvasLayer/ToggleParticles" to="MIDI" method="_on_toggle_particles_toggled"]
 [connection signal="toggled" from="MIDI/CanvasLayer/ToggleMIDI" to="MIDI" method="_on_toggle_midi_toggled"]
 [connection signal="toggled" from="MIDI/CanvasLayer/ToggleBG" to="MIDI" method="_on_toggle_bg_toggled"]
+[connection signal="color_changed" from="MIDI/CanvasLayer/ColorPicker_White_Key" to="MIDI/MIDI_Notes" method="_on_color_picker_white_key_color_changed"]
+[connection signal="color_changed" from="MIDI/CanvasLayer/ColorPicker_Black_Key" to="MIDI/MIDI_Notes" method="_on_color_picker_black_key_color_changed"]
 [connection signal="pressed" from="MIDI/CanvasLayer/ChangeBGImage_Button" to="MIDI/MIDI_Notes" method="_on_change_bg_image_button_pressed"]
 [connection signal="pressed" from="MIDI/CanvasLayer/ClearBGImage_Button" to="MIDI/MIDI_Notes" method="_on_clear_bg_image_button_pressed"]
 [connection signal="file_selected" from="MIDI/CanvasLayer/FileDialog" to="MIDI/MIDI_Notes" method="_on_file_dialog_file_selected"]
@@ -254,4 +253,3 @@ wait_time = 0.5
 [connection signal="item_selected" from="MIDI/CanvasLayer/SerialList" to="MIDI/Serial" method="_on_serial_list_item_selected"]
 [connection signal="toggled" from="MIDI/CanvasLayer/OpenClose" to="MIDI/Serial" method="_on_open_close_toggled"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
-[connection signal="timeout" from="SerialTimer" to="MIDI/Serial" method="_on_serial_timer_timeout"]
