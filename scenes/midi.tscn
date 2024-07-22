@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=22 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/MIDI.gd" id="1_3ll4w"]
 [ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="1_7mq6q"]
@@ -15,6 +15,7 @@
 [ext_resource type="Material" uid="uid://b5qeey5ruelw1" path="res://materials/particles_mat.tres" id="10_mr4d0"]
 [ext_resource type="Material" uid="uid://c87r7xa3yubcp" path="res://materials/bg_mat.tres" id="12_70sax"]
 [ext_resource type="Script" path="res://scripts/serial.gd" id="13_0vjy6"]
+[ext_resource type="Material" uid="uid://cgfhb3w1jwudu" path="res://materials/particles_flash_mat.tres" id="15_bskuw"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_pxhi1"]
 material = ExtResource("12_70sax")
@@ -451,6 +452,7 @@ black_note_material = SubResource("StandardMaterial3D_iwvbm")
 white_note_material_no_outline = ExtResource("2_473y8")
 black_note_material_no_outline = ExtResource("3_0tisb")
 particles_material = ExtResource("10_mr4d0")
+particles_flash_material = ExtResource("15_bskuw")
 bg_material = ExtResource("12_70sax")
 particle_scene = ExtResource("10_e3ntp")
 

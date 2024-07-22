@@ -7,6 +7,7 @@ extends Node3D
 @export var black_note_material_no_outline : Material
 
 @export var particles_material : StandardMaterial3D
+@export var particles_flash_material : StandardMaterial3D
 @export var bg_material : Material
 
 @export var base_speed_multiplier : float = 16.0
@@ -36,7 +37,9 @@ var note_depth = 0.1
 var previous_white_color
 var previous_black_color
 
-var active_particles = {} # Dictionary to hold active particle instances
+var active_particles = {}  # Dictionary to hold active parent particle instances
+var child_particles = {}  # Dictionary to hold active child particle instances
+
 
 func _ready():
 	previous_white_color = color_picker.color
@@ -142,26 +145,51 @@ func spawn_particle(pitch):
 		particle_instance.position = Vector3(x_offset - virtual_keyboard.display_range / 2, -8.5, 0.3)
 		add_child(particle_instance)
 		particle_instance.emitting = true
+		
+		# Track parent particle
 		active_particles[pitch] = particle_instance
+		
+		# Track child particles
+		for child in particle_instance.get_children():
+			child.emitting = true
+			if not child_particles.has(pitch):
+				child_particles[pitch] = []
+			child_particles[pitch].append(child)
+
 
 func stop_particle(pitch):
 	if pitch in active_particles:
 		var particle_instance = active_particles[pitch]
 		particle_instance.emitting = false
 		
-		# Set a timer to remove the particle instance after its lifetime
-		var timer = Timer.new()
-		timer.one_shot = true
-		timer.wait_time = particle_instance.lifetime  # Set wait_time to the particle's lifetime
-		timer.connect("timeout", Callable(self, "_remove_particle_instance").bind(particle_instance))
-		add_child(timer)
-		timer.start()
+		# Stop emission and schedule removal for parent particle
+		var parent_timer = Timer.new()
+		parent_timer.one_shot = true
+		parent_timer.wait_time = particle_instance.lifetime
+		parent_timer.connect("timeout", Callable(self, "_remove_particle_instance").bind(particle_instance))
+		add_child(parent_timer)
+		parent_timer.start()
+		
+		# Stop emission and schedule removal for each child particle
+		if pitch in child_particles:
+			for child in child_particles[pitch]:
+				child.emitting = false
+				var child_timer = Timer.new()
+				child_timer.one_shot = true
+				child_timer.wait_time = child.lifetime
+				child_timer.connect("timeout", Callable(self, "_remove_particle_instance").bind(child))
+				add_child(child_timer)
+				child_timer.start()
 			
+		# Clean up dictionaries
 		active_particles.erase(pitch)
+		child_particles.erase(pitch)
+
 
 func _remove_particle_instance(particle_instance):
 	if particle_instance and particle_instance.get_parent():
 		particle_instance.queue_free()
+
 
 
 func _on_change_bg_image_button_pressed():
@@ -205,6 +233,7 @@ func _on_color_picker_color_changed(color):
 	black_note_material_no_outline.albedo_color = darker_color
 	
 	particles_material.albedo_color = color
+	particles_flash_material.albedo_color = color
 	
 	serial.currentColor = color
 	serial.send_command_update_color(color)	
