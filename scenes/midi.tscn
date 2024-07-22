@@ -200,94 +200,189 @@ step = 0.05
 value = 1.0
 
 [node name="BrightnessSlider_Label" type="Label" parent="MIDI/CanvasLayer"]
-offset_left = 8.0
-offset_top = 589.0
-offset_right = 140.0
-offset_bottom = 612.0
+offset_left = 24.0
+offset_top = 621.0
+offset_right = 133.0
+offset_bottom = 644.0
 text = "Brightness
 "
+vertical_alignment = 1
+
+[node name="BrightnessSlider_Label2" type="Label" parent="MIDI/CanvasLayer"]
+offset_left = 26.0
+offset_top = 495.0
+offset_right = 107.0
+offset_bottom = 526.0
+text = "Serial Port"
+vertical_alignment = 1
+
+[node name="BrightnessSlider_Label3" type="Label" parent="MIDI/CanvasLayer"]
+offset_left = 24.0
+offset_top = 536.0
+offset_right = 105.0
+offset_bottom = 567.0
+text = "LED Mode"
+vertical_alignment = 1
+
+[node name="BrightnessSlider_Label4" type="Label" parent="MIDI/CanvasLayer"]
+offset_left = 26.0
+offset_top = 576.0
+offset_right = 107.0
+offset_bottom = 607.0
+text = "Animation"
+vertical_alignment = 1
 
 [node name="Brightness_Slider" type="HSlider" parent="MIDI/CanvasLayer"]
 anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 142.0
-offset_top = 49.0
-offset_right = -1620.0
-offset_bottom = 74.0
+offset_left = 139.0
+offset_top = 81.0
+offset_right = -1605.0
+offset_bottom = 106.0
 grow_horizontal = 2
 grow_vertical = 2
 max_value = 255.0
 value = 255.0
 
+[node name="BGBrightnessSlider_Label" type="Label" parent="MIDI/CanvasLayer"]
+offset_left = 24.0
+offset_top = 696.0
+offset_right = 133.0
+offset_bottom = 719.0
+text = "BG Brightness"
+vertical_alignment = 1
+
+[node name="PianoSize_Label" type="Label" parent="MIDI/CanvasLayer"]
+offset_left = 24.0
+offset_top = 719.0
+offset_right = 133.0
+offset_bottom = 752.0
+text = "Piano 88 Keys
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BGBrightness_Slider" type="HSlider" parent="MIDI/CanvasLayer"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 139.0
+offset_top = 156.0
+offset_right = -1605.0
+offset_bottom = 181.0
+grow_horizontal = 2
+grow_vertical = 2
+min_value = 10.0
+value = 100.0
+
 [node name="FadeRateSlider_Label" type="Label" parent="MIDI/CanvasLayer"]
-offset_left = 8.0
-offset_top = 612.0
-offset_right = 140.0
-offset_bottom = 635.0
+offset_left = 24.0
+offset_top = 646.0
+offset_right = 133.0
+offset_bottom = 669.0
 text = "Fade"
+vertical_alignment = 1
 
 [node name="FadeRate_Slider" type="HSlider" parent="MIDI/CanvasLayer"]
 anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 142.0
-offset_top = 72.0
-offset_right = -1620.0
-offset_bottom = 97.0
+offset_left = 139.0
+offset_top = 106.0
+offset_right = -1605.0
+offset_bottom = 131.0
 grow_horizontal = 2
 grow_vertical = 2
 max_value = 255.0
 value = 255.0
 
 [node name="SplashLengthSlider_Label" type="Label" parent="MIDI/CanvasLayer"]
-offset_left = 8.0
-offset_top = 637.0
-offset_right = 140.0
-offset_bottom = 660.0
+offset_left = 24.0
+offset_top = 671.0
+offset_right = 133.0
+offset_bottom = 694.0
 text = "Splash Length"
+vertical_alignment = 1
 
 [node name="SplashLength_Slider" type="HSlider" parent="MIDI/CanvasLayer"]
 anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 142.0
-offset_top = 97.0
-offset_right = -1620.0
-offset_bottom = 122.0
+offset_left = 139.0
+offset_top = 131.0
+offset_right = -1605.0
+offset_bottom = 156.0
 grow_horizontal = 2
 grow_vertical = 2
 min_value = 4.0
-max_value = 24.0
+max_value = 16.0
 value = 8.0
-tick_count = 12
 
 [node name="SerialList" parent="MIDI/CanvasLayer" instance=ExtResource("3_y44n4")]
-offset_left = 24.0
-offset_top = 480.0
-offset_right = 144.0
-offset_bottom = 510.0
+offset_left = 110.0
+offset_top = 493.0
+offset_right = 230.0
+offset_bottom = 523.0
 
 [node name="ModesList" parent="MIDI/CanvasLayer" instance=ExtResource("3_y44n4")]
-offset_left = 24.0
-offset_top = 520.0
-offset_right = 232.0
-offset_bottom = 550.0
+offset_left = 110.0
+offset_top = 536.0
+offset_right = 315.0
+offset_bottom = 566.0
 
 [node name="AnimationsList" parent="MIDI/CanvasLayer" instance=ExtResource("3_y44n4")]
-offset_left = 24.0
-offset_top = 559.0
-offset_right = 232.0
-offset_bottom = 589.0
+offset_left = 110.0
+offset_top = 576.0
+offset_right = 315.0
+offset_bottom = 606.0
 
 [node name="OpenClose" parent="MIDI/CanvasLayer" instance=ExtResource("4_pgseb")]
-offset_left = 152.0
-offset_top = 480.0
-offset_right = 232.0
-offset_bottom = 511.0
+offset_left = 235.0
+offset_top = 493.0
+offset_right = 315.0
+offset_bottom = 524.0
+
+[node name="PianoSizeDecrease_Button" parent="MIDI/CanvasLayer" instance=ExtResource("4_pgseb")]
+offset_left = 145.0
+offset_top = 721.0
+offset_right = 225.0
+offset_bottom = 752.0
+toggle_mode = false
+text = "<"
+
+[node name="PianoSizeIncrease_Button" parent="MIDI/CanvasLayer" instance=ExtResource("4_pgseb")]
+offset_left = 230.0
+offset_top = 721.0
+offset_right = 310.0
+offset_bottom = 752.0
+toggle_mode = false
+text = ">"
+
+[node name="FixLED_Toggle" type="CheckButton" parent="MIDI"]
+offset_left = 18.0
+offset_top = 752.0
+offset_right = 122.0
+offset_bottom = 783.0
+text = "Fix LED"
+
+[node name="BGLED_Toggle" type="CheckButton" parent="MIDI"]
+offset_left = 118.0
+offset_top = 752.0
+offset_right = 222.0
+offset_bottom = 783.0
+text = "BG LED"
+
+[node name="REVLED_Toggle" type="CheckButton" parent="MIDI"]
+offset_left = 217.0
+offset_top = 752.0
+offset_right = 327.0
+offset_bottom = 783.0
+text = "Rev LED"
 
 [node name="Serial" type="Control" parent="MIDI"]
 layout_mode = 3
@@ -328,10 +423,12 @@ particle_scene = ExtResource("10_e3ntp")
 [connection signal="file_selected" from="MIDI/CanvasLayer/FileDialog" to="MIDI/MIDI_Notes" method="_on_file_dialog_file_selected"]
 [connection signal="value_changed" from="MIDI/CanvasLayer/BGTransparency_Slider" to="MIDI/MIDI_Notes" method="_on_bg_transparency_slider_value_changed"]
 [connection signal="value_changed" from="MIDI/CanvasLayer/Brightness_Slider" to="MIDI/Serial" method="_on_brightness_slider_value_changed"]
+[connection signal="value_changed" from="MIDI/CanvasLayer/BGBrightness_Slider" to="MIDI/Serial" method="_on_bg_brightness_slider_value_changed"]
 [connection signal="value_changed" from="MIDI/CanvasLayer/FadeRate_Slider" to="MIDI/Serial" method="_on_fade_rate_slider_value_changed"]
 [connection signal="value_changed" from="MIDI/CanvasLayer/SplashLength_Slider" to="MIDI/Serial" method="_on_splash_length_slider_value_changed"]
 [connection signal="item_selected" from="MIDI/CanvasLayer/SerialList" to="MIDI/Serial" method="_on_serial_list_item_selected"]
 [connection signal="item_selected" from="MIDI/CanvasLayer/ModesList" to="MIDI/Serial" method="_on_modes_list_item_selected"]
 [connection signal="item_selected" from="MIDI/CanvasLayer/AnimationsList" to="MIDI/Serial" method="_on_animations_list_item_selected"]
 [connection signal="toggled" from="MIDI/CanvasLayer/OpenClose" to="MIDI/Serial" method="_on_open_close_toggled"]
+[connection signal="toggled" from="MIDI/BGLED_Toggle" to="MIDI/Serial" method="_on_bgled_toggle_toggled"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

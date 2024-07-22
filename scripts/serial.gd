@@ -4,8 +4,9 @@ var serial = SerialPort.new()
 var port
 var baudrate = 115200
 var MODE = 0
+var currentColor
 
-var led_mode_list = ["Default", "Splash", "Animation"]
+var led_mode_list = ["Default", "Splash", "Velocity", "Animation"]
 var led_animations_list = [
 	"RainbowColors",
 	"RainbowStripeColor",
@@ -59,8 +60,6 @@ func send_command(command_byte: int, args: Array):
 		message.append(arg)
 	if serial.is_open():
 		serial.write_raw(message)
-	else:
-		print("Can't send commmand to serial device. Busy port or not open!")
 
 
 func gamma_correction(value: float, gamma: float) -> int:
@@ -106,8 +105,8 @@ func send_command_splash_max_length(value: int):
 func send_command_set_bg(hue: int, saturation: int, brightness: int):
 	send_command(COMMAND_SET_BG, [hue, saturation, brightness])
 
-func send_command_velocity(velocity: int, note: int, c: Color):
-	send_command(COMMAND_VELOCITY, [velocity, note, int(c.r * 255), int(c.g * 255), int(c.b * 255)])
+func send_command_velocity(velocity: int, note: int):
+	send_command(COMMAND_VELOCITY, [velocity, note])
 
 func send_command_strip_direction(direction: int, num_leds: int):
 	send_command(COMMAND_STRIP_DIRECTION, [direction, num_leds])
@@ -200,10 +199,14 @@ func _on_modes_list_item_selected(index):
 		1:
 			# Splash mode
 			MODE = 1
-			set_defaults(8, 255, 50)
+			set_defaults(8, 255, 55)
 		2:
-			# Animation mode
+			# Splash mode
 			MODE = 2
+			set_defaults(8, 255, 255)
+		3:
+			# Animation mode
+			MODE = 3
 			set_defaults(8, 255, 0)
 			send_command_animation(0, 0)
 
@@ -260,3 +263,53 @@ func _on_fade_rate_slider_value_changed(value):
 
 func _on_splash_length_slider_value_changed(value):
 	send_command_splash_max_length(int(value))
+
+# Function to convert RGB to HSB
+func rgb_to_hsb(r: float, g: float, b: float) -> Dictionary:
+	var max_val = max(r, g, b)
+	var min_val = min(r, g, b)
+	var delta = max_val - min_val
+
+	var hue = 0.0
+	var saturation = 0.0
+	var brightness = max_val
+
+	if delta > 0.0:
+		saturation = delta / max_val
+		
+		if max_val == r:
+			hue = (g - b) / delta
+		elif max_val == g:
+			hue = 2.0 + (b - r) / delta
+		else:
+			hue = 4.0 + (r - g) / delta
+		
+		hue *= 60.0
+		if hue < 0.0:
+			hue += 360.0
+	
+	return {
+		"hue": hue / 360.0 * 255,
+		"saturation": saturation * 255,
+		"brightness": brightness * 255
+	}
+
+
+func _on_bg_brightness_slider_value_changed(value):
+	var red = currentColor.r
+	var green = currentColor.g
+	var blue = currentColor.b
+
+	var hsb = rgb_to_hsb(red, green, blue)
+
+	var hue = int(hsb["hue"])
+	var saturation = int(hsb["saturation"])
+	var brightness = int(value) # Use the slider value for brightness
+	send_command_set_bg(hue,saturation,brightness)
+
+
+func _on_bgled_toggle_toggled(toggled_on):
+	if toggled_on:
+		send_command_set_bg(0,0,50)
+	else:
+		send_command_set_bg(0,0,0)

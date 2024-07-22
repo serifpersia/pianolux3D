@@ -59,6 +59,8 @@ func _input(event):
 					serial.send_command_default_note_on(notePushed)
 				1:
 					serial.send_command_splash(event.velocity, notePushed)
+				2:
+					serial.send_command_velocity(event.velocity, notePushed)
 		elif event.message == MIDI_MESSAGE_NOTE_OFF:
 			notes_on.erase(event.pitch)
 			update_key_material(event.pitch, false)
@@ -190,4 +192,5 @@ func _on_color_picker_white_key_color_changed(color):
 	
 	particles_material.albedo_color = color
 	
+	serial.currentColor = color
 	serial.send_command_update_color(color)	
