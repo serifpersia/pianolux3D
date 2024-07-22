@@ -17,7 +17,7 @@ var speed_multiplier
 @onready var virtual_keyboard = $"../Virtual_Keyboard"
 @onready var canvas_layer = $"../CanvasLayer"
 
-@onready var color_picker_white_key = $"../CanvasLayer/ColorPicker_White_Key"
+@onready var color_picker = $"../CanvasLayer/ColorPicker"
 
 @onready var change_bg_image_button = $"../CanvasLayer/ChangeBGImage_Button"
 @onready var file_dialog = $"../CanvasLayer/FileDialog"
@@ -39,7 +39,7 @@ var previous_black_color
 var active_particles = {} # Dictionary to hold active particle instances
 
 func _ready():
-	previous_white_color = color_picker_white_key.color
+	previous_white_color = color_picker.color
 	OS.open_midi_inputs()
 	
 	# Adjust speed multiplier based on refresh rate
@@ -52,8 +52,14 @@ func _input(event):
 			notes_on[event.pitch] = true
 			update_key_material(event.pitch, true)
 			spawn_particle(event.pitch) # Spawn particle when note is pressed
+			
 			var notePushed
-			notePushed = serial.map_midi_note_to_led(event.pitch,21,108,176,1)
+			
+			if not serial.fixLED_Toggle:
+				notePushed = serial.fixed_map_midi_note_to_led(event.pitch,serial.firstNoteSelected,serial.lastNoteSelected,serial.stripLedNum,1)
+			else:
+				notePushed = serial.map_midi_note_to_led(event.pitch,serial.firstNoteSelected,serial.lastNoteSelected,serial.stripLedNum,1)
+				
 			match serial.MODE:
 				0:
 					serial.send_command_default_note_on(notePushed)
@@ -61,12 +67,20 @@ func _input(event):
 					serial.send_command_splash(event.velocity, notePushed)
 				2:
 					serial.send_command_velocity(event.velocity, notePushed)
+				3:
+					serial.send_command_note_on(notePushed)
 		elif event.message == MIDI_MESSAGE_NOTE_OFF:
 			notes_on.erase(event.pitch)
 			update_key_material(event.pitch, false)
 			stop_particle(event.pitch) # Stop particle when note is released
+			
 			var notePushed
-			notePushed = serial.map_midi_note_to_led(event.pitch,21,108,176,1)
+			
+			if not serial.fixLED_Toggle:
+				notePushed = serial.fixed_map_midi_note_to_led(event.pitch,serial.firstNoteSelected,serial.lastNoteSelected,serial.stripLedNum,1)
+			else:
+				notePushed = serial.map_midi_note_to_led(event.pitch,serial.firstNoteSelected,serial.lastNoteSelected,serial.stripLedNum,1)
+				
 			serial.send_command_note_off(notePushed)
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed and event.position.y > 915:
@@ -179,7 +193,7 @@ func _on_bg_transparency_slider_value_changed(value):
 	bg_material.albedo_color.a = value
 
 
-func _on_color_picker_white_key_color_changed(color):
+func _on_color_picker_color_changed(color):
 	white_note_material.albedo_color = color
 	white_note_material_no_outline.albedo_color = color
 	
@@ -194,3 +208,4 @@ func _on_color_picker_white_key_color_changed(color):
 	
 	serial.currentColor = color
 	serial.send_command_update_color(color)	
+

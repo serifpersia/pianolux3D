@@ -1,25 +1,5 @@
 extends Control
 
-var serial = SerialPort.new()
-var port
-var baudrate = 115200
-var MODE = 0
-var currentColor
-
-var led_mode_list = ["Default", "Splash", "Velocity", "Animation"]
-var led_animations_list = [
-	"RainbowColors",
-	"RainbowStripeColor",
-	"OceanColors",
-	"CloudColors",
-	"LavaColors",
-	"ForestColors",
-	"PartyColors",
-	"SineWave",
-	"SparkleDots",
-	"Snake"
-]
-
 @onready var serial_list = $"../CanvasLayer/SerialList"
 @onready var open_close = $"../CanvasLayer/OpenClose"
 @onready var modes_list = $"../CanvasLayer/ModesList"
@@ -28,6 +8,12 @@ var led_animations_list = [
 @onready var brightness_slider = $"../CanvasLayer/Brightness_Slider"
 @onready var fade_rate_slider = $"../CanvasLayer/FadeRate_Slider"
 @onready var splash_length_slider = $"../CanvasLayer/SplashLength_Slider"
+@onready var piano_size_label = $"../CanvasLayer/PianoSize_Label"
+@onready var bg_brightness_slider = $"../CanvasLayer/BGBrightness_Slider"
+
+var serial = SerialPort.new()
+var port
+var baudrate = 115200
 
 # Command bytes
 const COMMAND_BYTE1 = 0
@@ -48,6 +34,43 @@ const COMMAND_SET_BG = 13
 const COMMAND_SET_GUIDE = 14
 const COMMAND_SET_LED_VISUALIZER = 15
 const COMMAND_NOTE_ON = 16
+
+var MODE = 0
+var currentColor = Color(0.622,1.25,0)
+
+var led_mode_list = ["Default", "Splash", "Velocity", "Random", "Animation"]
+var led_animations_list = [
+	"RainbowColors",
+	"RainbowStripeColor",
+	"OceanColors",
+	"CloudColors",
+	"LavaColors",
+	"ForestColors",
+	"PartyColors",
+	"SineWave",
+	"SparkleDots",
+	"Snake"
+]
+
+# Counter to track the current piano size state
+var counter: int = 0
+
+# Labels for the different sizes
+var piano_size_labels = {
+	0: "Piano 88 Keys",
+	1: "Piano 76 Keys",
+	2: "Piano 73 Keys",
+	3: "Piano 61 Keys",
+	4: "Piano 49 Keys"
+}
+
+var stripLedNum: int = 176
+var firstNoteSelected: int = 21
+var lastNoteSelected: int = 108
+
+var fixLED_Toggle = false
+var bgLED_Toggle = false
+var octaveShift_Toggle = false
 
 # Helper function to send a command
 func send_command(command_byte: int, args: Array):
@@ -78,8 +101,25 @@ func send_command_update_color(c: Color):
 func send_command_default_note_on(note: int):
 		send_command(COMMAND_NOTE_ON_DEFAULT, [note])
 
-func send_command_note_on(c: Color, note: int):
-	send_command(COMMAND_NOTE_ON, [int(c.r * 255), int(c.g * 255), int(c.b * 255), note])
+func send_command_note_on(note: int):
+	# Generate a random hue value
+	var random_hue = randi_range(0, 359)
+
+	# Define saturation and brightness (you can adjust these as needed)
+	var saturation = 1.0  # Full saturation
+	var brightness = 1.0  # Full brightness
+
+	# Create a Color object using HSB values
+	var random_color = Color.from_hsv(random_hue / 360.0, saturation, brightness)
+
+	# Convert the Color object components to integers in the 0-255 range
+	var red = int(random_color.r * 255)
+	var green = int(random_color.g * 255)
+	var blue = int(random_color.b * 255)
+	
+	# Send the command with the random color
+	send_command(COMMAND_NOTE_ON, [red, green, blue, note])
+
 
 func send_command_set_brightness(brightness: int):
 	send_command(COMMAND_SET_BRIGHTNESS, [brightness])
@@ -131,13 +171,25 @@ func send_command_set_guide(current_array: int, hue: int, saturation: int, brigh
 func send_command_set_led_visualizer(effect: int, color_hue: int):
 	send_command(COMMAND_SET_LED_VISUALIZER, [effect, color_hue])
 
-
 var transposition : int = 0
 
 func map_midi_note_to_led(midi_note: int, lowest_note: int, highest_note: int, strip_led_number: int, out_min: int) -> int:
 	midi_note -= transposition
 	var out_max = out_min + strip_led_number - 1
 	var mapped_led = (midi_note - lowest_note) * float(out_max - out_min) / float(highest_note - lowest_note)
+	return int(mapped_led) + out_min
+
+func fixed_map_midi_note_to_led(midi_note: int, lowest_note: int, highest_note: int, strip_led_number: int, out_min: int) -> int:
+	midi_note -= transposition
+	var out_max = out_min + strip_led_number - 1
+	var mapped_led = (midi_note - lowest_note) * float(out_max - out_min) / float(highest_note - lowest_note)
+	
+	if midi_note >= 57:
+		mapped_led -= 1
+		
+	if midi_note >= 93:
+		mapped_led -= 1
+		
 	return int(mapped_led) + out_min
 	
 func _ready():
@@ -164,6 +216,8 @@ func _ready():
 func _exit_tree():
 	# Ensure we close the serial port when exiting the scene tree
 	if serial.is_open():
+		send_command_set_bg(0,0,0)
+		send_command_blackout()
 		serial.close()
 
 func update_serial():
@@ -207,11 +261,15 @@ func _on_modes_list_item_selected(index):
 		3:
 			# Animation mode
 			MODE = 3
+			set_defaults(8, 255, 255)
+		4:
+			# Animation mode
+			MODE = 4
 			set_defaults(8, 255, 0)
 			send_command_animation(0, 0)
 
 func _on_animations_list_item_selected(index):
-	if MODE == 2:
+	if MODE == 4:
 		match index:
 			0:
 				# Handle "RainbowColors" animation
@@ -294,22 +352,100 @@ func rgb_to_hsb(r: float, g: float, b: float) -> Dictionary:
 		"brightness": brightness * 255
 	}
 
-
-func _on_bg_brightness_slider_value_changed(value):
+# Function to handle setting the background color
+func update_bg_color(value: float) -> void:
+	# Extract RGB components from the current color
 	var red = currentColor.r
 	var green = currentColor.g
 	var blue = currentColor.b
 
+	# Convert RGB to HSB
 	var hsb = rgb_to_hsb(red, green, blue)
 
+	# Get the HSB values and convert them to integers
 	var hue = int(hsb["hue"])
 	var saturation = int(hsb["saturation"])
-	var brightness = int(value) # Use the slider value for brightness
-	send_command_set_bg(hue,saturation,brightness)
+	var brightness = int(value)
+	
+	# Send the command to set the background color
+	if bgLED_Toggle:
+		send_command_set_bg(hue, saturation, brightness)
+		
+# Called when the background brightness slider value changes
+func _on_bg_brightness_slider_value_changed(value):
+	update_bg_color(value)
 
 
 func _on_bgled_toggle_toggled(toggled_on):
 	if toggled_on:
+		bgLED_Toggle = true
 		send_command_set_bg(0,0,50)
 	else:
+		bgLED_Toggle = false
 		send_command_set_bg(0,0,0)
+
+func update_piano_size_label():
+	# Update the label text based on the current counter
+	piano_size_label.text = piano_size_labels.get(counter, "Unknown Size")
+
+func update_piano_size_settings():
+	match counter:
+		0:
+			stripLedNum = 176
+			firstNoteSelected = 21
+			lastNoteSelected = 108
+		1:
+			stripLedNum = 152
+			firstNoteSelected = 28
+			lastNoteSelected = 103
+		2:
+			stripLedNum = 146
+			firstNoteSelected = 28
+			lastNoteSelected = 100
+		3:
+			stripLedNum = 122
+			firstNoteSelected = 36
+			lastNoteSelected = 96
+		4:
+			stripLedNum = 98
+			firstNoteSelected = 36
+			lastNoteSelected = 84
+func _on_piano_size_decrease_button_pressed():
+	if counter > 0:
+		counter -= 1
+		update_piano_size_settings()
+		update_piano_size_label()
+
+func _on_piano_size_increase_button_pressed():
+	if counter < 4:
+		counter += 1
+		update_piano_size_settings()
+		update_piano_size_label()
+
+func _on_fix_led_toggle_toggled(toggled_on):
+	if toggled_on:
+		fixLED_Toggle = true
+	else:
+		fixLED_Toggle = false
+
+func _on_revled_toggle_toggled(toggled_on):
+	if toggled_on:
+		send_command_strip_direction(1, stripLedNum)
+	else:
+		send_command_strip_direction(0, stripLedNum)
+
+# Called when the set background button is pressed
+func _on_set_bg_button_pressed():
+	update_bg_color(bg_brightness_slider.value)
+
+func _on_transposition_slider_value_changed(value):
+	if octaveShift_Toggle:
+		transposition = -value * 12
+	else:
+		transposition = -value
+
+func _on_transposition_octave_shift_toggle_toggled(toggled_on):
+	if toggled_on:
+		octaveShift_Toggle = true
+	else:
+		octaveShift_Toggle = false
