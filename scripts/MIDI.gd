@@ -54,7 +54,11 @@ func _input(event):
 			spawn_particle(event.pitch) # Spawn particle when note is pressed
 			var notePushed
 			notePushed = serial.map_midi_note_to_led(event.pitch,21,108,176,1)
-			serial.send_command_default_note_on(notePushed)
+			match serial.MODE:
+				0:
+					serial.send_command_default_note_on(notePushed)
+				1:
+					serial.send_command_splash(event.velocity, notePushed)
 		elif event.message == MIDI_MESSAGE_NOTE_OFF:
 			notes_on.erase(event.pitch)
 			update_key_material(event.pitch, false)
@@ -63,7 +67,7 @@ func _input(event):
 			notePushed = serial.map_midi_note_to_led(event.pitch,21,108,176,1)
 			serial.send_command_note_off(notePushed)
 	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed and event.position.y > 545:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed and event.position.y > 915:
 			canvas_layer.visible = not canvas_layer.visible
 
 func update_key_material(pitch, is_note_on):
