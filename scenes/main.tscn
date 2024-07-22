@@ -18,3 +18,5 @@ glow_hdr_threshold = 0.39
 
 [node name="Camera3D" type="Camera3D" parent="."]
 environment = SubResource("Environment_kd4jh")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
