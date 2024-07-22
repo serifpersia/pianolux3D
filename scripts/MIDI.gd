@@ -18,7 +18,6 @@ var speed_multiplier
 @onready var canvas_layer = $"../CanvasLayer"
 
 @onready var color_picker_white_key = $"../CanvasLayer/ColorPicker_White_Key"
-@onready var color_picker_black_key = $"../CanvasLayer/ColorPicker_Black_Key"
 
 @onready var change_bg_image_button = $"../CanvasLayer/ChangeBGImage_Button"
 @onready var file_dialog = $"../CanvasLayer/FileDialog"
@@ -41,7 +40,6 @@ var active_particles = {} # Dictionary to hold active particle instances
 
 func _ready():
 	previous_white_color = color_picker_white_key.color
-	previous_black_color = color_picker_black_key.color
 	OS.open_midi_inputs()
 	
 	# Adjust speed multiplier based on refresh rate
@@ -178,9 +176,14 @@ func _on_bg_transparency_slider_value_changed(value):
 func _on_color_picker_white_key_color_changed(color):
 	white_note_material.albedo_color = color
 	white_note_material_no_outline.albedo_color = color
+	
+	# Create a darker shade for the black note materials
+	var darker_color = Color(color.r * 0.8, color.g * 0.8, color.b * 0.8, color.a)
+	print(darker_color)
+	
+	black_note_material.albedo_color = darker_color
+	black_note_material_no_outline.albedo_color = darker_color
+	
 	particles_material.albedo_color = color
+	
 	serial.send_command_update_color(color)	
-
-func _on_color_picker_black_key_color_changed(color):
-	black_note_material.albedo_color = color
-	black_note_material_no_outline.albedo_color = color

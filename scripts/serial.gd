@@ -36,8 +36,8 @@ func send_command(command_byte: int, args: Array):
 	
 	for arg in args:
 		message.append(arg)
-	
-	serial.write_raw(message)
+	if serial.is_open():
+		serial.write_raw(message)
 
 
 func gamma_correction(value: float, gamma: float) -> int:
@@ -51,7 +51,6 @@ func send_command_update_color(c: Color):
 	var g = gamma_correction(c.g, gamma)
 	var b = gamma_correction(c.b, gamma)
 
-	print('Input color: ', c, 'Output color: ', r, ' ', g, ' ', b)
 	send_command(COMMAND_SET_GLOBAL_COLOR, [r, g, b])
 
 func send_command_default_note_on(note: int):
