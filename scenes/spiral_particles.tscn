@@ -69,6 +69,7 @@ alpha_curve = SubResource("CurveTexture_mliwq")
 
 [sub_resource type="QuadMesh" id="QuadMesh_36mvb"]
 material = ExtResource("2_583u6")
+size = Vector2(1, 1.25)
 
 [node name="SpiralParticles" type="GPUParticles3D"]
 amount = 64

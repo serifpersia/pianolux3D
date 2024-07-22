@@ -40,8 +40,14 @@ var previous_black_color
 var active_particles = {}  # Dictionary to hold active parent particle instances
 var child_particles = {}  # Dictionary to hold active child particle instances
 
+var serial_thread : Thread = Thread.new() # Create a new thread instance
+var serial_queue : Array = []
+var serial_lock : Mutex = Mutex.new()
+var is_running : bool = true # Flag to control thread execution
 
 func _ready():
+	serial_thread.start(_thread_serial_handler)
+	
 	previous_white_color = color_picker.color
 	OS.open_midi_inputs()
 	
@@ -49,45 +55,83 @@ func _ready():
 	var display_refresh_rate = DisplayServer.screen_get_refresh_rate()
 	speed_multiplier = base_speed_multiplier * 60.0 / display_refresh_rate
 
+func _exit_tree():
+	is_running = false # Signal the thread to stop
+	if serial_thread:
+		serial_thread.wait_to_finish() # Wait for the thread to finish
+
 func _input(event):
 	if event is InputEventMIDI:
 		if event.message == MIDI_MESSAGE_NOTE_ON:
 			notes_on[event.pitch] = true
 			update_key_material(event.pitch, true)
 			spawn_particle(event.pitch) # Spawn particle when note is pressed
-			
+
 			var notePushed
-			
 			if not serial.fixLED_Toggle:
-				notePushed = serial.fixed_map_midi_note_to_led(event.pitch,serial.firstNoteSelected,serial.lastNoteSelected,serial.stripLedNum,1)
+				notePushed = serial.fixed_map_midi_note_to_led(event.pitch, serial.firstNoteSelected, serial.lastNoteSelected, serial.stripLedNum, 1)
 			else:
-				notePushed = serial.map_midi_note_to_led(event.pitch,serial.firstNoteSelected,serial.lastNoteSelected,serial.stripLedNum,1)
-				
-			match serial.MODE:
-				0:
-					serial.send_command_default_note_on(notePushed)
-				1:
-					serial.send_command_splash(event.velocity, notePushed)
-				2:
-					serial.send_command_velocity(event.velocity, notePushed)
-				3:
-					serial.send_command_note_on(notePushed)
+				notePushed = serial.map_midi_note_to_led(event.pitch, serial.firstNoteSelected, serial.lastNoteSelected, serial.stripLedNum, 1)
+
+			var command_data = {
+				"mode": serial.MODE,
+				"velocity": event.velocity,
+				"notePushed": notePushed,
+				"type": "note_on"
+			}
+
+			serial_lock.lock() # Ensure thread-safe access
+			serial_queue.append(command_data) # Enqueue command
+			serial_lock.unlock()
+
 		elif event.message == MIDI_MESSAGE_NOTE_OFF:
 			notes_on.erase(event.pitch)
 			update_key_material(event.pitch, false)
 			stop_particle(event.pitch) # Stop particle when note is released
-			
+
 			var notePushed
-			
 			if not serial.fixLED_Toggle:
-				notePushed = serial.fixed_map_midi_note_to_led(event.pitch,serial.firstNoteSelected,serial.lastNoteSelected,serial.stripLedNum,1)
+				notePushed = serial.fixed_map_midi_note_to_led(event.pitch, serial.firstNoteSelected, serial.lastNoteSelected, serial.stripLedNum, 1)
 			else:
-				notePushed = serial.map_midi_note_to_led(event.pitch,serial.firstNoteSelected,serial.lastNoteSelected,serial.stripLedNum,1)
-				
-			serial.send_command_note_off(notePushed)
+				notePushed = serial.map_midi_note_to_led(event.pitch, serial.firstNoteSelected, serial.lastNoteSelected, serial.stripLedNum, 1)
+
+			var command_data = {
+				"notePushed": notePushed,
+				"type": "note_off"
+			}
+
+			serial_lock.lock() # Ensure thread-safe access
+			serial_queue.append(command_data) # Enqueue command
+			serial_lock.unlock()
+
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed and event.position.y > 915:
 			canvas_layer.visible = not canvas_layer.visible
+
+func _thread_serial_handler():
+	while is_running:
+		serial_lock.lock() # Ensure thread-safe access
+		if serial_queue.size() > 0:
+			var command_data = serial_queue.pop_front() # Dequeue command
+			serial_lock.unlock() # Release lock before processing
+
+			if command_data.type == "note_on":
+				match command_data.mode:
+					0:
+						serial.send_command_default_note_on(command_data.notePushed)
+					1:
+						serial.send_command_splash(command_data.velocity, command_data.notePushed)
+					2:
+						serial.send_command_velocity(command_data.velocity, command_data.notePushed)
+					3:
+						serial.send_command_note_on(command_data.notePushed)
+			elif command_data.type == "note_off":
+				serial.send_command_note_off(command_data.notePushed)
+		else:
+			serial_lock.unlock() # Release lock when no command
+
+		# Allow other threads to run
+		OS.delay_msec(10)
 
 func update_key_material(pitch, is_note_on):
 	var keys = virtual_keyboard.get_children()
@@ -190,11 +234,8 @@ func _remove_particle_instance(particle_instance):
 	if particle_instance and particle_instance.get_parent():
 		particle_instance.queue_free()
 
-
-
 func _on_change_bg_image_button_pressed():
 	file_dialog.popup()
-
 
 func _on_file_dialog_file_selected(path):
 	var image = Image.new()
@@ -211,15 +252,12 @@ func _on_file_dialog_file_selected(path):
 	bg_transparency_slider.value = 1
 	toggle_bg.button_pressed = true
 
-
 func _on_clear_bg_image_button_pressed():
 	bg_material.albedo_texture = null
 	toggle_bg.button_pressed = false
 
-
 func _on_bg_transparency_slider_value_changed(value):
 	bg_material.albedo_color.a = value
-
 
 func _on_color_picker_color_changed(color):
 	white_note_material.albedo_color = color
@@ -236,5 +274,4 @@ func _on_color_picker_color_changed(color):
 	particles_flash_material.albedo_color = color
 	
 	serial.currentColor = color
-	serial.send_command_update_color(color)	
-
+	serial.send_command_update_color(color)
