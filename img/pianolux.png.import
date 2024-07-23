@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://uvti5bvgk3a2"
-path="res://.godot/imported/pianolux.svg-bc212da794c51789b8e02136ee63fd76.ctex"
+uid="uid://bdkablh275b70"
+path="res://.godot/imported/pianolux.png-2eb56f7702e3ca2302b0c0cdd4be5b37.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://img/pianolux.svg"
-dest_files=["res://.godot/imported/pianolux.svg-bc212da794c51789b8e02136ee63fd76.ctex"]
+source_file="res://img/pianolux.png"
+dest_files=["res://.godot/imported/pianolux.png-2eb56f7702e3ca2302b0c0cdd4be5b37.ctex"]
 
 [params]
 
@@ -32,6 +32,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false
