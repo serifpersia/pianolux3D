@@ -11,10 +11,11 @@
 
 PianoLux is Godot Game Engine port of PianoLux Java and ESP32 versions of the application. Midi visualization and WS2812B led strip controller application.
 
-For support, questions, or suggestions, join our Discord Server:
+## Join Our Community
+
+Be part of the PianoLux Discord Server Community where you can connect with fellow users, ask questions, and share your experiences:
 
 [![Discord Server](https://discordapp.com/api/guilds/1077195120950120458/widget.png?style=banner2)](https://discord.gg/MAypyD7k86)
-
 ## Demo
 <div align="center">
 
