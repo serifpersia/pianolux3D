@@ -1,4 +1,4 @@
-extends Control
+extends Node
 
 @onready var serial_list = $"../CanvasLayer/SerialList"
 @onready var open_close = $"../CanvasLayer/OpenClose"
@@ -449,3 +449,5 @@ func _on_transposition_octave_shift_toggle_toggled(toggled_on):
 		octaveShift_Toggle = true
 	else:
 		octaveShift_Toggle = false
+
+

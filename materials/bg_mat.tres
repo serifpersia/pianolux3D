@@ -5,6 +5,5 @@
 [resource]
 transparency = 1
 blend_mode = 1
-cull_mode = 2
 shading_mode = 0
 albedo_texture = ExtResource("1_6r7qf")

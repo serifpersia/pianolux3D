@@ -27,7 +27,7 @@ var speed_multiplier
 @onready var bg = $"../BG"
 @onready var toggle_bg = $"../CanvasLayer/ToggleBG"
 
-@onready var serial = $"../Serial"
+@onready var serial = $"../PianoController"
 
 var notes = []
 var notes_on = {}

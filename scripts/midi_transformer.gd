@@ -10,7 +10,6 @@ var mode = "position_z" # Current mode: "rotate_x", "rotate_y", "rotate_z", "pos
 var position_step = 0.5
 var rotation_step = 1.0
 
-
 func _ready():
 	set_process(true)
 	timer.wait_time = 0.05
