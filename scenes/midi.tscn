@@ -64,7 +64,6 @@ offset_left = 31.0
 offset_top = 93.0
 offset_right = 172.0
 offset_bottom = 124.0
-button_pressed = true
 text = "Background"
 
 [node name="ColorPicker" type="ColorPickerButton" parent="MIDI_Pivot/MIDI/CanvasLayer"]
@@ -395,6 +394,7 @@ text = "Rev LED"
 script = ExtResource("13_0vjy6")
 
 [node name="BG" type="MeshInstance3D" parent="MIDI_Pivot/MIDI"]
+visible = false
 mesh = SubResource("QuadMesh_pxhi1")
 
 [node name="Virtual_Keyboard" type="Node3D" parent="MIDI_Pivot/MIDI"]

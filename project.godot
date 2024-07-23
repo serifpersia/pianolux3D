@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="PianoLux"
-run/main_scene="res://scenes/main.tscn"
+config/version="1.0"
+run/main_scene="res://scenes/intro_scene.tscn"
 config/features=PackedStringArray("4.2")
 run/max_fps=120
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/show_image=false
+config/icon="res://img/pianolux.svg"
 
 [autoload]
 
