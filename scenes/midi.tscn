@@ -18,11 +18,10 @@
 
 [sub_resource type="QuadMesh" id="QuadMesh_pxhi1"]
 material = ExtResource("12_70sax")
-size = Vector2(44, 21)
-center_offset = Vector3(0, 1.815, 0)
+size = Vector2(44, 25)
 
 [node name="MIDI_Pivot" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.5, -16)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.5, -16.135)
 script = ExtResource("1_wr4lx")
 
 [node name="MIDI" type="Node3D" parent="."]
@@ -81,7 +80,7 @@ offset_bottom = 353.0
 text = "Press A S D  to select Position Axis Mode
 Press Q W E to select Rotation Axis Mode
 Press R to reset to default
-Press ,  . to change value"
+Press ,  . to change value Mouse Click on keys/bottom to hide and show UI"
 
 [node name="BGTransparency_Label" type="Label" parent="MIDI/CanvasLayer"]
 offset_left = 37.0
@@ -397,7 +396,6 @@ offset_bottom = 40.0
 script = ExtResource("13_0vjy6")
 
 [node name="BG" type="MeshInstance3D" parent="MIDI"]
-visible = false
 mesh = SubResource("QuadMesh_pxhi1")
 
 [node name="Virtual_Keyboard" type="Node3D" parent="MIDI"]

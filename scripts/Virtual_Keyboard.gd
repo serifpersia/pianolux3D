@@ -5,8 +5,8 @@ extends Node3D
 
 @export var speed_multiplier : float = 10.0
 
-var display_range = 42.75
-var note_range = 58.0
+var display_range = 42.84
+var note_range = 57.93
 var note_width = display_range / note_range
 
 func _ready():
@@ -23,7 +23,7 @@ func create_midi_keyboard():
 		key.mesh = mesh
 		var z_position = 0.2 if is_black_key(note) else 0.1
 		var x_offset = calculate_x_offset(note)
-		var y_offset = -9.65 if is_black_key(note) else -10.4145
+		var y_offset = -9.75 if is_black_key(note) else -10.5
 		key.position = Vector3(x_offset - display_range / 2, y_offset, z_position)
 		if is_black_key(note):
 			key.scale = Vector3(black_key_width, 2.4, 0.1)

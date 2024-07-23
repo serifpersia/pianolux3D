@@ -50,29 +50,21 @@ func handle_movement_or_rotation(direction):
 	match mode:
 		"rotate_x":
 			rotation_degrees.x += rotation_step * direction
-			print("Rotation X: ", String("%.1f" % rotation_degrees.x))
 		"rotate_y":
 			rotation_degrees.y += rotation_step * direction
-			print("Rotation Y: ", String("%.1f" % rotation_degrees.y))
 		"rotate_z":
 			rotation_degrees.z += rotation_step * direction
-			print("Rotation Z: ", String("%.1f" % rotation_degrees.z))
 		"position_x":
 			position.x += position_step * direction
-			print("Position X: ", String("%.1f" % position.x))
 		"position_y":
 			position.y += position_step * direction
-			print("Position Y: ", String("%.1f" % position.y))
 		"position_z":
 			position.z += position_step * direction
-			print("Position Z: ", String("%.1f" % position.z))
 	update_labels()
 
 func reset_to_default():
 	rotation_degrees = Vector3(0, 0, 0)
-	position = Vector3(0, -12.5, -16)
-	print("Rotation reset to (0.0, 0.0, 0.0)")
-	print("Position reset to (0.0, 0.0, -16.0)")
+	position = Vector3(0, -12.5, -16.135)
 	update_labels()
 
 func update_labels():
