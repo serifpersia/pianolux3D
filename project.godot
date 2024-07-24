@@ -23,6 +23,7 @@ config/windows_native_icon="res://img/icon.ico"
 [autoload]
 
 Global="*res://scripts/global.gd"
+DiscordRPCLoader="*res://addons/discord-rpc-gd/nodes/discord_autoload.gd"
 
 [display]
 
@@ -31,6 +32,10 @@ window/size/viewport_height=1080
 window/size/resizable=false
 window/stretch/mode="viewport"
 window/vsync/vsync_mode=0
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/discord-rpc-gd/plugin.cfg")
 
 [input]
 
