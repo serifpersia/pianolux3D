@@ -18,15 +18,10 @@ Be part of the PianoLux Discord Server Community where you can connect with fell
 [![Discord Server](https://discordapp.com/api/guilds/1077195120950120458/widget.png?style=banner2)](https://discord.gg/MAypyD7k86)
 ## Demo
 <div align="center">
-
-https://github.com/serifpersia/pianolux-arduino/assets/62844718/6342ae71-eb57-4ae7-88c2-e7f4cdfcc62f
-
-</div>
-
-## MIDI Visualization
-
+  
 https://github.com/user-attachments/assets/9e596e92-1543-4f85-b95d-3ffbcf5fbea2
 
+</div>
 ## LED Strip Compatibility
 
 PianoLux is compatible with officially supported strips by FastLED library default are NeoPixels/WS2812B. Density must be 144 which is supported on all modes of the app and 72 density for few basic modes. You can find list of FastLED supported leds below:
