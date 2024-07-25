@@ -142,6 +142,10 @@ To use PianoLux on Linux, follow these steps:
 - Record/Stream
 - Have fun!
 
+## Loading Godot Project
+To load the project you need Godot 4.2 & addons for [serial](https://github.com/matrixant/serial_port/releases/tag/v0.1.0) and [discord-rcp](https://godotengine.org/asset-library/asset/1968)
+extract addons zips in the godot project addons dir. The folder structure should match this: `PianoLux Godot project/addons/serialports PianoLux Godot project/addons/discord-rcp`. SerialPorts addon doesn't need any further installation, for discord-rcp, enable the addon via Project Settings>Plugins
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
