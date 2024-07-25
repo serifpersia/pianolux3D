@@ -25,9 +25,7 @@ https://github.com/serifpersia/pianolux-arduino/assets/62844718/6342ae71-eb57-4a
 
 ## MIDI Visualization
 
-![image](https://github.com/user-attachments/assets/c340259e-1bfc-43bd-8199-8d1fa230ec96)
-
-https://github.com/user-attachments/assets/d336ac71-31f6-4dcd-815a-4ed50319e2d1
+https://github.com/user-attachments/assets/9e596e92-1543-4f85-b95d-3ffbcf5fbea2
 
 ## LED Strip Compatibility
 
