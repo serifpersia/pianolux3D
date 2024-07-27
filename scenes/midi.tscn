@@ -49,6 +49,13 @@ button_pressed = true
 text = "Particles
 "
 
+[node name="WebSocket_Toggle" type="CheckButton" parent="MIDI_Pivot/MIDI/CanvasLayer"]
+offset_left = 331.0
+offset_top = 443.0
+offset_right = 425.0
+offset_bottom = 474.0
+text = "ESP32"
+
 [node name="ToggleMIDI" type="CheckButton" parent="MIDI_Pivot/MIDI/CanvasLayer"]
 offset_left = 31.0
 offset_top = 62.0

@@ -4,13 +4,18 @@ extends Node
 @onready var open_close = $"../CanvasLayer/OpenClose"
 @onready var modes_list = $"../CanvasLayer/ModesList"
 @onready var animations_list = $"../CanvasLayer/AnimationsList"
-
 @onready var brightness_slider = $"../CanvasLayer/Brightness_Slider"
 @onready var fade_rate_slider = $"../CanvasLayer/FadeRate_Slider"
 @onready var splash_length_slider = $"../CanvasLayer/SplashLength_Slider"
 @onready var piano_size_label = $"../CanvasLayer/PianoSize_Label"
 @onready var bg_brightness_slider = $"../CanvasLayer/BGBrightness_Slider"
+@onready var web_socket_toggle = $"../CanvasLayer/WebSocket_Toggle"
 
+var web_socket = WebSocketPeer.new()
+var has_printed_open_message = false  # Flag to track if the open message has been printed
+@onready var piano_controller = $"../PianoController"
+
+var useESP32
 var serial = SerialPort.new()
 var port
 var baudrate = 115200
@@ -88,6 +93,18 @@ func send_command(command_byte: int, args: Array):
 func gamma_correction(value: float, gamma: float) -> int:
 	return int(pow(clamp(value, 0.0, 1.0), gamma) * 255)
 
+func create_hsb_data(action: String, index: int, hsb: Dictionary) -> Dictionary:
+	var value = 0.0
+	match index:
+		0: value = hsb["hue"]
+		1: value = hsb["saturation"]
+		2: value = hsb["brightness"]
+	
+	return {
+		"action": action,
+		"value": value
+	}
+
 func send_command_update_color(c: Color):
 	var gamma = 5.0
 	
@@ -96,18 +113,47 @@ func send_command_update_color(c: Color):
 	var g = gamma_correction(c.g, gamma)
 	var b = gamma_correction(c.b, gamma)
 
-	send_command(COMMAND_SET_GLOBAL_COLOR, [r, g, b])
+	# Convert RGB to HSB
+	var hsb = rgb_to_hsb(r / 255.0, g / 255.0, b / 255.0)
+	
+	if useESP32 and web_socket.get_ready_state() == WebSocketPeer.STATE_OPEN:
+		# Define actions for each HSB component
+		var actions = ["Hue", "Saturation", "Brightness"]
+		
+		for i in range(3):
+			var action = actions[i]  # Get the correct action for each component
+			var data = create_hsb_data(action, i, hsb)
+			
+			if data:
+				# Convert the dictionary to a JSON string
+				var json_string = JSON.stringify(data)
+				# Send the JSON string as text
+				web_socket.send_text(json_string)
+				print("Sent HSB JSON: ", json_string)
+				
+		var data_bg_action = {
+			"action": "BGAction",
+			"value" : 1
+		}
+		var json_string = JSON.stringify(data_bg_action)
+		web_socket.send_text(json_string)
+		print("Sent BG Action JSON: ", json_string)
+		
+	else:
+		if useESP32:
+			print("WebSocket is not open or ESP32 logic is not active.")
+		send_command(COMMAND_SET_GLOBAL_COLOR, [r, g, b])
+
+
 
 func send_command_default_note_on(note: int):
 		send_command(COMMAND_NOTE_ON_DEFAULT, [note])
 
 func send_command_note_on(note: int):
-	# Generate a random hue value
 	var random_hue = randi_range(0, 359)
 
-	# Define saturation and brightness (you can adjust these as needed)
-	var saturation = 1.0  # Full saturation
-	var brightness = 1.0  # Full brightness
+	var saturation = 1.0
+	var brightness = 1.0
 
 	# Create a Color object using HSB values
 	var random_color = Color.from_hsv(random_hue / 360.0, saturation, brightness)
@@ -213,6 +259,36 @@ func _ready():
 			
 	update_serial()
 
+func _process(_delta):
+	if useESP32:
+		web_socket.poll()
+		var state = web_socket.get_ready_state()
+		
+		if state == WebSocketPeer.STATE_OPEN:
+			if not has_printed_open_message:
+				print("WebSocket is open. You can press the button.")
+				has_printed_open_message = true  # Set flag to true after printing
+			
+			while web_socket.get_available_packet_count() > 0:
+				var packet = web_socket.get_packet()
+				var json_string = packet.get_string_from_utf8()
+				
+				var json = JSON.new()  # Create a new JSON instance
+				var error = json.parse(json_string)
+				if error == OK:
+					var json_data = json.data
+					print("Parsed JSON Data: ", json_data)
+				else:
+					print("Failed to parse JSON: ", json.get_error_message(), " at line ", json.get_error_line())
+		elif state == WebSocketPeer.STATE_CLOSING:
+			# Keep polling to achieve proper close.
+			pass
+		elif state == WebSocketPeer.STATE_CLOSED:
+			var code = web_socket.get_close_code()
+			var reason = web_socket.get_close_reason()
+			print("WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
+			set_process(false) # Stop processing.
+
 func _exit_tree():
 	# Ensure we close the serial port when exiting the scene tree
 	if serial.is_open():
@@ -231,16 +307,37 @@ func _on_serial_list_item_selected(index):
 
 func _on_open_close_toggled(button_pressed):
 	if button_pressed:
-		serial.baudrate = baudrate
-		serial.open(port)
-		if serial.is_open():
-			button_pressed = false
+		if web_socket_toggle.button_pressed:
+			# Handle ESP32 logic
+			print("ESP32 logic is now active.")
+			web_socket.connect_to_url("ws://pianolux.local:81")
+			useESP32 = true
 			open_close.text = "Close"
+		else:
+			# Handle serial logic
+			serial.baudrate = baudrate
+			serial.open(port)
+			if serial.is_open():
+				button_pressed = false
+				open_close.text = "Close"
+				print("serial open: ", serial.port)
+			else:
+				print("Failed to open serial port.")
 	else:
-		serial.close()
-		if not serial.is_open():
-			button_pressed = true
+		if web_socket_toggle.button_pressed:
+			# Handle ESP32 logic closure
+			print("ESP32 logic is now deactivated.")
+			useESP32 = false
 			open_close.text = "Open"
+		else:
+			# Handle serial logic closure
+			serial.close()
+			if not serial.is_open():
+				button_pressed = true
+				open_close.text = "Open"
+				print("serial closed: ", serial.port)
+			else:
+				print("Failed to close serial port.")
 
 
 func _on_modes_list_item_selected(index):
