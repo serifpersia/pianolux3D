@@ -118,13 +118,14 @@ func _thread_serial_handler():
 			if command_data.type == "note_on":
 				match command_data.mode:
 					0:
-						serial.send_command_default_note_on(command_data.notePushed)
+						serial.send_command_default_note_on(command_data.notePushed, command_data.velocity)
 					1:
 						serial.send_command_splash(command_data.velocity, command_data.notePushed)
 					2:
-						serial.send_command_velocity(command_data.velocity, command_data.notePushed)
-					3:
 						serial.send_command_note_on(command_data.notePushed)
+					3:
+						serial.send_command_velocity(command_data.velocity, command_data.notePushed)
+						
 			elif command_data.type == "note_off":
 				serial.send_command_note_off(command_data.notePushed)
 		else:

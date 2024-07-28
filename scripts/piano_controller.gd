@@ -20,6 +20,9 @@ var serial = SerialPort.new()
 var port
 var baudrate = 115200
 
+var udp_peer: PacketPeerUDP = PacketPeerUDP.new()
+var udp_port: int = 12345
+
 # Command bytes
 const COMMAND_BYTE1 = 0
 const COMMAND_BYTE2 = 1
@@ -36,14 +39,12 @@ const COMMAND_SPLASH_MAX_LENGTH = 10
 const COMMAND_VELOCITY = 11
 const COMMAND_ANIMATION = 12
 const COMMAND_SET_BG = 13
-const COMMAND_SET_GUIDE = 14
-const COMMAND_SET_LED_VISUALIZER = 15
-const COMMAND_NOTE_ON = 16
+const COMMAND_NOTE_ON_RANDOM_SERIAL = 16
 
 var MODE = 0
 var currentColor = Color(0.622,1.25,0)
 
-var led_mode_list = ["Default", "Splash", "Velocity", "Random", "Animation"]
+var led_mode_list = ["Default", "Splash", "Random", "Velocity", "Animation"]
 var led_animations_list = [
 	"RainbowColors",
 	"RainbowStripeColor",
@@ -89,7 +90,23 @@ func send_command(command_byte: int, args: Array):
 	if serial.is_open():
 		serial.write_raw(message)
 
-
+func send_json_command(action: String, value: Variant) -> void:
+	# Create the data dictionary with the action and value
+	var data = {
+		"action": action,
+		"value": value
+	}
+	
+	# Convert the dictionary to a JSON string
+	var json_string = JSON.stringify(data)
+	
+	# Send the JSON string through the WebSocket
+	if web_socket.get_ready_state() == WebSocketPeer.STATE_OPEN:
+		web_socket.send_text(json_string)
+		print("Sent JSON Command: ", json_string)
+	else:
+		print("WebSocket is not connected")
+		
 func gamma_correction(value: float, gamma: float) -> int:
 	return int(pow(clamp(value, 0.0, 1.0), gamma) * 255)
 
@@ -116,7 +133,7 @@ func send_command_update_color(c: Color):
 	# Convert RGB to HSB
 	var hsb = rgb_to_hsb(r / 255.0, g / 255.0, b / 255.0)
 	
-	if useESP32 and web_socket.get_ready_state() == WebSocketPeer.STATE_OPEN:
+	if useESP32:
 		# Define actions for each HSB component
 		var actions = ["Hue", "Saturation", "Brightness"]
 		
@@ -125,20 +142,7 @@ func send_command_update_color(c: Color):
 			var data = create_hsb_data(action, i, hsb)
 			
 			if data:
-				# Convert the dictionary to a JSON string
-				var json_string = JSON.stringify(data)
-				# Send the JSON string as text
-				web_socket.send_text(json_string)
-				print("Sent HSB JSON: ", json_string)
-				
-		var data_bg_action = {
-			"action": "BGAction",
-			"value" : 1
-		}
-		var json_string = JSON.stringify(data_bg_action)
-		web_socket.send_text(json_string)
-		print("Sent BG Action JSON: ", json_string)
-		
+				send_json_command(data["action"], data["value"])
 	else:
 		if useESP32:
 			print("WebSocket is not open or ESP32 logic is not active.")
@@ -146,44 +150,56 @@ func send_command_update_color(c: Color):
 
 
 
-func send_command_default_note_on(note: int):
+func send_command_default_note_on(note: int, velocity : int):
+	if useESP32:
+		send_midi_note_on(note, velocity)
+	else:
 		send_command(COMMAND_NOTE_ON_DEFAULT, [note])
 
 func send_command_note_on(note: int):
-	var random_hue = randi_range(0, 359)
+	if useESP32:
+		send_midi_note_on(note, 0)
+	else:
+		var random_hue = randi_range(0, 359)
 
-	var saturation = 1.0
-	var brightness = 1.0
+		var saturation = 1.0
+		var brightness = 1.0
 
-	# Create a Color object using HSB values
-	var random_color = Color.from_hsv(random_hue / 360.0, saturation, brightness)
+		# Create a Color object using HSB values
+		var random_color = Color.from_hsv(random_hue / 360.0, saturation, brightness)
 
-	# Convert the Color object components to integers in the 0-255 range
-	var red = int(random_color.r * 255)
-	var green = int(random_color.g * 255)
-	var blue = int(random_color.b * 255)
-	
-	# Send the command with the random color
-	send_command(COMMAND_NOTE_ON, [red, green, blue, note])
+		# Convert the Color object components to integers in the 0-255 range
+		var red = int(random_color.r * 255)
+		var green = int(random_color.g * 255)
+		var blue = int(random_color.b * 255)
+		
+		# Send the command with the random color
+		send_command(COMMAND_NOTE_ON_RANDOM_SERIAL, [red, green, blue, note])
 
 
 func send_command_set_brightness(brightness: int):
 	send_command(COMMAND_SET_BRIGHTNESS, [brightness])
 
 func send_command_splash(velocity: int, note: int):
-	send_command(COMMAND_SPLASH, [velocity, note])
-
+	if useESP32:
+		send_command_default_note_on(note, velocity)
+	else:
+		send_command(COMMAND_SPLASH, [velocity, note])
+		
 func send_command_fade_rate(fade_rate: int):
 	send_command(COMMAND_FADE_RATE, [fade_rate])
 
 func send_command_animation(animation_index: int, hue: int):
-	send_command(COMMAND_ANIMATION, [animation_index, hue])
+		send_command(COMMAND_ANIMATION, [animation_index, hue])
 
 func send_command_blackout():
 	send_command(COMMAND_BLACKOUT, [])
 
 func send_command_note_off(note: int):
-	send_command(COMMAND_NOTE_OFF, [note])
+	if useESP32:
+		send_midi_note_off(note)
+	else:
+		send_command(COMMAND_NOTE_OFF, [note])
 
 func send_command_splash_max_length(value: int):
 	send_command(COMMAND_SPLASH_MAX_LENGTH, [value])
@@ -192,30 +208,13 @@ func send_command_set_bg(hue: int, saturation: int, brightness: int):
 	send_command(COMMAND_SET_BG, [hue, saturation, brightness])
 
 func send_command_velocity(velocity: int, note: int):
-	send_command(COMMAND_VELOCITY, [velocity, note])
+	if useESP32:
+		send_command_default_note_on(note, velocity)
+	else:
+		send_command(COMMAND_VELOCITY, [velocity, note])
 
 func send_command_strip_direction(direction: int, num_leds: int):
 	send_command(COMMAND_STRIP_DIRECTION, [direction, num_leds])
-
-func send_command_set_guide(current_array: int, hue: int, saturation: int, brightness: int, scale_key_index: int, scale_pattern: Array):
-	var message = PackedByteArray()
-	message.append(COMMAND_BYTE1)
-	message.append(COMMAND_BYTE2)
-	message.append(COMMAND_SET_GUIDE)
-	
-	message.append(current_array)
-	message.append(hue)
-	message.append(saturation)
-	message.append(brightness)
-	message.append(scale_key_index)
-	
-	for value in scale_pattern:
-		message.append(value)
-	
-	serial.write_raw(message)
-
-func send_command_set_led_visualizer(effect: int, color_hue: int):
-	send_command(COMMAND_SET_LED_VISUALIZER, [effect, color_hue])
 
 var transposition : int = 0
 
@@ -258,22 +257,28 @@ func _ready():
 		animations_list.select(0)
 			
 	update_serial()
-
+	
+	udp_peer.set_broadcast_enabled(true)
+	udp_peer.set_dest_address("255.255.255.255", udp_port)  # Broadcast address
+	_request_esp32_ip()
+	
 func _process(_delta):
 	if useESP32:
 		web_socket.poll()
+		udp_peer.set_broadcast_enabled(true)
+		
 		var state = web_socket.get_ready_state()
 		
 		if state == WebSocketPeer.STATE_OPEN:
 			if not has_printed_open_message:
-				print("WebSocket is open. You can press the button.")
-				has_printed_open_message = true  # Set flag to true after printing
+				print("WebSocket is open.")
+				has_printed_open_message = true
 			
 			while web_socket.get_available_packet_count() > 0:
 				var packet = web_socket.get_packet()
 				var json_string = packet.get_string_from_utf8()
 				
-				var json = JSON.new()  # Create a new JSON instance
+				var json = JSON.new()
 				var error = json.parse(json_string)
 				if error == OK:
 					var json_data = json.data
@@ -281,13 +286,16 @@ func _process(_delta):
 				else:
 					print("Failed to parse JSON: ", json.get_error_message(), " at line ", json.get_error_line())
 		elif state == WebSocketPeer.STATE_CLOSING:
-			# Keep polling to achieve proper close.
 			pass
 		elif state == WebSocketPeer.STATE_CLOSED:
 			var code = web_socket.get_close_code()
 			var reason = web_socket.get_close_reason()
 			print("WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
 			set_process(false) # Stop processing.
+			
+		while udp_peer.get_available_packet_count() > 0:
+			_on_data_received()
+			udp_peer.set_broadcast_enabled(false)
 
 func _exit_tree():
 	# Ensure we close the serial port when exiting the scene tree
@@ -310,7 +318,7 @@ func _on_open_close_toggled(button_pressed):
 		if web_socket_toggle.button_pressed:
 			# Handle ESP32 logic
 			print("ESP32 logic is now active.")
-			web_socket.connect_to_url("ws://pianolux.local:81")
+			web_socket.connect_to_url("ws://pianolux3d.local:81") // use ip instead of MDNS i f the ArduinoOTA i s enabled
 			useESP32 = true
 			open_close.text = "Close"
 		else:
@@ -325,8 +333,6 @@ func _on_open_close_toggled(button_pressed):
 				print("Failed to open serial port.")
 	else:
 		if web_socket_toggle.button_pressed:
-			# Handle ESP32 logic closure
-			print("ESP32 logic is now deactivated.")
 			useESP32 = false
 			open_close.text = "Open"
 		else:
@@ -338,66 +344,115 @@ func _on_open_close_toggled(button_pressed):
 				print("serial closed: ", serial.port)
 			else:
 				print("Failed to close serial port.")
-
-
+	
 func _on_modes_list_item_selected(index):
 	send_command_blackout()
 	match index:
 		0:
-			# Default mode
 			MODE = 0
+			# Default mode
+			if useESP32:
+				send_json_command("ChangeLEDModeAction", 0)
 			set_defaults(8, 255, 255)
 		1:
-			# Splash mode
 			MODE = 1
+			# Splash mode
+			if useESP32:
+				send_json_command("ChangeLEDModeAction", 1)
 			set_defaults(8, 255, 55)
 		2:
-			# Splash mode
 			MODE = 2
+			# Random mode
+			if useESP32:
+				send_json_command("ChangeLEDModeAction", 2)
 			set_defaults(8, 255, 255)
 		3:
-			# Animation mode
 			MODE = 3
+			# Velocity mode
+			if useESP32:
+				send_json_command("ChangeLEDModeAction", 3)
 			set_defaults(8, 255, 255)
 		4:
-			# Animation mode
 			MODE = 4
-			set_defaults(8, 255, 0)
+			# Animation mode
+			if useESP32:
+				send_json_command("ChangeLEDModeAction", 4)
+				set_defaults(8, 255, 0)
 			send_command_animation(0, 0)
+
 
 func _on_animations_list_item_selected(index):
 	if MODE == 4:
 		match index:
 			0:
 				# Handle "RainbowColors" animation
-				send_command_animation(index, 0)
+				if useESP32:
+					send_json_command("ChangeAnimationAction", 0)
+				else:
+					send_command_animation(index, 0)
+				
 			1:
 				# Handle "RainbowStripeColor" animation
-				send_command_animation(index, 1)
+				if useESP32:
+					send_json_command("ChangeAnimationAction", 1)
+				else:
+					send_command_animation(index, 1)
+				
 			2:
 				# Handle "OceanColors" animation
-				send_command_animation(index, 2)
+				if useESP32:
+					send_json_command("ChangeAnimationAction", 2)
+				else:
+					send_command_animation(index, 2)
+				
 			3:
 				# Handle "CloudColors" animation
-				send_command_animation(index, 3)
+				if useESP32:
+					send_json_command("ChangeAnimationAction", 3)
+				else:
+					send_command_animation(index, 3)
+				
 			4:
 				# Handle "LavaColors" animation
-				send_command_animation(index, 4)
+				if useESP32:
+					send_json_command("ChangeAnimationAction", 4)
+				else:
+					send_command_animation(index, 4)
+				
 			5:
 				# Handle "ForestColors" animation
-				send_command_animation(index, 5)
+				if useESP32:
+					send_json_command("ChangeAnimationAction", 5)
+				else:
+					send_command_animation(index, 5)
+				
 			6:
 				# Handle "PartyColors" animation
-				send_command_animation(index, 6)
+				if useESP32:
+					send_json_command("ChangeAnimationAction", 6)
+				else:
+					send_command_animation(index, 6)
+				
 			7:
 				# Handle "SineWave" animation
-				send_command_animation(index, 7)
+				if useESP32:
+					send_json_command("ChangeAnimationAction", 7)
+				else:
+					send_command_animation(index, 7)
+				
 			8:
 				# Handle "SparkleDots" animation
-				send_command_animation(index, 8)
+				if useESP32:
+					send_json_command("ChangeAnimationAction", 8)
+				else:
+					send_command_animation(index, 8)
+				
 			9:
 				# Handle "Snake" animation
-				send_command_animation(index, 9)
+				if useESP32:
+					send_json_command("ChangeAnimationAction", 9)
+				else:
+					send_command_animation(index, 9)
 
 # Mode-specific settings function
 func set_defaults(splash_length: int, brightness: int, fade_rate: int):
@@ -411,13 +466,22 @@ func set_defaults(splash_length: int, brightness: int, fade_rate: int):
 	send_command_fade_rate(fade_rate)
 	
 func _on_brightness_slider_value_changed(value):
-	send_command_set_brightness(int(value))
+	if useESP32:
+		send_json_command("Brightness", value)
+	else:
+		send_command_set_brightness(int(value))
 
 func _on_fade_rate_slider_value_changed(value):
-	send_command_fade_rate(int(value))
+	if useESP32:
+		send_json_command("Fade", value)
+	else:
+		send_command_fade_rate(int(value))
 
 func _on_splash_length_slider_value_changed(value):
-	send_command_splash_max_length(int(value))
+	if useESP32:
+		send_json_command("Splash", value)
+	else:
+		send_command_splash_max_length(int(value))
 
 # Function to convert RGB to HSB
 func rgb_to_hsb(r: float, g: float, b: float) -> Dictionary:
@@ -470,16 +534,28 @@ func update_bg_color(value: float) -> void:
 		
 # Called when the background brightness slider value changes
 func _on_bg_brightness_slider_value_changed(value):
-	update_bg_color(value)
+	if useESP32:
+		send_json_command("Background", value)
+	else:
+		update_bg_color(value)
 
 
 func _on_bgled_toggle_toggled(toggled_on):
 	if toggled_on:
 		bgLED_Toggle = true
-		send_command_set_bg(0,0,50)
+		
+		if useESP32:
+			send_json_command("BGAction", 1)
+		else:
+			
+			send_command_set_bg(0,0,50)
 	else:
 		bgLED_Toggle = false
-		send_command_set_bg(0,0,0)
+		
+		if useESP32:
+			send_json_command("BGAction", 0)
+		else:
+			send_command_set_bg(0,0,0)
 
 func update_piano_size_label():
 	# Update the label text based on the current counter
@@ -527,13 +603,22 @@ func _on_fix_led_toggle_toggled(toggled_on):
 
 func _on_revled_toggle_toggled(toggled_on):
 	if toggled_on:
-		send_command_strip_direction(1, stripLedNum)
+		if useESP32:
+			send_json_command("DirectionAction", 1)
+		else:
+			send_command_strip_direction(1, stripLedNum)
 	else:
-		send_command_strip_direction(0, stripLedNum)
+		if useESP32:
+			send_json_command("DirectionAction", 0)
+		else:
+			send_command_strip_direction(0, stripLedNum)
 
 # Called when the set background button is pressed
 func _on_set_bg_button_pressed():
-	update_bg_color(bg_brightness_slider.value)
+	if useESP32:
+		send_json_command("BGAction", 1)
+	else:
+		update_bg_color(bg_brightness_slider.value)
 
 func _on_transposition_slider_value_changed(value):
 	if octaveShift_Toggle:
@@ -547,4 +632,49 @@ func _on_transposition_octave_shift_toggle_toggled(toggled_on):
 	else:
 		octaveShift_Toggle = false
 
+func _request_esp32_ip():
+	var request_buffer = PackedByteArray()
+	var request_data = "ScanRequest".to_ascii_buffer()  # Converts the string to a UTF-8 encoded byte array
+	request_buffer.append_array(request_data)
+	udp_peer.put_packet(request_buffer)
+	print("Sending: ", request_buffer)
+	print("Broadcast request sent.")
 
+func _on_data_received():
+	var packet = udp_peer.get_packet()
+	var ip_address = _parse_ip_from_packet(packet)
+	if ip_address != "":
+		print("Received IP address: ", ip_address)
+		udp_peer.set_dest_address(ip_address, udp_port)  # Broadcast address
+
+func _parse_ip_from_packet(packet: PackedByteArray):
+	if packet.size() == 4:
+		var octets = [packet[0], packet[1], packet[2], packet[3]]
+		var ip_str = str(octets[0]) + "." + str(octets[1]) + "." + str(octets[2]) + "." + str(octets[3])
+		return ip_str
+	else:
+		print("Invalid packet size: ", packet.size())
+		return ""
+
+# Function to send MIDI NOTE_ON
+func send_midi_note_on(note: int, velocity: int):
+
+	if MODE != 4:
+		# Format message: [note_number, note_state, velocity]
+		var message: PackedByteArray = PackedByteArray()
+		message.append(note-1)
+		message.append(velocity)
+		
+		# Send the message over UDP
+		udp_peer.put_packet(message)
+		print("MIDI message sent:", message)
+
+# Function to send MIDI NOTE_OFF
+func send_midi_note_off(note: int):
+	if MODE != 4:
+		# Format message: [note_number, note_state, velocity]
+		var message: PackedByteArray = PackedByteArray()
+		message.append(note-1)
+		# Send the message over UDP
+		udp_peer.put_packet(message)
+		print("MIDI message sent:", message)
