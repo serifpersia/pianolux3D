@@ -318,7 +318,7 @@ func _on_open_close_toggled(button_pressed):
 		if web_socket_toggle.button_pressed:
 			# Handle ESP32 logic
 			print("ESP32 logic is now active.")
-			web_socket.connect_to_url("ws://pianolux3d.local:81") // use ip instead of MDNS i f the ArduinoOTA i s enabled
+			web_socket.connect_to_url("ws://pianolux3d.local:81") #use ip instead of MDNS if the ArduinoOTA is enabled
 			useESP32 = true
 			open_close.text = "Close"
 		else:
