@@ -4,22 +4,22 @@ FadeController ::FadeController() {
 }
 
 // Set the duration of the transition and the number of steps
-unsigned long transitionTime = 1000;  // in milliseconds
-uint8_t steps = 100;
-uint8_t BG_FADE_OFFSET = 0;
+int transitionTime = 1000;  // in milliseconds
+int steps = 100;
+int BG_FADE_OFFSET = 0;
 
-void FadeController::fade(uint8_t fadeRate) {
+void FadeController::fade(int fadeRate) {
   boolean bgModeOn = (bgColor != CRGB(0));
 
-  for (uint8_t i = 0; i < NUM_LEDS; i++) {
-    uint8_t effectiveSplashRate = fadeRate;
+  for (int i = 0; i < NUM_LEDS; i++) {
+    int effectiveSplashRate = fadeRate;
     if (keysOn[i]) {
       if (MODE == COMMAND_SPLASH)
         effectiveSplashRate = 1;
       else
         effectiveSplashRate = 0;
     }
-    uint8_t ledNo = ledNum(i);
+    int ledNo = ledNum(i);
     CRGB currentColor = leds[ledNo];
 
     // Trigger is complete, fade the LED
@@ -32,8 +32,7 @@ void FadeController::fade(uint8_t fadeRate) {
             leds[ledNo] = bgColor;
           }
         }
-      }
-      else {
+      } else {
         // Both background mode and guide mode are off, fade to black
         leds[ledNo].fadeToBlackBy(fadeRate);
       }

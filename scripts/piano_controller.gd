@@ -616,7 +616,8 @@ func _on_revled_toggle_toggled(toggled_on):
 # Called when the set background button is pressed
 func _on_set_bg_button_pressed():
 	if useESP32:
-		send_json_command("BGAction", 1)
+		if bgLED_Toggle:
+			send_json_command("BGAction", 1)
 	else:
 		update_bg_color(bg_brightness_slider.value)
 

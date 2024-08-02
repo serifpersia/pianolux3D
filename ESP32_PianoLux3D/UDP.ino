@@ -49,6 +49,6 @@ void sendESP32IPInfo() {
   udp.beginPacket(udp.remoteIP(), udp.remotePort());
   udp.write(responseBuffer, 4); // Assuming IPv4 address
   udp.endPacket();
-  WebSerial.println("Requested ESP32's IP sent");
-  WebSerial.println(localIP);
+  //  WebSerial.println("Requested ESP32's IP sent");
+  //  WebSerial.println(localIP);
 }

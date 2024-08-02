@@ -49,19 +49,6 @@ void noteOn(uint8_t note, uint8_t velocity) {
     setColorFromVelocity(velocity, hue, saturation, brightness);
     controlLeds(note, hue, saturation, brightness);
   }
-  //Split Mode
-  else if (serverMode == 5) {
-    // Split Mode
-    uint8_t splitIndex = map(note, splitLeftMinPitch, splitRightMaxPitch, 0, 100);
-
-    if (splitIndex <= splitPosition) {
-      // Use left color
-      controlLeds(note, splitLeftColor.h, splitLeftColor.s, splitLeftColor.v);
-    } else {
-      // Use right color
-      controlLeds(note, splitRightColor.h, splitRightColor.s, splitRightColor.v);
-    }
-  }
 }
 
 void noteOff(uint8_t note) {

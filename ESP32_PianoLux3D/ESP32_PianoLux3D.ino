@@ -1,24 +1,33 @@
+/*
+  PianoLux3D is an open-source project that aims to provide MIDI-based LED control to the masses.
+  It is developed by a one-person team.
+
+  If you modify this code and redistribute the PianoLux3D project, please ensure that you
+  don't remove this disclaimer or appropriately credit the original author of the project
+  by linking to the project's source on GitHub: github.com/serifpersia/pianolux3d/
+  Failure to comply with these terms would constitute a violation of the project's
+  MIT license under which PianoLux3D is released.
+
+  Copyright © 2024 Serif Rami, aka serifpersia
+
+*/
+
 String firmwareVersion = "v1.0";
 
-//DEV defines
-// if arduinoOTA is enabled, mdns doesn't function!
-#define ARDUINO_OTA_YES 1
-#define ARDUINO_OTA_NO 0
-
-#define CURRENT_ARDUINO_OTA 1
+#define USE_ELEGANT_OTA 1 // Set to 1 to use ElegantOTA, 0 to not use
 
 // WIFI Libs
 #include <WiFiManager.h>
 #include <ESPmDNS.h>
-#include <WebSerial.h>
-
-#if CURRENT_ARDUINO_OTA == ARDUINO_OTA_YES
-#include <ArduinoOTA.h>
-#endif
+//#include <WebSerial.h>
 
 #include <ArduinoJson.h>
 #include <ESPAsyncWebServer.h>
 #include <WebSocketsServer.h>
+
+#if USE_ELEGANT_OTA
+#include <ElegantOTA.h>
+#endif
 
 // ESP Storage Lib
 #include <LittleFS.h>
@@ -56,10 +65,6 @@ uint8_t STRIP_DIRECTION = 0;  // 0 - left-to-right
 uint8_t generalFadeRate = 255;
 uint8_t numEffects = 0;
 
-uint8_t lowestNote = 21;    // MIDI note A0
-uint8_t highestNote = 108;  // MIDI note C8 (adjust as needed)
-uint8_t useFix;
-uint8_t pianoScaleRatio;
 
 uint8_t  getHueForPos(uint8_t pos) {
   return pos * 255 / NUM_LEDS;
@@ -89,21 +94,9 @@ uint8_t bgBrightness = 128;
 
 uint8_t currentHue[MAX_NUM_LEDS] = {0}; // Array to store current hue value for each LED
 
-
-// Define split positions (percentage)
-uint8_t splitPosition = 50;  // Example: 50 means the split is in the middle
-uint8_t splitLeftMinPitch = 21;
-uint8_t splitRightMaxPitch = 108;
-
-// Define split colors
-CHSV splitLeftColor = CHSV(0, 255, 255);     // Red color
-CHSV splitRightColor = CHSV(160, 255, 255);  // Blue color
-
 uint8_t bgToggle;
-uint8_t fixToggle;
 uint8_t reverseToggle;
 uint8_t bgUpdateToggle = 1;
-uint8_t keySizeVal;
 
 uint8_t LED_PIN;
 uint8_t COLOR_PRESET;
@@ -129,10 +122,6 @@ const uint8_t COMMAND_KEY_OFF = 249;
 const uint8_t COMMAND_SPLASH_MAX_LENGTH = 248;
 const uint8_t COMMAND_SET_BG = 247;
 const uint8_t COMMAND_VELOCITY = 246;
-const uint8_t COMMAND_STRIP_DIRECTION = 245;
-const uint8_t COMMAND_SET_GUIDE = 244;
-const uint8_t COMMAND_SET_LED_VISUALIZER = 243;
-
 
 uint8_t MODE = COMMAND_SET_COLOR;
 
@@ -244,14 +233,14 @@ const uint8_t wmJumperPin = 15;  // Jumper pin for WiFi Manager Captive Portal
 const uint8_t apJumperPin = 16;      // Jumper pin for AP mode
 
 void startWmPortal(WiFiManager& wifiManager) {
-  if (!wifiManager.startConfigPortal("PianoLux Portal")) {
+  if (!wifiManager.startConfigPortal("PianoLux3D Portal")) {
     ESP.restart();
   }
 }
 
 void startAP() {
   // Start ESP32 in AP mode
-  WiFi.softAP("PianoLux AP");
+  WiFi.softAP("PianoLux3D AP");
 }
 
 void startSTA(WiFiManager& wifiManager) {
@@ -268,11 +257,46 @@ void startSTA(WiFiManager& wifiManager) {
     ESP.restart();
   });
 
-  if (!wifiManager.autoConnect("PianoLux Portal")) {
+  if (!wifiManager.autoConnect("PianoLux3D Portal")) {
     wifiManager.resetSettings();
     ESP.restart();
   }
 }
+
+#if USE_ARDUINO_OTA
+void setupArduinoOTA()
+{
+  ArduinoOTA.setHostname("PianoLux3D-ESP32-OTA");
+
+  ArduinoOTA
+  .onStart([]() {
+    String type;
+    if (ArduinoOTA.getCommand() == U_FLASH)
+      type = "sketch";
+    else // U_LittleFS
+      type = "filesystem";
+
+    // NOTE: if updating LittleFS this would be the place to unmount LittleFS using LittleFS.end()
+    Serial.println("Start updating " + type);
+  })
+  .onEnd([]() {
+    Serial.println("\nEnd");
+  })
+  .onProgress([](unsigned int progress, unsigned int total) {
+    Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+  })
+  .onError([](ota_error_t error) {
+    Serial.printf("Error[%u]: ", error);
+    if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+    else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+    else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+    else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+    else if (error == OTA_END_ERROR) Serial.println("End Failed");
+  });
+
+  ArduinoOTA.begin();
+}
+#endif
 
 void setup() {
   // Start Serial at 115200 baud rate
@@ -316,61 +340,33 @@ void setup() {
   }
   Serial.println("LittleFS mounted successfully");
 
-#if CURRENT_ARDUINO_OTA == ARDUINO_OTA_YES
 
-  ArduinoOTA.setHostname("PianoLux-ESP32-OTA");
-
-  ArduinoOTA
-  .onStart([]() {
-    String type;
-    if (ArduinoOTA.getCommand() == U_FLASH)
-      type = "sketch";
-    else // U_LittleFS
-      type = "filesystem";
-
-    // NOTE: if updating LittleFS this would be the place to unmount LittleFS using LittleFS.end()
-    Serial.println("Start updating " + type);
-  })
-  .onEnd([]() {
-    Serial.println("\nEnd");
-  })
-  .onProgress([](unsigned int progress, unsigned int total) {
-    Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
-  })
-  .onError([](ota_error_t error) {
-    Serial.printf("Error[%u]: ", error);
-    if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
-    else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
-    else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
-    else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
-    else if (error == OTA_END_ERROR) Serial.println("End Failed");
-  });
-
-  ArduinoOTA.begin();
+#if USE_ELEGANT_OTA
+  ElegantOTA.begin(&server);
 #endif
 
   // Load configuration from file
   loadConfig();
 
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request) {
-    request->send(200, "text/plain", "Hi! This is WebSerial demo. You can access webserial interface at http://" + WiFi.localIP().toString() + "/webserial");
-  });
+  //  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request) {
+  //    request->send(200, "text/plain", "Hi! This is WebSerial demo. You can access webserial interface at http://" + WiFi.localIP().toString() + "/webserial");
+  //  });
 
   // WebSerial is accessible at "<IP Address>/webserial" in browser
-  WebSerial.begin(&server);
+  //  WebSerial.begin(&server);
 
-  /* Attach Message Callback */
-  WebSerial.onMessage([&](uint8_t *data, size_t len) {
-    Serial.printf("Received %u bytes from WebSerial: ", len);
-    Serial.write(data, len);
-    Serial.println();
-    WebSerial.println("Received Data...");
-    String d = "";
-    for (size_t i = 0; i < len; i++) {
-      d += char(data[i]);
-    }
-    WebSerial.println(d);
-  });
+  //  /* Attach Message Callback */
+  //  WebSerial.onMessage([&](uint8_t *data, size_t len) {
+  //    Serial.printf("Received %u bytes from WebSerial: ", len);
+  //    Serial.write(data, len);
+  //    Serial.println();
+  //    WebSerial.println("Received Data...");
+  //    String d = "";
+  //    for (size_t i = 0; i < len; i++) {
+  //      d += char(data[i]);
+  //    }
+  //    WebSerial.println(d);
+  //  });
 
 
   server.begin();
@@ -404,12 +400,12 @@ void setup() {
 
 void loop() {
 
-#if CURRENT_ARDUINO_OTA == ARDUINO_OTA_YES
-  ArduinoOTA.handle();
+#if USE_ELEGANT_OTA
+  ElegantOTA.loop();
 #endif
 
   webSocket.loop();
-  WebSerial.loop();
+  //  WebSerial.loop();
 
   if (serverMode == 2) {
     // Update hue for LEDs that are currently on
