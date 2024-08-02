@@ -148,7 +148,7 @@ To get started with the project, follow these steps:
 
 1. **Requirements**: Ensure you have Godot 4.2 installed. You will also need the following addons:
    - [Serial](https://github.com/matrixant/serial_port/releases/tag/v0.1.0)
-   - [Discord-RCP](https://godotengine.org/asset-library/asset/1968)
+   - [Discord-RCP](https://github.com/vaporvee/discord-rpc-godot/releases)
 
 2. **Addons Installation**:
    - Download the addons and extract the zip files into the `addons` directory of your Godot project.
