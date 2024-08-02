@@ -2,14 +2,14 @@
   
 ![pianolux_logo](https://github.com/serifpersia/pianolux-esp32/assets/62844718/41b64e47-2d2b-4114-b2ca-05d3ef084215)
 
-<h1><span class="piano-text" style="color: white;">PianoLux</span></h1> 
+<h1><span class="piano-text" style="color: white;">PianoLux3D</span></h1> 
 
   [![Release](https://img.shields.io/github/release/serifpersia/pianolux-godot.svg?style=flat-square)](https://github.com/serifpersia/pianolux-godot/releases)
   [![License](https://img.shields.io/github/license/serifpersia/pianolux-godot?color=blue&style=flat-square)](https://raw.githubusercontent.com/serifpersia/pianolux-godot/master/LICENSE)
   [![Discord](https://img.shields.io/discord/1077195120950120458.svg?colorB=blue&label=discord&style=flat-square)](https://discord.gg/MAypyD7k86)
 </div>
 
-PianoLux is Godot Game Engine port of PianoLux Java and ESP32 versions of the application. Midi visualization and WS2812B led strip controller application.
+PianoLux3D is Godot Game Engine port of PianoLux Java and ESP32 versions of the application. Midi visualization and WS2812B led strip controller application.
 
 ## Join Our Community
 
@@ -69,7 +69,7 @@ Some arm32 based native usb boards will also work latest arduino code needs to b
 
 ESP32 platform boards also are supported
 - ESP32/S2/S3
-
+* You can send midi and led control commands over wifi if you use esp32 arduino code(initial wifi setup required after upload, instructions are inside esp32 version of the arduino code)
 ## Download
 
 You can download the latest release of PianoLux here:

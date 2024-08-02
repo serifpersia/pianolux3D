@@ -120,12 +120,12 @@ libraries = {
 }
 
 [node name="Logo_Label" type="Label" parent="."]
-offset_left = 624.0
+offset_left = 518.0
 offset_top = 747.0
-offset_right = 1291.0
+offset_right = 1381.0
 offset_bottom = 952.0
 theme_override_colors/font_color = Color(1, 1, 1, 0)
 theme_override_font_sizes/font_size = 150
-text = "PianoLux"
+text = "PianoLux3D"
 horizontal_alignment = 1
 vertical_alignment = 1

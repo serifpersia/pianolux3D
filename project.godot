@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="PianoLux"
+config/name="PianoLux3D"
 config/version="1.0"
 run/main_scene="res://scenes/intro_scene.tscn"
 config/features=PackedStringArray("4.2")

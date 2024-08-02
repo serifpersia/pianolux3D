@@ -2,6 +2,18 @@
   PianoLux3D is an open-source project that aims to provide MIDI-based LED control to the masses.
   It is developed by a one-person team.
 
+  To use this version of the code, install esp32 arduino core version 2.0.14,
+  install required libraries via .bat or .sh scripts depending on 
+  what os you are using.After libs install, restart Arduino IDE 1.8.x.
+  Select your board under Tools>Board> ESP32, ESP32-S2 or ESP32S3
+  (*other boards are not tested and aren't guaranteed to work with the project)
+  Edit config.cfg file in the data folder to change pin number for led strip data pin default
+  is pin 18, also u can change led color order and led strip max current in mA
+  Under Tools>ESP32PartitionTool will open my tool for uploading, select LittleFS
+  under SPIFFS section and press Merge binary and upload.
+  With no errors you can connect via wifi capable device to PianoLux3D AP WIFi and
+  setup your local network WiFi, after that you are ready to use PianoLux3D app on your OS
+
   If you modify this code and redistribute the PianoLux3D project, please ensure that you
   don't remove this disclaimer or appropriately credit the original author of the project
   by linking to the project's source on GitHub: github.com/serifpersia/pianolux3d/
