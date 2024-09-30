@@ -133,6 +133,12 @@ To use PianoLux on Linux, follow these steps:
 
    - Select Serial port and press Open button to start optional serial communication
 
+
+## Compile
+To be able to compile for arduino only install FastLED 3.7.0
+For ESP32 run install_libs.bat/.sh files to auto install libs needed
+*Modify ElegantOTA.h file in this lib's src directory change #define ELEGANTOTA_USE_ASYNC_WEBSERVER 0 to 1
+
 ## Usage
 
 - Start the app using the provided executable.
