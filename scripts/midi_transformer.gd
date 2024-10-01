@@ -6,7 +6,7 @@ extends Node3D
 @onready var position_label = $MIDI/CanvasLayer/Position_Label
 @onready var mode_label = $MIDI/CanvasLayer/Mode_Label
 
-var mode = "position_z" # Current mode: "rotate_x", "rotate_y", "rotate_z", "position_x", "position_y", "position_z"
+var mode = "position_z"
 var position_step = 0.5
 var rotation_step = 1.0
 
@@ -17,7 +17,7 @@ func _ready():
 	update_labels()
 
 func _process(_delta):
-	# Handle input for mode selection
+	
 	if Input.is_action_just_pressed("ui_q"):
 		mode = "rotate_x"
 		update_mode_label()

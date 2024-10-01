@@ -11,7 +11,7 @@ extends Node3D
 @export var bg_material : Material
 
 @export var base_speed_multiplier : float = 16.0
-@export var particle_scene : PackedScene # Add a variable to hold the particle scene
+@export var particle_scene : PackedScene
 
 var speed_multiplier
 
@@ -37,13 +37,13 @@ var note_depth = 0.1
 var previous_white_color
 var previous_black_color
 
-var active_particles = {}  # Dictionary to hold active parent particle instances
-var child_particles = {}  # Dictionary to hold active child particle instances
+var active_particles = {}
+var child_particles = {}
 
-var serial_thread : Thread = Thread.new() # Create a new thread instance
+var serial_thread : Thread = Thread.new()
 var serial_queue : Array = []
 var serial_lock : Mutex = Mutex.new()
-var is_running : bool = true # Flag to control thread execution
+var is_running : bool = true
 
 func _ready():
 	serial_thread.start(_thread_serial_handler)
@@ -51,21 +51,20 @@ func _ready():
 	previous_white_color = color_picker.color
 	OS.open_midi_inputs()
 	
-	# Adjust speed multiplier based on refresh rate
 	var display_refresh_rate = DisplayServer.screen_get_refresh_rate()
 	speed_multiplier = base_speed_multiplier * 60.0 / display_refresh_rate
 
 func _exit_tree():
-	is_running = false # Signal the thread to stop
+	is_running = false
 	if serial_thread:
-		serial_thread.wait_to_finish() # Wait for the thread to finish
+		serial_thread.wait_to_finish()
 
 func _input(event):
 	if event is InputEventMIDI:
 		if event.message == MIDI_MESSAGE_NOTE_ON:
 			notes_on[event.pitch] = true
 			update_key_material(event.pitch, true)
-			spawn_particle(event.pitch) # Spawn particle when note is pressed
+			spawn_particle(event.pitch)
 
 			var notePushed
 			if not serial.fixLED_Toggle:
@@ -80,14 +79,14 @@ func _input(event):
 				"type": "note_on"
 			}
 
-			serial_lock.lock() # Ensure thread-safe access
-			serial_queue.append(command_data) # Enqueue command
+			serial_lock.lock()
+			serial_queue.append(command_data)
 			serial_lock.unlock()
 
 		elif event.message == MIDI_MESSAGE_NOTE_OFF:
 			notes_on.erase(event.pitch)
 			update_key_material(event.pitch, false)
-			stop_particle(event.pitch) # Stop particle when note is released
+			stop_particle(event.pitch)
 
 			var notePushed
 			if not serial.fixLED_Toggle:
@@ -100,20 +99,21 @@ func _input(event):
 				"type": "note_off"
 			}
 
-			serial_lock.lock() # Ensure thread-safe access
-			serial_queue.append(command_data) # Enqueue command
+			serial_lock.lock()
+			serial_queue.append(command_data)
 			serial_lock.unlock()
 
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed and event.position.y > 915:
+	if event is InputEventKey:
+		if event.keycode == KEY_SPACE and event.pressed:
 			canvas_layer.visible = not canvas_layer.visible
+
 
 func _thread_serial_handler():
 	while is_running:
-		serial_lock.lock() # Ensure thread-safe access
+		serial_lock.lock()
 		if serial_queue.size() > 0:
-			var command_data = serial_queue.pop_front() # Dequeue command
-			serial_lock.unlock() # Release lock before processing
+			var command_data = serial_queue.pop_front()
+			serial_lock.unlock()
 
 			if command_data.type == "note_on":
 				match command_data.mode:
@@ -129,26 +129,28 @@ func _thread_serial_handler():
 			elif command_data.type == "note_off":
 				serial.send_command_note_off(command_data.notePushed)
 		else:
-			serial_lock.unlock() # Release lock when no command
+			serial_lock.unlock()
 
-		# Allow other threads to run
 		OS.delay_msec(10)
 
 func update_key_material(pitch, is_note_on):
 	var keys = virtual_keyboard.get_children()
 	for key in keys:
 		if key.name == "key_" + str(pitch):
+			
+			var mesh_instance = key.get_child(0)
 			if virtual_keyboard.is_black_key(pitch):
 				if is_note_on:
-					key.material_override = black_note_material_no_outline
+					mesh_instance.material_override = black_note_material_no_outline
 				else:
-					key.material_override = virtual_keyboard.black_key_material
+					mesh_instance.material_override = virtual_keyboard.black_key_material
 			else:
 				if is_note_on:
-					key.material_override = white_note_material_no_outline
+					mesh_instance.material_override = white_note_material_no_outline
 				else:
-					key.material_override = virtual_keyboard.white_key_meterial
+					mesh_instance.material_override = virtual_keyboard.white_key_meterial
 			break
+
 
 func _process(delta):
 	spawn_notes()
@@ -162,7 +164,7 @@ func spawn_notes():
 		box.mesh = capsule
 		var x_offset = virtual_keyboard.calculate_x_offset(note)
 		var width = virtual_keyboard.note_width if not virtual_keyboard.is_black_key(note) else virtual_keyboard.note_width * 0.65
-		var z_position = 0.2 if virtual_keyboard.is_black_key(note) else 0.1  # Slightly in front for black keys
+		var z_position = 0.2 if virtual_keyboard.is_black_key(note) else 0.1
 		box.position = Vector3(x_offset - virtual_keyboard.display_range / 2, -8.5, z_position)
 		box.scale = Vector3(width, note_height, note_depth)
 		box.material_override = black_note_material if virtual_keyboard.is_black_key(note) else white_note_material
@@ -191,10 +193,8 @@ func spawn_particle(pitch):
 		add_child(particle_instance)
 		particle_instance.emitting = true
 		
-		# Track parent particle
 		active_particles[pitch] = particle_instance
 		
-		# Track child particles
 		for child in particle_instance.get_children():
 			child.emitting = true
 			if not child_particles.has(pitch):
@@ -207,7 +207,6 @@ func stop_particle(pitch):
 		var particle_instance = active_particles[pitch]
 		particle_instance.emitting = false
 		
-		# Stop emission and schedule removal for parent particle
 		var parent_timer = Timer.new()
 		parent_timer.one_shot = true
 		parent_timer.wait_time = particle_instance.lifetime
@@ -215,7 +214,6 @@ func stop_particle(pitch):
 		add_child(parent_timer)
 		parent_timer.start()
 		
-		# Stop emission and schedule removal for each child particle
 		if pitch in child_particles:
 			for child in child_particles[pitch]:
 				child.emitting = false
@@ -226,7 +224,6 @@ func stop_particle(pitch):
 				add_child(child_timer)
 				child_timer.start()
 			
-		# Clean up dictionaries
 		active_particles.erase(pitch)
 		child_particles.erase(pitch)
 
@@ -264,7 +261,6 @@ func _on_color_picker_color_changed(color):
 	white_note_material.albedo_color = color
 	white_note_material_no_outline.albedo_color = color
 	
-	# Create a darker shade for the black note materials
 	var darker_color = Color(color.r * 0.8, color.g * 0.8, color.b * 0.8, color.a)
 	print(darker_color)
 	

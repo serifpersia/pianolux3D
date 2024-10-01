@@ -1,11 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=16 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/MIDI.gd" id="1_3ll4w"]
 [ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="1_7mq6q"]
 [ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_jo87c"]
 [ext_resource type="Script" path="res://scripts/midi_transformer.gd" id="1_wr4lx"]
 [ext_resource type="Material" uid="uid://dxoey040t634h" path="res://materials/white_note_no_outline_mat.tres" id="2_473y8"]
-[ext_resource type="Material" uid="uid://che5eiuay5aby" path="res://materials/white_key_mat.tres" id="2_upvwc"]
 [ext_resource type="Material" uid="uid://qnj37138s6ar" path="res://materials/black_note_no_outline_mat.tres" id="3_0tisb"]
 [ext_resource type="Material" uid="uid://xdabkcdm3c8g" path="res://materials/black_key_mat.tres" id="3_mcpll"]
 [ext_resource type="PackedScene" uid="uid://bjgxxihfcew33" path="res://scenes/serial_list.tscn" id="3_y44n4"]
@@ -407,7 +406,6 @@ mesh = SubResource("QuadMesh_pxhi1")
 [node name="Virtual_Keyboard" type="Node3D" parent="MIDI_Pivot/MIDI"]
 transform = Transform3D(1, 1.48077e-11, 0, 1.62279e-11, 1, 0, 1.45519e-11, 3.63798e-12, 1, 1.81899e-12, 0, 0)
 script = ExtResource("1_7mq6q")
-white_key_meterial = ExtResource("2_upvwc")
 black_key_material = ExtResource("3_mcpll")
 
 [node name="MIDI_Notes" type="Node3D" parent="MIDI_Pivot/MIDI"]

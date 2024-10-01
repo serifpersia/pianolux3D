@@ -12,28 +12,43 @@ var note_width = display_range / note_range
 func _ready():
 	create_midi_keyboard()
 
-	
 func create_midi_keyboard():
 	var white_key_width = note_width
 	var black_key_width = white_key_width * 0.65
 
 	for note in range(21,109):
-		var key = MeshInstance3D.new()
+		
+		var key_body = StaticBody3D.new()
+		var key_mesh_instance = MeshInstance3D.new()
 		var mesh = BoxMesh.new()
-		key.mesh = mesh
+		
+		key_mesh_instance.mesh = mesh
+		
 		var z_position = 0.2 if is_black_key(note) else 0.1
 		var x_offset = calculate_x_offset(note)
 		var y_offset = -9.75 if is_black_key(note) else -10.5
-		key.position = Vector3(x_offset - display_range / 2, y_offset, z_position)
-		if is_black_key(note):
-			key.scale = Vector3(black_key_width, 2.4, 0.1)
-			key.material_override = black_key_material
-		else:
-			key.scale = Vector3(white_key_width, 3.8, 0.1)
-			key.material_override = white_key_meterial
+		key_body.position = Vector3(x_offset - display_range / 2, y_offset, z_position)
 		
-		key.name = "key_" + str(note)
-		add_child(key)
+		if is_black_key(note):
+			key_mesh_instance.scale = Vector3(black_key_width, 2.4, 0.1)
+			key_mesh_instance.material_override = black_key_material
+		else:
+			key_mesh_instance.scale = Vector3(white_key_width, 3.8, 0.1)
+			key_mesh_instance.material_override = white_key_meterial
+		
+		key_body.add_child(key_mesh_instance)
+
+		var collision_shape = CollisionShape3D.new()
+		var shape = BoxShape3D.new()
+		
+		shape.size = key_mesh_instance.scale
+		collision_shape.shape = shape
+		
+		key_body.add_child(collision_shape)
+
+		key_body.name = "key_" + str(note)
+
+		add_child(key_body)
 
 func calculate_x_offset(note):
 	var white_key_width = note_width + 0.1

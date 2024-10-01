@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://kf6tjtr76ly2"]
+[gd_scene load_steps=5 format=3 uid="uid://kf6tjtr76ly2"]
 
 [ext_resource type="PackedScene" uid="uid://demetbmmfc3sm" path="res://scenes/midi.tscn" id="1_gd7mg"]
+[ext_resource type="Script" path="res://scripts/camera_3d.gd" id="2_4cuns"]
 [ext_resource type="Script" path="res://scripts/discord-rpc.gd" id="2_l1ve6"]
 
 [sub_resource type="Environment" id="Environment_kd4jh"]
@@ -19,6 +20,7 @@ glow_hdr_threshold = 0.39
 
 [node name="Camera3D" type="Camera3D" parent="."]
 environment = SubResource("Environment_kd4jh")
+script = ExtResource("2_4cuns")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 
