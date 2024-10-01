@@ -67,7 +67,7 @@ func _input(event):
 			spawn_particle(event.pitch)
 
 			var notePushed
-			if not serial.fixLED_Toggle:
+			if serial.fixLED_Toggle:
 				notePushed = serial.fixed_map_midi_note_to_led(event.pitch, serial.firstNoteSelected, serial.lastNoteSelected, serial.stripLedNum, 1)
 			else:
 				notePushed = serial.map_midi_note_to_led(event.pitch, serial.firstNoteSelected, serial.lastNoteSelected, serial.stripLedNum, 1)
@@ -89,7 +89,7 @@ func _input(event):
 			stop_particle(event.pitch)
 
 			var notePushed
-			if not serial.fixLED_Toggle:
+			if serial.fixLED_Toggle:
 				notePushed = serial.fixed_map_midi_note_to_led(event.pitch, serial.firstNoteSelected, serial.lastNoteSelected, serial.stripLedNum, 1)
 			else:
 				notePushed = serial.map_midi_note_to_led(event.pitch, serial.firstNoteSelected, serial.lastNoteSelected, serial.stripLedNum, 1)

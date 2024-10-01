@@ -396,6 +396,37 @@ offset_right = 344.0
 offset_bottom = 748.0
 text = "Rev LED"
 
+[node name="LoadProfileButton" parent="MIDI_Pivot/MIDI/CanvasLayer" instance=ExtResource("4_pgseb")]
+offset_left = 107.0
+offset_top = 756.0
+offset_right = 187.0
+offset_bottom = 787.0
+text = "Load"
+
+[node name="SaveProfileButton" parent="MIDI_Pivot/MIDI/CanvasLayer" instance=ExtResource("4_pgseb")]
+offset_left = 195.0
+offset_top = 756.0
+offset_right = 275.0
+offset_bottom = 787.0
+text = "Save"
+
+[node name="LoadProfileFileDialog" type="FileDialog" parent="MIDI_Pivot/MIDI/CanvasLayer"]
+title = "Open a File"
+initial_position = 2
+size = Vector2i(324, 180)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+use_native_dialog = true
+
+[node name="SaveProfileFileDialog" type="FileDialog" parent="MIDI_Pivot/MIDI/CanvasLayer"]
+auto_translate_mode = 1
+initial_position = 2
+size = Vector2i(352, 180)
+ok_button_text = "Save"
+access = 2
+use_native_dialog = true
+
 [node name="PianoController" type="Node" parent="MIDI_Pivot/MIDI"]
 script = ExtResource("13_0vjy6")
 
@@ -446,4 +477,8 @@ particle_scene = ExtResource("10_e3ntp")
 [connection signal="toggled" from="MIDI_Pivot/MIDI/CanvasLayer/FixLED_Toggle" to="MIDI_Pivot/MIDI/PianoController" method="_on_fix_led_toggle_toggled"]
 [connection signal="toggled" from="MIDI_Pivot/MIDI/CanvasLayer/BGLED_Toggle" to="MIDI_Pivot/MIDI/PianoController" method="_on_bgled_toggle_toggled"]
 [connection signal="toggled" from="MIDI_Pivot/MIDI/CanvasLayer/REVLED_Toggle" to="MIDI_Pivot/MIDI/PianoController" method="_on_revled_toggle_toggled"]
+[connection signal="pressed" from="MIDI_Pivot/MIDI/CanvasLayer/LoadProfileButton" to="MIDI_Pivot/MIDI/PianoController" method="_on_load_profile_button_pressed"]
+[connection signal="pressed" from="MIDI_Pivot/MIDI/CanvasLayer/SaveProfileButton" to="MIDI_Pivot/MIDI/PianoController" method="_on_save_profile_button_pressed"]
+[connection signal="file_selected" from="MIDI_Pivot/MIDI/CanvasLayer/LoadProfileFileDialog" to="MIDI_Pivot/MIDI/PianoController" method="_on_load_profile_file_dialog_file_selected"]
+[connection signal="file_selected" from="MIDI_Pivot/MIDI/CanvasLayer/SaveProfileFileDialog" to="MIDI_Pivot/MIDI/PianoController" method="_on_save_profile_file_dialog_file_selected"]
 [connection signal="timeout" from="MIDI_Pivot/Timer" to="MIDI_Pivot" method="_on_timer_timeout"]

@@ -10,9 +10,11 @@ extends Node
 @onready var piano_size_label = $"../CanvasLayer/PianoSize_Label"
 @onready var bg_brightness_slider = $"../CanvasLayer/BGBrightness_Slider"
 @onready var web_socket_toggle = $"../CanvasLayer/WebSocket_Toggle"
+@onready var load_profile_file_dialog: FileDialog = $"../CanvasLayer/LoadProfileFileDialog"
+@onready var save_profile_file_dialog: FileDialog = $"../CanvasLayer/SaveProfileFileDialog"
 
 var web_socket = WebSocketPeer.new()
-var has_printed_open_message = false  # Flag to track if the open message has been printed
+var has_printed_open_message = false
 @onready var piano_controller = $"../PianoController"
 
 var useESP32
@@ -23,7 +25,6 @@ var baudrate = 115200
 var udp_peer: PacketPeerUDP = PacketPeerUDP.new()
 var udp_port: int = 12345
 
-# Command bytes
 const COMMAND_BYTE1 = 0
 const COMMAND_BYTE2 = 1
 
@@ -58,10 +59,8 @@ var led_animations_list = [
 	"Snake"
 ]
 
-# Counter to track the current piano size state
 var counter: int = 0
 
-# Labels for the different sizes
 var piano_size_labels = {
 	0: "Piano 88 Keys",
 	1: "Piano 76 Keys",
@@ -78,7 +77,6 @@ var fixLED_Toggle = false
 var bgLED_Toggle = false
 var octaveShift_Toggle = false
 
-# Helper function to send a command
 func send_command(command_byte: int, args: Array):
 	var message = PackedByteArray()
 	message.append(COMMAND_BYTE1)
@@ -91,16 +89,13 @@ func send_command(command_byte: int, args: Array):
 		serial.write_raw(message)
 
 func send_json_command(action: String, value: Variant) -> void:
-	# Create the data dictionary with the action and value
 	var data = {
 		"action": action,
 		"value": value
 	}
 	
-	# Convert the dictionary to a JSON string
 	var json_string = JSON.stringify(data)
 	
-	# Send the JSON string through the WebSocket
 	if web_socket.get_ready_state() == WebSocketPeer.STATE_OPEN:
 		web_socket.send_text(json_string)
 		print("Sent JSON Command: ", json_string)
@@ -125,20 +120,17 @@ func create_hsb_data(action: String, index: int, hsb: Dictionary) -> Dictionary:
 func send_command_update_color(c: Color):
 	var gamma = 5.0
 	
-	# Apply gamma correction and clamp the values
 	var r = gamma_correction(c.r, gamma)
 	var g = gamma_correction(c.g, gamma)
 	var b = gamma_correction(c.b, gamma)
 
-	# Convert RGB to HSB
 	var hsb = rgb_to_hsb(r / 255.0, g / 255.0, b / 255.0)
 	
 	if useESP32:
-		# Define actions for each HSB component
 		var actions = ["Hue", "Saturation", "Brightness"]
 		
 		for i in range(3):
-			var action = actions[i]  # Get the correct action for each component
+			var action = actions[i]
 			var data = create_hsb_data(action, i, hsb)
 			
 			if data:
@@ -165,15 +157,12 @@ func send_command_note_on(note: int):
 		var saturation = 1.0
 		var brightness = 1.0
 
-		# Create a Color object using HSB values
 		var random_color = Color.from_hsv(random_hue / 360.0, saturation, brightness)
 
-		# Convert the Color object components to integers in the 0-255 range
 		var red = int(random_color.r * 255)
 		var green = int(random_color.g * 255)
 		var blue = int(random_color.b * 255)
 		
-		# Send the command with the random color
 		send_command(COMMAND_NOTE_ON_RANDOM_SERIAL, [red, green, blue, note])
 
 
@@ -219,11 +208,18 @@ func send_command_strip_direction(direction: int, num_leds: int):
 var transposition : int = 0
 
 func map_midi_note_to_led(midi_note: int, lowest_note: int, highest_note: int, strip_led_number: int, out_min: int) -> int:
+	
+	var offset = Global.offset_map.get(midi_note, 0)
+	
 	midi_note -= transposition
+	
 	var out_max = out_min + strip_led_number - 1
 	var mapped_led = (midi_note - lowest_note) * float(out_max - out_min) / float(highest_note - lowest_note)
-	return int(mapped_led) + out_min
 
+	mapped_led += offset
+
+	return int(mapped_led) + out_min
+	
 func fixed_map_midi_note_to_led(midi_note: int, lowest_note: int, highest_note: int, strip_led_number: int, out_min: int) -> int:
 	midi_note -= transposition
 	var out_max = out_min + strip_led_number - 1
@@ -259,7 +255,7 @@ func _ready():
 	update_serial()
 	
 	udp_peer.set_broadcast_enabled(true)
-	udp_peer.set_dest_address("255.255.255.255", udp_port)  # Broadcast address
+	udp_peer.set_dest_address("255.255.255.255", udp_port)
 	_request_esp32_ip()
 	
 func _process(_delta):
@@ -291,14 +287,13 @@ func _process(_delta):
 			var code = web_socket.get_close_code()
 			var reason = web_socket.get_close_reason()
 			print("WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
-			set_process(false) # Stop processing.
+			set_process(false)
 			
 		while udp_peer.get_available_packet_count() > 0:
 			_on_data_received()
 			udp_peer.set_broadcast_enabled(false)
 
 func _exit_tree():
-	# Ensure we close the serial port when exiting the scene tree
 	if serial.is_open():
 		send_command_set_bg(0,0,0)
 		send_command_blackout()
@@ -316,13 +311,11 @@ func _on_serial_list_item_selected(index):
 func _on_open_close_toggled(button_pressed):
 	if button_pressed:
 		if web_socket_toggle.button_pressed:
-			# Handle ESP32 logic
 			print("ESP32 logic is now active.")
-			web_socket.connect_to_url("ws://pianolux3d.local:81") #use ip instead of MDNS if the ArduinoOTA is enabled
+			web_socket.connect_to_url("ws://pianolux3d.local:81")
 			useESP32 = true
 			open_close.text = "Close"
 		else:
-			# Handle serial logic
 			serial.baudrate = baudrate
 			serial.open(port)
 			if serial.is_open():
@@ -336,7 +329,6 @@ func _on_open_close_toggled(button_pressed):
 			useESP32 = false
 			open_close.text = "Open"
 		else:
-			# Handle serial logic closure
 			serial.close()
 			if not serial.is_open():
 				button_pressed = true
@@ -350,31 +342,26 @@ func _on_modes_list_item_selected(index):
 	match index:
 		0:
 			MODE = 0
-			# Default mode
 			if useESP32:
 				send_json_command("ChangeLEDModeAction", 0)
 			set_defaults(8, 255, 255)
 		1:
 			MODE = 1
-			# Splash mode
 			if useESP32:
 				send_json_command("ChangeLEDModeAction", 1)
 			set_defaults(8, 255, 55)
 		2:
 			MODE = 2
-			# Random mode
 			if useESP32:
 				send_json_command("ChangeLEDModeAction", 2)
 			set_defaults(8, 255, 255)
 		3:
 			MODE = 3
-			# Velocity mode
 			if useESP32:
 				send_json_command("ChangeLEDModeAction", 3)
 			set_defaults(8, 255, 255)
 		4:
 			MODE = 4
-			# Animation mode
 			if useESP32:
 				send_json_command("ChangeLEDModeAction", 4)
 				set_defaults(8, 255, 0)
@@ -385,82 +372,70 @@ func _on_animations_list_item_selected(index):
 	if MODE == 4:
 		match index:
 			0:
-				# Handle "RainbowColors" animation
 				if useESP32:
 					send_json_command("ChangeAnimationAction", 0)
 				else:
 					send_command_animation(index, 0)
 				
 			1:
-				# Handle "RainbowStripeColor" animation
 				if useESP32:
 					send_json_command("ChangeAnimationAction", 1)
 				else:
 					send_command_animation(index, 1)
 				
 			2:
-				# Handle "OceanColors" animation
 				if useESP32:
 					send_json_command("ChangeAnimationAction", 2)
 				else:
 					send_command_animation(index, 2)
 				
 			3:
-				# Handle "CloudColors" animation
 				if useESP32:
 					send_json_command("ChangeAnimationAction", 3)
 				else:
 					send_command_animation(index, 3)
 				
 			4:
-				# Handle "LavaColors" animation
 				if useESP32:
 					send_json_command("ChangeAnimationAction", 4)
 				else:
 					send_command_animation(index, 4)
 				
 			5:
-				# Handle "ForestColors" animation
 				if useESP32:
 					send_json_command("ChangeAnimationAction", 5)
 				else:
 					send_command_animation(index, 5)
 				
 			6:
-				# Handle "PartyColors" animation
 				if useESP32:
 					send_json_command("ChangeAnimationAction", 6)
 				else:
 					send_command_animation(index, 6)
 				
 			7:
-				# Handle "SineWave" animation
 				if useESP32:
 					send_json_command("ChangeAnimationAction", 7)
 				else:
 					send_command_animation(index, 7)
 				
 			8:
-				# Handle "SparkleDots" animation
 				if useESP32:
 					send_json_command("ChangeAnimationAction", 8)
 				else:
 					send_command_animation(index, 8)
 				
 			9:
-				# Handle "Snake" animation
 				if useESP32:
 					send_json_command("ChangeAnimationAction", 9)
 				else:
 					send_command_animation(index, 9)
 
-# Mode-specific settings function
 func set_defaults(splash_length: int, brightness: int, fade_rate: int):
 	splash_length_slider.value = splash_length
 	brightness_slider.value = brightness
 	fade_rate_slider.value = fade_rate
 
-	# Send commands based on slider values
 	send_command_splash_max_length(splash_length)
 	send_command_set_brightness(brightness)
 	send_command_fade_rate(fade_rate)
@@ -483,7 +458,6 @@ func _on_splash_length_slider_value_changed(value):
 	else:
 		send_command_splash_max_length(int(value))
 
-# Function to convert RGB to HSB
 func rgb_to_hsb(r: float, g: float, b: float) -> Dictionary:
 	var max_val = max(r, g, b)
 	var min_val = min(r, g, b)
@@ -513,26 +487,21 @@ func rgb_to_hsb(r: float, g: float, b: float) -> Dictionary:
 		"brightness": brightness * 255
 	}
 
-# Function to handle setting the background color
 func update_bg_color(value: float) -> void:
-	# Extract RGB components from the current color
+	
 	var red = currentColor.r
 	var green = currentColor.g
 	var blue = currentColor.b
 
-	# Convert RGB to HSB
 	var hsb = rgb_to_hsb(red, green, blue)
 
-	# Get the HSB values and convert them to integers
 	var hue = int(hsb["hue"])
 	var saturation = int(hsb["saturation"])
 	var brightness = int(value)
 	
-	# Send the command to set the background color
 	if bgLED_Toggle:
 		send_command_set_bg(hue, saturation, brightness)
 		
-# Called when the background brightness slider value changes
 func _on_bg_brightness_slider_value_changed(value):
 	if useESP32:
 		send_json_command("Background", value)
@@ -558,7 +527,6 @@ func _on_bgled_toggle_toggled(toggled_on):
 			send_command_set_bg(0,0,0)
 
 func update_piano_size_label():
-	# Update the label text based on the current counter
 	piano_size_label.text = piano_size_labels.get(counter, "Unknown Size")
 
 func update_piano_size_settings():
@@ -613,7 +581,6 @@ func _on_revled_toggle_toggled(toggled_on):
 		else:
 			send_command_strip_direction(0, stripLedNum)
 
-# Called when the set background button is pressed
 func _on_set_bg_button_pressed():
 	if useESP32:
 		if bgLED_Toggle:
@@ -635,7 +602,7 @@ func _on_transposition_octave_shift_toggle_toggled(toggled_on):
 
 func _request_esp32_ip():
 	var request_buffer = PackedByteArray()
-	var request_data = "ScanRequest".to_ascii_buffer()  # Converts the string to a UTF-8 encoded byte array
+	var request_data = "ScanRequest".to_ascii_buffer()
 	request_buffer.append_array(request_data)
 	udp_peer.put_packet(request_buffer)
 	print("Sending: ", request_buffer)
@@ -646,7 +613,7 @@ func _on_data_received():
 	var ip_address = _parse_ip_from_packet(packet)
 	if ip_address != "":
 		print("Received IP address: ", ip_address)
-		udp_peer.set_dest_address(ip_address, udp_port)  # Broadcast address
+		udp_peer.set_dest_address(ip_address, udp_port)
 
 func _parse_ip_from_packet(packet: PackedByteArray):
 	if packet.size() == 4:
@@ -657,25 +624,63 @@ func _parse_ip_from_packet(packet: PackedByteArray):
 		print("Invalid packet size: ", packet.size())
 		return ""
 
-# Function to send MIDI NOTE_ON
 func send_midi_note_on(note: int, velocity: int):
 
 	if MODE != 4:
-		# Format message: [note_number, note_state, velocity]
 		var message: PackedByteArray = PackedByteArray()
 		message.append(note-1)
 		message.append(velocity)
 		
-		# Send the message over UDP
 		udp_peer.put_packet(message)
 		print("MIDI message sent:", message)
 
-# Function to send MIDI NOTE_OFF
 func send_midi_note_off(note: int):
 	if MODE != 4:
-		# Format message: [note_number, note_state, velocity]
 		var message: PackedByteArray = PackedByteArray()
 		message.append(note-1)
-		# Send the message over UDP
 		udp_peer.put_packet(message)
 		print("MIDI message sent:", message)
+
+
+func _on_save_profile_button_pressed() -> void:
+	save_profile_file_dialog.visible = true
+
+func _on_save_profile_file_dialog_file_selected(path: String) -> void:
+	var file = FileAccess.open(path, FileAccess.WRITE)
+	if file:
+		var offset_string = "{ "
+		for pitch in Global.offset_map.keys():
+			var offset = Global.offset_map[pitch]
+			offset_string += str(pitch) + ": " + str(offset) + ", "
+			
+		if offset_string.length() > 2:
+			offset_string = offset_string.substr(0, offset_string.length() - 2)
+		offset_string += " }"  # Add closing brace
+
+		file.store_line(offset_string)
+		file.close()
+		print("Profile saved successfully to:", path)
+	else:
+		print("Error opening file for writing.")
+
+
+func _on_load_profile_button_pressed() -> void:
+	load_profile_file_dialog.visible = true
+
+func _on_load_profile_file_dialog_file_selected(path: String) -> void:
+	var file = FileAccess.open(path, FileAccess.READ)
+	if file:
+		var line = file.get_line().strip_edges()
+		if line != "":
+			line = line.substr(1, line.length() - 2)
+			var pairs = line.split(", ")
+			for pair in pairs:
+				var data = pair.split(": ")
+				if data.size() == 2:
+					var pitch = int(data[0])
+					var offset = int(data[1])
+					Global.offset_map[pitch] = offset
+		file.close()
+		print("Profile loaded successfully from:", path)
+	else:
+		print("Error opening file for reading.")

@@ -1,6 +1,7 @@
 extends Camera3D
 
 @onready var midi_notes: Node3D = $"../MIDI_Pivot/MIDI_Pivot/MIDI/MIDI_Notes"
+const LEFT_OFFSET_DIALOG = preload("res://scenes/left_offset_dialog.tscn")
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -12,7 +13,7 @@ func _input(event):
 
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			if event.is_released():
-				print_pitch_on_right_click()
+				show_offset_dialog()
 
 func detect_key():
 	var raycast_result = shoot_ray()
@@ -50,7 +51,7 @@ func stop_note_on_release():
 		midi_notes.notes_on.erase(key)
 		midi_notes.stop_particle(key)
 
-func print_pitch_on_right_click():
+func show_offset_dialog():
 	var raycast_result = shoot_ray()
 	if raycast_result and raycast_result.collider:
 		var hit_object = raycast_result.collider
@@ -61,4 +62,9 @@ func print_pitch_on_right_click():
 			if key_name.begins_with("key_"):
 				var pitch_str = key_name.split("_")[1]
 				var pitch = int(pitch_str)
-				print("Right-clicked pitch:", pitch)
+				
+				var offset_dialog = LEFT_OFFSET_DIALOG.instantiate()
+				
+				add_child(offset_dialog)
+				
+				offset_dialog.initialize_dialog(pitch)
