@@ -118,7 +118,7 @@ func create_hsb_data(action: String, index: int, hsb: Dictionary) -> Dictionary:
 	}
 
 func send_command_update_color(c: Color):
-	var gamma = 5.0
+	var gamma = 2.0
 	
 	var r = gamma_correction(c.r, gamma)
 	var g = gamma_correction(c.g, gamma)
