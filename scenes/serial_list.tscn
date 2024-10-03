@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://bjgxxihfcew33"]
-
-[node name="SerialList" type="OptionButton"]
-custom_minimum_size = Vector2(120, 0)
-text_overrun_behavior = 3
-clip_text = true

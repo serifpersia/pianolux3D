@@ -1,0 +1,165 @@
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #191919;
+}
+
+.logo {
+    display: flex;
+    flex-direction: column; /* Display items vertically */
+    align-items: center;
+    padding-top: 20px;
+    margin-bottom: -15px;
+
+}
+
+/* Style for Piano text */
+h1 .piano-text {
+    color: white;
+    font-weight: lighter;
+}
+
+/* Style for Lux text */
+h1 .lux-text {
+    color: #fff65d;
+    font-family: "Comic Sans MS";
+}
+
+.piano-svg {
+    height: 100px;
+    width: 100px;
+    margin-bottom: -30px;
+}
+
+
+@media (min-width: 768px) {
+    .piano-svg {
+        width: 300px;
+        height: 300px;
+        margin-bottom: -100px;
+    }
+    .logo {
+        margin-bottom: -65px;
+
+    }
+    h1{
+        font-size: 100px;
+    }
+
+    .buttons button{
+        height: 100px;
+        font-size: 50px;
+    }
+}
+
+nav {
+    background-color: #333;
+    overflow: hidden;
+    text-align: center; /* Center the links horizontally */
+    margin-bottom: 25px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: inline-block; /* Center the list horizontally */
+}
+
+li {
+    display: inline; /* Display list items inline */
+}
+
+li a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #555;
+}
+
+#container {
+    text-align: left; /* Align the content to the left within the container */
+    background-color: #231f20;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px #fff;
+    max-width: 1000px; /* Set a fixed maximum width for the container */
+    margin: 0 auto; /* Center the container horizontally */
+    overflow: hidden; /* Prevent horizontal scrollbar if content overflows */
+}
+
+
+select {
+    padding: 15px;
+    margin: 10px;
+    width: 200px;
+    font-size: 20px;
+    margin-bottom: 20px
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #ffffff; /* Light background color for the popup */
+    color: #121212; /* Dark text color for the popup */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border-radius: 25px;
+}
+#placeholderLink {
+    display: block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #3498db; /* Blue background color for the link */
+    color: #ffffff; /* Light text color for the link */
+    text-decoration: none;
+    text-align: center;
+}
+
+#placeholderLink:hover {
+    background-color: #2980b9; /* Darker blue background color on hover */
+}
+
+#ViewESP32 {
+    padding: 8px;
+    background-color: green; /* Blue background color for the link */
+    color: #ffffff; /* Light text color for the link */
+    text-decoration: none;
+    text-align: center;
+    border-radius: 5px;
+}
+
+#ViewESP32:hover {
+    background-color: red; /* Darker blue background color on hover */
+}
+
+
+#buttons
+{
+    text-align: center;
+}

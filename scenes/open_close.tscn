@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://b8sjcwx28odsw"]
-
-[node name="OpenClose" type="Button"]
-custom_minimum_size = Vector2(80, 0)
-toggle_mode = true
-text = "Open"

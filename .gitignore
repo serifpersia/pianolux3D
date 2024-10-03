@@ -1,7 +1,0 @@
-# Godot 4+ specific ignores
-.godot/
-*.tmp
-/addons/
-*.bin
-*.translation
-*.import
