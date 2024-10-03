@@ -60,7 +60,7 @@ TaskHandle_t WiFiCommunicationTask;
 #define MAX_NUM_LEDS 176         // How many LEDs do you want to control
 #define MAX_EFFECTS 128
 
-#define USE_NEOPIXEL_STRIP 0
+#define USE_NEOPIXEL_STRIP 1
 
 //RMT LED STRIP INIT
 #include "w2812-rmt.hpp"  // Include the custom ESP32RMT_WS2812B class
