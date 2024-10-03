@@ -138,6 +138,10 @@ To use PianoLux on Linux, follow these steps:
 To be able to compile for arduino only install FastLED 3.7.0
 For ESP32 run install_libs.bat/.sh files to auto install libs needed
 *Modify ElegantOTA.h file in this lib's src directory change #define ELEGANTOTA_USE_ASYNC_WEBSERVER 0 to 1
+By default NEOPIXEL/WS2812B strip is used, change USE_NEOPIXEL_STRIP to 0 to use custom strip by uncommenting specific led strip code line
+
+## Auto Install
+You can auto install esp32 firmware by going to auto install [page](https://serifpersia.github.io/pianolux3D/) on any chromium based web browsers(Google Chrome, Brave, Edge...)
 
 ## Usage
 
