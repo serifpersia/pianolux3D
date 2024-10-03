@@ -3,7 +3,7 @@
   It is developed by a one-person team.
 
   To use this version of the code, install esp32 arduino core version 2.0.14,
-  install required libraries via .bat or .sh scripts depending on 
+  install required libraries via .bat or .sh scripts depending on
   what os you are using.After libs install, restart Arduino IDE 1.8.x.
   Select your board under Tools>Board> ESP32, ESP32-S2 or ESP32S3
   (*other boards are not tested and aren't guaranteed to work with the project)
@@ -59,6 +59,8 @@ TaskHandle_t WiFiCommunicationTask;
 #define UPDATES_PER_SECOND 60
 #define MAX_NUM_LEDS 176         // How many LEDs do you want to control
 #define MAX_EFFECTS 128
+
+#define USE_NEOPIXEL_STRIP 0
 
 //RMT LED STRIP INIT
 #include "w2812-rmt.hpp"  // Include the custom ESP32RMT_WS2812B class
@@ -208,23 +210,45 @@ void updateConfigFile(const char* configKey, uint16_t newValue) {
 }
 
 void initializeLEDStrip(uint8_t colorMode) {
-  switch (colorMode) {
-    case 0:
-      wsstripGRB = new ESP32RMT_WS2812B<GRB>(LED_PIN);
-      FastLED.addLeds(wsstripGRB, leds, NUM_LEDS);
-      break;
-    case 1:
-      wsstripRGB = new ESP32RMT_WS2812B<RGB>(LED_PIN);
-      FastLED.addLeds(wsstripRGB, leds, NUM_LEDS);
-      break;
-    case 2:
-      wsstripBRG = new ESP32RMT_WS2812B<BRG>(LED_PIN);
-      FastLED.addLeds(wsstripBRG, leds, NUM_LEDS);
-      break;
-    // Add more cases if needed
-    default:
-      // Handle default case if colorMode is not 0, 1, or 2
-      break;
+
+  if (USE_NEOPIXEL_STRIP)
+  {
+    switch (colorMode) {
+      case 0:
+        wsstripGRB = new ESP32RMT_WS2812B<GRB>(LED_PIN);
+        FastLED.addLeds(wsstripGRB, leds, NUM_LEDS);
+        break;
+      case 1:
+        wsstripRGB = new ESP32RMT_WS2812B<RGB>(LED_PIN);
+        FastLED.addLeds(wsstripRGB, leds, NUM_LEDS);
+        break;
+      case 2:
+        wsstripBRG = new ESP32RMT_WS2812B<BRG>(LED_PIN);
+        FastLED.addLeds(wsstripBRG, leds, NUM_LEDS);
+        break;
+      // Add more cases if needed
+      default:
+        // Handle default case if colorMode is not 0, 1, or 2
+        break;
+    }
+  }
+  else
+  {
+    // Pick one of the strips below or look at FastLED repo for all supported strips
+    //144leds/m 2m strips are needed no matter the type!
+
+    //FastLED.addLeds<WS2812B, DATA_PIN, GRB>(leds, NUM_LEDS);
+    // FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
+    // FastLED.addLeds<WS2812, DATA_PIN, RGB>(leds, NUM_LEDS);
+    // FastLED.addLeds<WS2852, DATA_PIN, RGB>(leds, NUM_LEDS);
+    // FastLED.addLeds<WS2812B, DATA_PIN, RGB>(leds, NUM_LEDS);
+    // FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS);
+    // FastLED.addLeds<WS2813, DATA_PIN, RGB>(leds, NUM_LEDS);
+    // FastLED.addLeds<APA104, DATA_PIN, RGB>(leds, NUM_LEDS);
+    // FastLED.addLeds<WS2811_400, DATA_PIN, RGB>(leds, NUM_LEDS);
+    // FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);
+    // FastLED.addLeds<WS2803, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);
+    // FastLED.addLeds<SK6812, DATA_PIN, RGB>(leds, NUM_LEDS);
   }
   FastLED.setMaxPowerInVoltsAndMilliamps(5, LED_CURRENT);  // set power limit
   FastLED.setBrightness(DEFAULT_BRIGHTNESS);
