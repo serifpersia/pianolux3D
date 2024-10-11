@@ -88,7 +88,7 @@ offset_bottom = 353.0
 text = "Press A S D  to select Position Axis Mode
 Press Q W E to select Rotation Axis Mode
 Press R to reset to default
-Press ,  . to change value Mouse Click on keys/bottom to hide and show UI"
+Press ,  . to change values -/+. Space key to show/hide UI"
 
 [node name="BGTransparency_Label" type="Label" parent="MIDI_Pivot/MIDI/CanvasLayer"]
 offset_left = 37.0
@@ -431,7 +431,6 @@ use_native_dialog = true
 script = ExtResource("13_0vjy6")
 
 [node name="BG" type="MeshInstance3D" parent="MIDI_Pivot/MIDI"]
-visible = false
 mesh = SubResource("QuadMesh_pxhi1")
 
 [node name="Virtual_Keyboard" type="Node3D" parent="MIDI_Pivot/MIDI"]
