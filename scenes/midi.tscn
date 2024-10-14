@@ -1,11 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=17 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/MIDI.gd" id="1_3ll4w"]
 [ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="1_7mq6q"]
 [ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_jo87c"]
 [ext_resource type="Script" path="res://scripts/midi_transformer.gd" id="1_wr4lx"]
-[ext_resource type="Material" uid="uid://dxoey040t634h" path="res://materials/white_note_no_outline_mat.tres" id="2_473y8"]
-[ext_resource type="Material" uid="uid://qnj37138s6ar" path="res://materials/black_note_no_outline_mat.tres" id="3_0tisb"]
 [ext_resource type="Material" uid="uid://xdabkcdm3c8g" path="res://materials/black_key_mat.tres" id="3_mcpll"]
 [ext_resource type="PackedScene" uid="uid://bjgxxihfcew33" path="res://scenes/serial_list.tscn" id="3_y44n4"]
 [ext_resource type="PackedScene" uid="uid://b8sjcwx28odsw" path="res://scenes/open_close.tscn" id="4_pgseb"]
@@ -17,7 +15,22 @@
 
 [sub_resource type="QuadMesh" id="QuadMesh_pxhi1"]
 material = ExtResource("12_70sax")
-size = Vector2(44, 25)
+size = Vector2(44, 22)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0nee3"]
+shading_mode = 0
+albedo_color = Color(0.843184, 0.843184, 0.843184, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o6tcl"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+shading_mode = 0
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u1dhp"]
+shading_mode = 0
+albedo_color = Color(0.8, 0, 0, 1)
 
 [node name="MIDI_Webcam" type="Node3D"]
 
@@ -70,6 +83,7 @@ offset_left = 31.0
 offset_top = 93.0
 offset_right = 172.0
 offset_bottom = 124.0
+button_pressed = true
 text = "Background"
 
 [node name="ColorPicker" type="ColorPickerButton" parent="MIDI_Pivot/MIDI/CanvasLayer"]
@@ -78,7 +92,7 @@ offset_top = 211.0
 offset_right = 192.0
 offset_bottom = 242.0
 text = "Color Picker"
-color = Color(0.622, 1.25, 0, 1)
+color = Color(1, 0, 0, 1)
 
 [node name="HowToTransform" type="Label" parent="MIDI_Pivot/MIDI/CanvasLayer"]
 offset_left = 39.0
@@ -153,6 +167,7 @@ ok_button_text = "Open"
 file_mode = 0
 access = 2
 filters = PackedStringArray("*.png", "*.jpg", "*.jpeg", "*.bmp")
+use_native_dialog = true
 
 [node name="BGTransparency_Slider" type="HSlider" parent="MIDI_Pivot/MIDI/CanvasLayer"]
 anchors_preset = 14
@@ -431,19 +446,19 @@ use_native_dialog = true
 script = ExtResource("13_0vjy6")
 
 [node name="BG" type="MeshInstance3D" parent="MIDI_Pivot/MIDI"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.33, 0)
 mesh = SubResource("QuadMesh_pxhi1")
 
 [node name="Virtual_Keyboard" type="Node3D" parent="MIDI_Pivot/MIDI"]
 transform = Transform3D(1, 1.48077e-11, 0, 1.62279e-11, 1, 0, 1.45519e-11, 3.63798e-12, 1, 1.81899e-12, 0, 0)
 script = ExtResource("1_7mq6q")
+white_key_meterial = SubResource("StandardMaterial3D_0nee3")
 black_key_material = ExtResource("3_mcpll")
 
 [node name="MIDI_Notes" type="Node3D" parent="MIDI_Pivot/MIDI"]
 script = ExtResource("1_3ll4w")
-white_note_material = ExtResource("2_473y8")
-black_note_material = ExtResource("3_0tisb")
-white_note_material_no_outline = ExtResource("2_473y8")
-black_note_material_no_outline = ExtResource("3_0tisb")
+white_note_material = SubResource("StandardMaterial3D_o6tcl")
+black_note_material = SubResource("StandardMaterial3D_u1dhp")
 particles_material = ExtResource("10_mr4d0")
 particles_flash_material = ExtResource("15_bskuw")
 bg_material = ExtResource("12_70sax")

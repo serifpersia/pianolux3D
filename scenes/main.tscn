@@ -22,7 +22,5 @@ glow_hdr_threshold = 0.39
 environment = SubResource("Environment_kd4jh")
 script = ExtResource("2_4cuns")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-
 [node name="discord-rpc" type="Node" parent="."]
 script = ExtResource("2_l1ve6")

@@ -3,8 +3,6 @@ extends Node3D
 @export var white_note_material : Material
 @export var black_note_material : Material
 
-@export var white_note_material_no_outline : Material
-@export var black_note_material_no_outline : Material
 
 @export var particles_material : StandardMaterial3D
 @export var particles_flash_material : StandardMaterial3D
@@ -141,12 +139,12 @@ func update_key_material(pitch, is_note_on):
 			var mesh_instance = key.get_child(0)
 			if virtual_keyboard.is_black_key(pitch):
 				if is_note_on:
-					mesh_instance.material_override = black_note_material_no_outline
+					mesh_instance.material_override = black_note_material
 				else:
 					mesh_instance.material_override = virtual_keyboard.black_key_material
 			else:
 				if is_note_on:
-					mesh_instance.material_override = white_note_material_no_outline
+					mesh_instance.material_override = white_note_material
 				else:
 					mesh_instance.material_override = virtual_keyboard.white_key_meterial
 			break
@@ -165,7 +163,7 @@ func spawn_notes():
 		var x_offset = virtual_keyboard.calculate_x_offset(note)
 		var width = virtual_keyboard.note_width if not virtual_keyboard.is_black_key(note) else virtual_keyboard.note_width * 0.65
 		var z_position = 0.2 if virtual_keyboard.is_black_key(note) else 0.1
-		box.position = Vector3(x_offset - virtual_keyboard.display_range / 2, -8.5, z_position)
+		box.position = Vector3(x_offset - 31.57, -8.53, z_position)
 		box.scale = Vector3(width, note_height, note_depth)
 		box.material_override = black_note_material if virtual_keyboard.is_black_key(note) else white_note_material
 		add_child(box)
@@ -189,7 +187,7 @@ func spawn_particle(pitch):
 	if Global.particles_state:
 		var particle_instance = particle_scene.instantiate()
 		var x_offset = virtual_keyboard.calculate_x_offset(pitch)
-		particle_instance.position = Vector3(x_offset - virtual_keyboard.display_range / 2, -8.5, 0.3)
+		particle_instance.position = Vector3(x_offset - 31.57, -8.5, 0.3)
 		add_child(particle_instance)
 		particle_instance.emitting = true
 		
@@ -259,13 +257,11 @@ func _on_bg_transparency_slider_value_changed(value):
 
 func _on_color_picker_color_changed(color):
 	white_note_material.albedo_color = color
-	white_note_material_no_outline.albedo_color = color
 	
 	var darker_color = Color(color.r * 0.8, color.g * 0.8, color.b * 0.8, color.a)
 	print(darker_color)
 	
 	black_note_material.albedo_color = darker_color
-	black_note_material_no_outline.albedo_color = darker_color
 	
 	particles_material.albedo_color = color
 	particles_flash_material.albedo_color = color

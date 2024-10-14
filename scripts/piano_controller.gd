@@ -12,6 +12,7 @@ extends Node
 @onready var web_socket_toggle = $"../CanvasLayer/WebSocket_Toggle"
 @onready var load_profile_file_dialog: FileDialog = $"../CanvasLayer/LoadProfileFileDialog"
 @onready var save_profile_file_dialog: FileDialog = $"../CanvasLayer/SaveProfileFileDialog"
+@onready var midi_pivot: Node3D = $"../.."
 
 var web_socket = WebSocketPeer.new()
 var has_printed_open_message = false
@@ -648,21 +649,27 @@ func _on_save_profile_button_pressed() -> void:
 func _on_save_profile_file_dialog_file_selected(path: String) -> void:
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	if file:
-		var offset_string = "{ "
+		var position = midi_pivot.position
+		var rotation = midi_pivot.rotation
+		
+		var offsets = {}
 		for pitch in Global.offset_map.keys():
-			var offset = Global.offset_map[pitch]
-			offset_string += str(pitch) + ": " + str(offset) + ", "
-			
-		if offset_string.length() > 2:
-			offset_string = offset_string.substr(0, offset_string.length() - 2)
-		offset_string += " }"  # Add closing brace
+			offsets[str(pitch)] = Global.offset_map[pitch]  # Store the offsets as a dictionary
 
-		file.store_line(offset_string)
+		var data = {
+			"position": {"x": position.x, "y": position.y, "z": position.z},
+			"rotation": {"x": rotation.x, "y": rotation.y, "z": rotation.z},
+			"offsets": offsets  # Include the offset data
+		}
+
+		var json_data = JSON.stringify(data)  # Use JSON.stringify()
+
+		file.store_string(json_data)
 		file.close()
+
 		print("Profile saved successfully to:", path)
 	else:
 		print("Error opening file for writing.")
-
 
 func _on_load_profile_button_pressed() -> void:
 	load_profile_file_dialog.visible = true
@@ -670,17 +677,28 @@ func _on_load_profile_button_pressed() -> void:
 func _on_load_profile_file_dialog_file_selected(path: String) -> void:
 	var file = FileAccess.open(path, FileAccess.READ)
 	if file:
-		var line = file.get_line().strip_edges()
-		if line != "":
-			line = line.substr(1, line.length() - 2)
-			var pairs = line.split(", ")
-			for pair in pairs:
-				var data = pair.split(": ")
-				if data.size() == 2:
-					var pitch = int(data[0])
-					var offset = int(data[1])
-					Global.offset_map[pitch] = offset
+		var file_content = file.get_as_text().strip_edges()
 		file.close()
-		print("Profile loaded successfully from:", path)
+
+		var json_parser = JSON.new()
+		var error_code = json_parser.parse(file_content)
+		
+		if error_code == OK:
+			var data = json_parser.get_data()
+
+			var position = Vector3(data["position"]["x"], data["position"]["y"], data["position"]["z"])
+			var rotation = Vector3(data["rotation"]["x"], data["rotation"]["y"], data["rotation"]["z"])
+
+			midi_pivot.position = position
+			midi_pivot.rotation = rotation
+
+			Global.offset_map.clear()
+			for pitch in data["offsets"].keys():
+				var offset = int(data["offsets"][pitch])
+				Global.offset_map[int(pitch)] = offset
+
+			print("Profile loaded successfully from:", path)
+		else:
+			print("Error parsing JSON from file. Error: ", json_parser.error_message())
 	else:
 		print("Error opening file for reading.")

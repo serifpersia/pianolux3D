@@ -1,3 +1,4 @@
+@tool
 extends Node3D
 
 @export var white_key_meterial : Material
@@ -5,9 +6,7 @@ extends Node3D
 
 @export var speed_multiplier : float = 10.0
 
-var display_range = 42.84
-var note_range = 57.93
-var note_width = display_range / note_range
+var note_width = 0.792
 
 func _ready():
 	create_midi_keyboard()
@@ -20,14 +19,14 @@ func create_midi_keyboard():
 		
 		var key_body = StaticBody3D.new()
 		var key_mesh_instance = MeshInstance3D.new()
-		var mesh = BoxMesh.new()
+		var mesh = QuadMesh.new()
 		
 		key_mesh_instance.mesh = mesh
 		
 		var z_position = 0.2 if is_black_key(note) else 0.1
 		var x_offset = calculate_x_offset(note)
-		var y_offset = -9.75 if is_black_key(note) else -10.5
-		key_body.position = Vector3(x_offset - display_range / 2, y_offset, z_position)
+		var y_offset = -9.75 if is_black_key(note) else -10.502
+		key_body.position = Vector3(x_offset-31.57, y_offset, z_position)
 		
 		if is_black_key(note):
 			key_mesh_instance.scale = Vector3(black_key_width, 2.4, 0.1)
@@ -51,30 +50,34 @@ func create_midi_keyboard():
 		add_child(key_body)
 
 func calculate_x_offset(note):
-	var white_key_width = note_width + 0.1
-	var octave = int((note - 21) / 12)
-	var key_in_octave = (note - 21) % 12
+	var spacing = 0.05
+	var white_key_width = note_width + spacing
+	var octave = int(note / 12)  # Calculate octave based on MIDI note
+	var key_in_octave = note % 12  # Key within the octave
 	var x_offset = octave * 7 * white_key_width
 
+	# Adjusted offsets for keys in an octave
 	var key_offsets = [
-		0,  # A
-		white_key_width * 0.5,  # A#
-		white_key_width * 1,  # B
-		white_key_width * 2,  # C
-		white_key_width * 2.5,  # C#
-		white_key_width * 3,  # D
-		white_key_width * 3.5,  # D#
-		white_key_width * 4,  # E
-		white_key_width * 5,  # F
-		white_key_width * 5.5,  # F#
-		white_key_width * 6,  # G
-		white_key_width * 6.5  # G#
+		0,  # C
+		white_key_width * 0.5,  # C#
+		white_key_width * 1,  # D
+		white_key_width * 1.5,  # D#
+		white_key_width * 2,  # E
+		white_key_width * 3,  # F
+		white_key_width * 3.5,  # F#
+		white_key_width * 4,  # G
+		white_key_width * 4.5,  # G#
+		white_key_width * 5,  # A
+		white_key_width * 5.5, # A#
+		white_key_width * 6  # B
 	]
 
 	x_offset += key_offsets[key_in_octave]
 
 	return x_offset
 
+## Revised Function: `is_black_key`
+
 func is_black_key(note):
-	var black_keys = [1, 3, 6, 8, 10]
+	var black_keys = [1, 3, 6, 8, 10] # C#, D#, F#, G#, A#
 	return (note % 12) in black_keys
