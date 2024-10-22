@@ -18,6 +18,7 @@ extends Node
 @onready var midi_particles: Node3D = $"../MIDI_Particles"
 
 @onready var virtual_keyboard: Node3D = $"../Virtual_Keyboard"
+@onready var piano_controller = $"../PianoController"
 
 var serial_thread : Thread = Thread.new()
 var serial_queue : Array = []
@@ -26,7 +27,6 @@ var is_running : bool = true
 
 var web_socket = WebSocketPeer.new()
 var has_printed_open_message = false
-@onready var piano_controller = $"../PianoController"
 
 var useESP32
 var serial = SerialPort.new()
