@@ -146,6 +146,8 @@ uint8_t animationIndex;
 uint8_t splashMaxLength = 8;
 uint8_t SPLASH_HEAD_FADE_RATE = 5;
 
+uint8_t numConnectedClients = 0;
+
 CRGBPalette16 currentPalette;
 TBlendType currentBlending;
 
@@ -299,6 +301,41 @@ void startSTA(WiFiManager& wifiManager) {
   }
 }
 
+bool handleFileRead(AsyncWebServerRequest *request) {
+  String path = request->url();
+  Serial.println("Request for file: " + path);
+  if (path.endsWith("/")) {
+    path += "index.html";
+  }
+
+  String contentType = getContentType(path);
+  if (!LittleFS.exists(path)) {
+    Serial.println("File not found: " + path);
+    return false;
+  }
+
+  // Open the file for reading
+  File file = LittleFS.open(path, "r");
+  if (!file) {
+    Serial.println("Failed to open file: " + path);
+    return false;
+  }
+
+  // Send the file content to the client
+  request->send(LittleFS, path, contentType);
+
+  Serial.println("File served: " + path);
+  return true;
+}
+
+String getContentType(String filename) {
+  if (filename.endsWith(".html")) return "text/html";
+  if (filename.endsWith(".css"))  return "text/css";
+  if (filename.endsWith(".js"))   return "application/javascript";
+  if (filename.endsWith(".ico"))  return "image/x-icon";
+  return "text/plain";
+}
+
 #if USE_ARDUINO_OTA
 void setupArduinoOTA()
 {
@@ -376,13 +413,20 @@ void setup() {
   }
   Serial.println("LittleFS mounted successfully");
 
+  // Route for serving static files
+  server.onNotFound([](AsyncWebServerRequest * request) {
+    if (!handleFileRead(request)) {
+      request->send(404, "text/html", "<html><body><h1>No website files found on ESP32</h1></body></html>");
+    }
+  });
+
+
+  // Load configuration from file
+  loadConfig();
 
 #if USE_ELEGANT_OTA
   ElegantOTA.begin(&server);
 #endif
-
-  // Load configuration from file
-  loadConfig();
 
   //  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request) {
   //    request->send(200, "text/plain", "Hi! This is WebSerial demo. You can access webserial interface at http://" + WiFi.localIP().toString() + "/webserial");
@@ -655,4 +699,18 @@ void setIPLeds() {
   // Show the entire IP address
   generalFadeRate = 0;
   FastLED.show();
+}
+
+void sendESP32Log(String logMessage) {
+  JsonDocument doc;
+
+  doc["LOG_MESSAGE"] = logMessage;
+
+  // Serialize the JSON document to a string
+  String jsonStr;
+  serializeJson(doc, jsonStr);
+
+  // Send the JSON data to all connected clients
+  Serial.println("Sending Data To Clients");
+  webSocket.broadcastTXT(jsonStr);
 }

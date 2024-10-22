@@ -14,6 +14,16 @@ extends Node
 @onready var save_profile_file_dialog: FileDialog = $"../CanvasLayer/SaveProfileFileDialog"
 @onready var midi_pivot: Node3D = $"../.."
 
+@onready var midi_notes: Node3D = $"../MIDI_Notes"
+@onready var midi_particles: Node3D = $"../MIDI_Particles"
+
+@onready var virtual_keyboard: Node3D = $"../Virtual_Keyboard"
+
+var serial_thread : Thread = Thread.new()
+var serial_queue : Array = []
+var serial_lock : Mutex = Mutex.new()
+var is_running : bool = true
+
 var web_socket = WebSocketPeer.new()
 var has_printed_open_message = false
 @onready var piano_controller = $"../PianoController"
@@ -233,7 +243,7 @@ func fixed_map_midi_note_to_led(midi_note: int, lowest_note: int, highest_note: 
 		mapped_led -= 1
 		
 	return int(mapped_led) + out_min
-	
+
 func _ready():
 	var ports_info = SerialPort.list_ports()
 	for info in ports_info:
@@ -259,6 +269,92 @@ func _ready():
 	udp_peer.set_dest_address("255.255.255.255", udp_port)
 	_request_esp32_ip()
 	
+	serial_thread.start(_thread_serial_handler)
+	
+	OS.open_midi_inputs()
+
+func _exit_tree():
+	if serial.is_open():
+		send_command_set_bg(0,0,0)
+		send_command_blackout()
+		serial.close()
+		
+	is_running = false
+	if serial_thread:
+		serial_thread.wait_to_finish()
+
+func _input(event):
+	if event is InputEventMIDI:
+		if event.message == MIDI_MESSAGE_NOTE_ON:
+			midi_notes.notes_on[event.pitch] = true
+			update_key_material(event.pitch, true)
+			midi_particles.spawn_particle(event.pitch)
+			
+
+			var notePushed
+			if fixLED_Toggle:
+				notePushed = fixed_map_midi_note_to_led(event.pitch, firstNoteSelected, lastNoteSelected, stripLedNum, 1)
+			else:
+				notePushed = map_midi_note_to_led(event.pitch, firstNoteSelected, lastNoteSelected, stripLedNum, 1)
+
+			var command_data = {
+				"mode": MODE,
+				"velocity": event.velocity,
+				"notePushed": notePushed,
+				"type": "note_on"
+			}
+
+			serial_lock.lock()
+			serial_queue.append(command_data)
+			serial_lock.unlock()
+
+		elif event.message == MIDI_MESSAGE_NOTE_OFF:
+			midi_notes.notes_on.erase(event.pitch)
+			update_key_material(event.pitch, false)
+			midi_particles.stop_particle(event.pitch)
+
+			var notePushed
+			if fixLED_Toggle:
+				notePushed = fixed_map_midi_note_to_led(event.pitch, firstNoteSelected, lastNoteSelected, stripLedNum, 1)
+			else:
+				notePushed = map_midi_note_to_led(event.pitch, firstNoteSelected, lastNoteSelected, stripLedNum, 1)
+
+			var command_data = {
+				"notePushed": notePushed,
+				"type": "note_off"
+			}
+
+			serial_lock.lock()
+			serial_queue.append(command_data)
+			serial_lock.unlock()
+
+
+func _thread_serial_handler():
+	while is_running:
+		serial_lock.lock()
+		if serial_queue.size() > 0:
+			var command_data = serial_queue.pop_front()
+			serial_lock.unlock()
+
+			if command_data.type == "note_on":
+				match command_data.mode:
+					0:
+						send_command_default_note_on(command_data.notePushed, command_data.velocity)
+					1:
+						send_command_splash(command_data.velocity, command_data.notePushed)
+					2:
+						send_command_note_on(command_data.notePushed)
+					3:
+						send_command_velocity(command_data.velocity, command_data.notePushed)
+						
+			elif command_data.type == "note_off":
+				send_command_note_off(command_data.notePushed)
+		else:
+			serial_lock.unlock()
+
+		OS.delay_msec(10)
+
+
 func _process(_delta):
 	if useESP32:
 		web_socket.poll()
@@ -294,12 +390,6 @@ func _process(_delta):
 			_on_data_received()
 			udp_peer.set_broadcast_enabled(false)
 
-func _exit_tree():
-	if serial.is_open():
-		send_command_set_bg(0,0,0)
-		send_command_blackout()
-		serial.close()
-
 func update_serial():
 	port = serial_list.get_item_text(serial_list.selected)
 	serial.port = port
@@ -327,6 +417,10 @@ func _on_open_close_toggled(button_pressed):
 				print("Failed to open serial port.")
 	else:
 		if web_socket_toggle.button_pressed:
+			# Close the WebSocket connection
+			if web_socket.get_ready_state() == web_socket.STATE_OPEN:
+				web_socket.close()
+				print("WebSocket closed.")
 			useESP32 = false
 			open_close.text = "Open"
 		else:
@@ -642,7 +736,37 @@ func send_midi_note_off(note: int):
 		udp_peer.put_packet(message)
 		print("MIDI message sent:", message)
 
+func update_key_material(pitch, is_note_on):
+	var keys = virtual_keyboard.get_children()
+	for key in keys:
+		if key.name == "key_" + str(pitch):
+			
+			var mesh_instance = key.get_child(0)
+			if virtual_keyboard.is_black_key(pitch):
+				if is_note_on:
+					mesh_instance.material_override = midi_notes.black_note_material
+				else:
+					mesh_instance.material_override = virtual_keyboard.black_key_material
+			else:
+				if is_note_on:
+					mesh_instance.material_override = midi_notes.white_note_material
+				else:
+					mesh_instance.material_override = virtual_keyboard.white_key_meterial
+			break
 
+func _on_color_picker_color_changed(color):
+	midi_notes.white_note_material.albedo_color = color
+	
+	var darker_color = Color(color.r * 0.6, color.g * 0.6, color.b * 0.6, color.a)
+	
+	midi_notes.black_note_material.albedo_color = darker_color
+	
+	midi_particles.particles_material.albedo_color = color
+	midi_particles.particles_flash_material.albedo_color = color
+	
+	currentColor = color
+	send_command_update_color(color)
+	
 func _on_save_profile_button_pressed() -> void:
 	save_profile_file_dialog.visible = true
 

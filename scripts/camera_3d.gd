@@ -1,6 +1,9 @@
 extends Camera3D
 
 @onready var midi_notes: Node3D = $"../MIDI_Pivot/MIDI_Pivot/MIDI/MIDI_Notes"
+@onready var piano_controller: Node = $"../MIDI_Pivot/MIDI_Pivot/MIDI/PianoController"
+@onready var midi_particles: Node3D = $"../MIDI_Pivot/MIDI_Pivot/MIDI/MIDI_Particles"
+
 const LEFT_OFFSET_DIALOG = preload("res://scenes/left_offset_dialog.tscn")
 
 func _input(event):
@@ -41,16 +44,16 @@ func shoot_ray():
 	return space.intersect_ray(ray_query)
 
 func handle_key_action(pitch):
-	midi_notes.update_key_material(pitch, true)
+	piano_controller.update_key_material(pitch, true)
 	midi_notes.notes_on[pitch] = true
-	midi_notes.spawn_particle(pitch)
+	midi_particles.spawn_particle(pitch)
 
 func stop_note_on_release():
 	for key in midi_notes.notes_on.keys():
-		midi_notes.update_key_material(key, false)
+		piano_controller.update_key_material(key, false)
 		midi_notes.notes_on.erase(key)
-		midi_notes.stop_particle(key)
-
+		midi_particles.stop_particle(key)
+		
 func show_offset_dialog():
 	var raycast_result = shoot_ray()
 	if raycast_result and raycast_result.collider:
