@@ -10,11 +10,18 @@ extends Node3D
 @export var shader: Shader
 @export var speed: float = 18.0
 
+@export var white_light_offset: Vector3 = Vector3(0, 0.2, 0)
+@export var black_light_offset: Vector3 = Vector3(0, 0.4, 0)
+@export var light_range: float = 6.0
+@export var light_attenuation: float = -1.25
+
 class NoteData:
 	var instance: MeshInstance3D
+	var parent_node: Node3D
 	var released: bool
 	var shader_material: ShaderMaterial
 	var offset: float
+	var light_holder: Node3D
 
 var active_notes: Dictionary = {}
 var notes_to_remove: Array[int] = []
@@ -25,15 +32,17 @@ var shader_material_prototype: ShaderMaterial
 func _ready() -> void:
 	shader_material_prototype = ShaderMaterial.new()
 	shader_material_prototype.shader = shader
-	
+
 	var key_mesh_instance: Node3D = white_note_mesh_scene.instantiate()
 	var mesh_instance_get_mesh_data: MeshInstance3D = key_mesh_instance.get_child(0)
-	
+
 	select_vertices_automatically(mesh_instance_get_mesh_data.mesh)
 	
 	shader_material_prototype.set_shader_parameter("target_vertex_count", target_vertex_indices.size())
 	shader_material_prototype.set_shader_parameter("target_vertex_indices", target_vertex_indices)
 	shader_material_prototype.set_shader_parameter("z_offset", 0.0)
+
+	key_mesh_instance.queue_free()
 
 func _process(delta: float) -> void:
 	move_notes(delta)
@@ -42,13 +51,15 @@ func _process(delta: float) -> void:
 func create_shader_material() -> ShaderMaterial:
 	return shader_material_prototype.duplicate()
 
-func create_note_data(instance: MeshInstance3D, shader_material: ShaderMaterial) -> NoteData:
+func create_note_data(instance: MeshInstance3D, parent: Node3D, shader_material: ShaderMaterial) -> NoteData:
 	var data := NoteData.new()
 	
 	data.instance = instance
+	data.parent_node = parent
 	data.released = false
 	data.shader_material = shader_material
 	data.offset = 0.0
+	data.light_holder = instance.get_node("NoteLightHolder")
 
 	shader_material.set_shader_parameter("white_key_color", midi_keyboard.white_note_mesh_color)
 	shader_material.set_shader_parameter("black_key_color", midi_keyboard.black_note_mesh_color)
@@ -76,10 +87,22 @@ func on_note_on(pitch: int) -> void:
 	new_mesh_instance.material_override = note_shader_material
 	new_mesh_instance.position = Vector3(note_mesh.position.x, note_mesh.position.y, note_mesh_z)
 
+	var light_holder = Node3D.new()
+	light_holder.name = "NoteLightHolder"
+	new_mesh_instance.add_child(light_holder)
+	
+	var omni_light = OmniLight3D.new()
+	omni_light.name = "NoteLight"
+	omni_light.light_color = midi_keyboard.black_note_mesh_color if is_black else midi_keyboard.white_note_mesh_color
+	omni_light.omni_range = light_range
+	omni_light.omni_attenuation = light_attenuation
+	
+	light_holder.add_child(omni_light)
+
 	note_shader_material.set_shader_parameter("is_black_key", is_black)
 
 	var note_array: Array = active_notes[pitch]
-	note_array.append(create_note_data(new_mesh_instance, note_shader_material))
+	note_array.append(create_note_data(new_mesh_instance, key_mesh_instance, note_shader_material))
 
 	add_child(key_mesh_instance)
 
@@ -116,9 +139,11 @@ func despawn_notes() -> void:
 			var note_data := note_array[i] as NoteData
 			var note_instance: Node3D = note_data.instance
 			if note_instance and note_instance.position.z < -64:
-				note_instance.queue_free()
+
+				if note_data.parent_node and is_instance_valid(note_data.parent_node):
+					note_data.parent_node.queue_free()
 				notes_to_remove.append(i)
-		
+
 		for index in notes_to_remove:
 			note_array.remove_at(index)
 			
@@ -131,7 +156,7 @@ func despawn_notes() -> void:
 func select_vertices_automatically(array_mesh: ArrayMesh) -> void:
 	var surface_count := array_mesh.get_surface_count()
 	target_vertex_indices.resize(0)
-	
+
 	for surface_index in surface_count:
 		var vertices: PackedVector3Array = array_mesh.surface_get_arrays(surface_index)[ArrayMesh.ARRAY_VERTEX]
 		for i in vertices.size():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=18 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/MIDI_Notes.gd" id="1_3ll4w"]
 [ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_jo87c"]
@@ -16,6 +16,7 @@
 [ext_resource type="Material" uid="uid://dgmbakuidedwe" path="res://materials/black_notes_on.tres" id="13_bekje"]
 [ext_resource type="PackedScene" uid="uid://dhkr8srl7vpqg" path="res://models/white_note_cube_mesh.blend" id="14_44per"]
 [ext_resource type="Shader" path="res://shaders/rounded_note_mesh.gdshader" id="15_nsxvj"]
+[ext_resource type="PackedScene" uid="uid://f5efwh0x0i5i" path="res://models/piano_bg.blend" id="17_nwwxk"]
 
 [node name="MIDI" type="Node3D"]
 script = ExtResource("1_jo87c")
@@ -444,6 +445,12 @@ white_notes_on_mat = ExtResource("12_kiwm3")
 black_notes_on_mat = ExtResource("13_bekje")
 white_note_mesh_scene = ExtResource("14_44per")
 shader = ExtResource("15_nsxvj")
+white_light_offset = Vector3(0, 0, 0)
+black_light_offset = Vector3(0, 0, 0)
+light_range = 0.0
+light_attenuation = -1.0
+
+[node name="MIDI_BG" parent="." instance=ExtResource("17_nwwxk")]
 
 [connection signal="toggled" from="CanvasLayer/ToggleKeyboard" to="." method="_on_toggle_keyboard_toggled"]
 [connection signal="toggled" from="CanvasLayer/ToggleParticles" to="." method="_on_toggle_particles_toggled"]

@@ -20,5 +20,3 @@ light_energy = 0.025
 
 [node name="FPS" parent="." instance=ExtResource("4_jleid")]
 transform = Transform3D(0.511293, 0.448455, -0.733122, 0, 0.853056, 0.52182, 0.859407, -0.266803, 0.436161, -77.5542, 29.4369, 22.7174)
-
-[editable path="FPS"]

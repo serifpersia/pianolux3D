@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://blm0g7xf3s0ff"]
+
+[resource]
+resource_name = "white"
+cull_mode = 2
+roughness = 0.5
