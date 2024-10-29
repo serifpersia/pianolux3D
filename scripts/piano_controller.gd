@@ -17,9 +17,6 @@ extends Node
 @onready var midi_notes: Node3D = $"../MIDI_Notes"
 @onready var midi_particles: Node3D = $"../MIDI_Particles"
 
-@onready var virtual_keyboard: Node3D = $"../Virtual_Keyboard"
-@onready var piano_controller = $"../PianoController"
-
 var serial_thread : Thread = Thread.new()
 var serial_queue : Array = []
 var serial_lock : Mutex = Mutex.new()
@@ -283,11 +280,12 @@ func _exit_tree():
 	if serial_thread:
 		serial_thread.wait_to_finish()
 
+
 func _input(event):
 	if event is InputEventMIDI:
 		if event.message == MIDI_MESSAGE_NOTE_ON:
-			midi_notes.notes_on[event.pitch] = true
-			update_key_material(event.pitch, true)
+			midi_notes.on_note_on(event.pitch)
+			midi_notes.update_key_material(event.pitch, true)
 			midi_particles.spawn_particle(event.pitch)
 			
 
@@ -309,8 +307,8 @@ func _input(event):
 			serial_lock.unlock()
 
 		elif event.message == MIDI_MESSAGE_NOTE_OFF:
-			midi_notes.notes_on.erase(event.pitch)
-			update_key_material(event.pitch, false)
+			midi_notes.on_note_off(event.pitch)
+			midi_notes.update_key_material(event.pitch, false)
 			midi_particles.stop_particle(event.pitch)
 
 			var notePushed
@@ -735,38 +733,45 @@ func send_midi_note_off(note: int):
 		message.append(note-1)
 		udp_peer.put_packet(message)
 		print("MIDI message sent:", message)
+		
+func _on_color_picker_color_changed(color: Color) -> void:
+	var dark_color = Color(color.r * 0.8, color.g * 0.8, color.b * 0.8, color.a)
 
-func update_key_material(pitch, is_note_on):
-	var keys = virtual_keyboard.get_children()
-	for key in keys:
-		if key.name == "key_" + str(pitch):
-			
-			var mesh_instance = key.get_child(0)
-			if virtual_keyboard.is_black_key(pitch):
-				if is_note_on:
-					mesh_instance.material_override = midi_notes.black_note_material
-				else:
-					mesh_instance.material_override = virtual_keyboard.black_key_material
-			else:
-				if is_note_on:
-					mesh_instance.material_override = midi_notes.white_note_material
-				else:
-					mesh_instance.material_override = virtual_keyboard.white_key_meterial
-			break
+	stop_all_notes_and_particles()
 
-func _on_color_picker_color_changed(color):
-	midi_notes.white_note_material.albedo_color = color
+	midi_notes.white_note_mesh_color = color
+	midi_notes.black_note_mesh_color = dark_color
+
+	midi_notes.white_notes_on_mat.emission = color
+	midi_notes.black_notes_on_mat.emission = dark_color
 	
-	var darker_color = Color(color.r * 0.6, color.g * 0.6, color.b * 0.6, color.a)
-	
-	midi_notes.black_note_material.albedo_color = darker_color
-	
-	midi_particles.particles_material.albedo_color = color
-	midi_particles.particles_flash_material.albedo_color = color
-	
+	midi_notes.white_notes_on_mat.albedo_color = color
+	midi_notes.black_notes_on_mat.albedo_color = dark_color
+
+	for note_array in midi_notes.active_notes.values():
+		for note_data in note_array:
+			var shader_material = note_data.shader_material
+			if shader_material:
+				shader_material.set_shader_parameter("white_key_color", midi_notes.white_note_mesh_color)
+				shader_material.set_shader_parameter("black_key_color", midi_notes.black_note_mesh_color)
+
+	for key_name in midi_notes.light_nodes.keys():
+		var light_holder = midi_notes.light_nodes[key_name]
+		var is_black = midi_notes.is_black_key(int(key_name))
+		
+		var light: OmniLight3D = light_holder.get_child(0)
+		if light:
+			light.light_color = midi_notes.black_note_mesh_color if is_black else midi_notes.white_note_mesh_color
+
 	currentColor = color
 	send_command_update_color(color)
-	
+
+func stop_all_notes_and_particles() -> void:
+	for pitch in midi_particles.active_particles.keys() + midi_notes.active_notes.keys():
+		midi_particles.stop_particle(pitch)
+		midi_notes.on_note_off(pitch)
+		midi_notes.update_key_material(pitch, false)
+
 func _on_save_profile_button_pressed() -> void:
 	save_profile_file_dialog.visible = true
 
@@ -778,15 +783,15 @@ func _on_save_profile_file_dialog_file_selected(path: String) -> void:
 		
 		var offsets = {}
 		for pitch in Global.offset_map.keys():
-			offsets[str(pitch)] = Global.offset_map[pitch]  # Store the offsets as a dictionary
+			offsets[str(pitch)] = Global.offset_map[pitch]
 
 		var data = {
 			"position": {"x": position.x, "y": position.y, "z": position.z},
 			"rotation": {"x": rotation.x, "y": rotation.y, "z": rotation.z},
-			"offsets": offsets  # Include the offset data
+			"offsets": offsets
 		}
 
-		var json_data = JSON.stringify(data)  # Use JSON.stringify()
+		var json_data = JSON.stringify(data)
 
 		file.store_string(json_data)
 		file.close()

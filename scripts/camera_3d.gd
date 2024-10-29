@@ -1,10 +1,14 @@
 extends Camera3D
 
-@onready var midi_notes: Node3D = $"../MIDI_Pivot/MIDI_Pivot/MIDI/MIDI_Notes"
-@onready var piano_controller: Node = $"../MIDI_Pivot/MIDI_Pivot/MIDI/PianoController"
-@onready var midi_particles: Node3D = $"../MIDI_Pivot/MIDI_Pivot/MIDI/MIDI_Particles"
+@onready var midi_notes: Node3D = $"../../MIDI_Pivot/MIDI_Pivot/MIDI/MIDI_Notes"
+@onready var midi_particles: Node3D = $"../../MIDI_Pivot/MIDI_Pivot/MIDI/MIDI_Particles"
+
+#@onready var midi_notes: Node3D = $"../MIDI_Pivot/MIDI_Pivot/MIDI/MIDI_Notes"
+#@onready var midi_particles: Node3D = $"../MIDI_Pivot/MIDI_Pivot/MIDI/MIDI_Particles"
 
 const LEFT_OFFSET_DIALOG = preload("res://scenes/left_offset_dialog.tscn")
+
+var current_pressed_keys: Array[int] = []
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -24,13 +28,8 @@ func detect_key():
 		var hit_object = raycast_result.collider
 		
 		if hit_object is StaticBody3D:
-			var key_name = hit_object.name
-			
-			if key_name.begins_with("key_"):
-				var pitch_str = key_name.split("_")[1]
-				var pitch = int(pitch_str)
-
-				handle_key_action(pitch)
+			var key_name = hit_object.get_parent().name
+			handle_key_action(int(String(key_name)))
 
 func shoot_ray():
 	var mouse_pos = get_viewport().get_mouse_position()
@@ -44,15 +43,17 @@ func shoot_ray():
 	return space.intersect_ray(ray_query)
 
 func handle_key_action(pitch):
-	piano_controller.update_key_material(pitch, true)
-	midi_notes.notes_on[pitch] = true
+	midi_notes.update_key_material(pitch, true)
+	current_pressed_keys.append(pitch)
+	midi_notes.on_note_on(pitch)
 	midi_particles.spawn_particle(pitch)
 
 func stop_note_on_release():
-	for key in midi_notes.notes_on.keys():
-		piano_controller.update_key_material(key, false)
-		midi_notes.notes_on.erase(key)
-		midi_particles.stop_particle(key)
+	
+	for pitch in current_pressed_keys:
+		midi_notes.update_key_material(pitch, false)
+		midi_notes.on_note_off(pitch)
+		midi_particles.stop_particle(pitch)
 		
 func show_offset_dialog():
 	var raycast_result = shoot_ray()
@@ -60,14 +61,11 @@ func show_offset_dialog():
 		var hit_object = raycast_result.collider
 		
 		if hit_object is StaticBody3D:
-			var key_name = hit_object.name
+			var key_number_str = String(hit_object.get_parent().name)
+			var pitch = int(key_number_str)
 			
-			if key_name.begins_with("key_"):
-				var pitch_str = key_name.split("_")[1]
-				var pitch = int(pitch_str)
-				
-				var offset_dialog = LEFT_OFFSET_DIALOG.instantiate()
-				
-				add_child(offset_dialog)
-				
-				offset_dialog.initialize_dialog(pitch)
+			var offset_dialog = LEFT_OFFSET_DIALOG.instantiate()
+
+			add_child(offset_dialog)
+
+			offset_dialog.initialize_dialog(pitch)

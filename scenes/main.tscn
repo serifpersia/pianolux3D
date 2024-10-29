@@ -1,26 +1,22 @@
 [gd_scene load_steps=5 format=3 uid="uid://kf6tjtr76ly2"]
 
 [ext_resource type="PackedScene" uid="uid://demetbmmfc3sm" path="res://scenes/midi.tscn" id="1_gd7mg"]
-[ext_resource type="Script" path="res://scripts/camera_3d.gd" id="2_4cuns"]
+[ext_resource type="PackedScene" uid="uid://dqk2cq5exa12w" path="res://scenes/world_environment.tscn" id="1_o1vt1"]
 [ext_resource type="Script" path="res://scripts/discord-rpc.gd" id="2_l1ve6"]
-
-[sub_resource type="Environment" id="Environment_kd4jh"]
-background_mode = 2
-glow_enabled = true
-glow_levels/1 = 1.97
-glow_levels/2 = 0.29
-glow_levels/3 = 0.05
-glow_levels/5 = 0.0
-glow_blend_mode = 1
-glow_hdr_threshold = 0.39
+[ext_resource type="PackedScene" uid="uid://bgfampmcitsjy" path="res://scenes/fps.tscn" id="4_jleid"]
 
 [node name="main" type="Node3D"]
 
-[node name="MIDI_Pivot" parent="." instance=ExtResource("1_gd7mg")]
-
-[node name="Camera3D" type="Camera3D" parent="."]
-environment = SubResource("Environment_kd4jh")
-script = ExtResource("2_4cuns")
-
 [node name="discord-rpc" type="Node" parent="."]
 script = ExtResource("2_l1ve6")
+
+[node name="WorldEnvironment" parent="." instance=ExtResource("1_o1vt1")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+light_energy = 0.05
+
+[node name="MIDI_Pivot" parent="." instance=ExtResource("1_gd7mg")]
+
+[node name="FPS" parent="." instance=ExtResource("4_jleid")]
+transform = Transform3D(0.511293, 0.448455, -0.733122, 0, 0.853056, 0.52182, 0.859407, -0.266803, 0.436161, -77.5542, 29.4369, 22.7174)

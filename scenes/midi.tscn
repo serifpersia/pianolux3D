@@ -1,47 +1,34 @@
-[gd_scene load_steps=19 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=20 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/MIDI_Notes.gd" id="1_3ll4w"]
-[ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="1_7mq6q"]
 [ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_jo87c"]
 [ext_resource type="Script" path="res://scripts/midi_transformer.gd" id="1_wr4lx"]
-[ext_resource type="Material" uid="uid://xdabkcdm3c8g" path="res://materials/black_key_mat.tres" id="3_mcpll"]
 [ext_resource type="PackedScene" uid="uid://bjgxxihfcew33" path="res://scenes/serial_list.tscn" id="3_y44n4"]
 [ext_resource type="PackedScene" uid="uid://b8sjcwx28odsw" path="res://scenes/open_close.tscn" id="4_pgseb"]
 [ext_resource type="Script" path="res://scripts/bg.gd" id="7_hn4g7"]
 [ext_resource type="PackedScene" uid="uid://dtacf6kg6rwxg" path="res://scenes/spiral_particles.tscn" id="10_e3ntp"]
 [ext_resource type="Material" uid="uid://b5qeey5ruelw1" path="res://materials/particles_mat.tres" id="10_mr4d0"]
+[ext_resource type="Material" uid="uid://cj3ujrwh48kgc" path="res://materials/white_keys_mat.tres" id="10_wj7rp"]
+[ext_resource type="Material" uid="uid://cj7e5yhxqclf5" path="res://materials/black_keys_mat.tres" id="11_0tc8c"]
 [ext_resource type="Material" uid="uid://c87r7xa3yubcp" path="res://materials/bg_mat.tres" id="12_70sax"]
+[ext_resource type="Material" uid="uid://cu3axujswfcr1" path="res://materials/white_notes_on.tres" id="12_kiwm3"]
 [ext_resource type="Script" path="res://scripts/piano_controller.gd" id="13_0vjy6"]
 [ext_resource type="Script" path="res://scripts/MIDI_Particles.gd" id="13_7uhe6"]
-[ext_resource type="Material" uid="uid://cgfhb3w1jwudu" path="res://materials/particles_flash_mat.tres" id="15_bskuw"]
+[ext_resource type="PackedScene" uid="uid://bh26616vg2jet" path="res://models/beta_keys.blend" id="13_8radr"]
+[ext_resource type="Material" uid="uid://dgmbakuidedwe" path="res://materials/black_notes_on.tres" id="13_bekje"]
+[ext_resource type="PackedScene" uid="uid://dhkr8srl7vpqg" path="res://models/white_note_cube_mesh.blend" id="14_44per"]
+[ext_resource type="Shader" path="res://shaders/rounded_note_mesh.gdshader" id="15_nsxvj"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_pxhi1"]
 material = ExtResource("12_70sax")
 size = Vector2(44, 22)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0nee3"]
-shading_mode = 0
-albedo_color = Color(0.843184, 0.843184, 0.843184, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o6tcl"]
-transparency = 2
-alpha_scissor_threshold = 0.5
-alpha_antialiasing_mode = 0
-shading_mode = 0
-albedo_color = Color(1.6, 0, 0, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u1dhp"]
-shading_mode = 0
-albedo_color = Color(0.8, 0, 0, 1)
-
 [node name="MIDI_Webcam" type="Node3D"]
 
 [node name="MIDI_Pivot" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.5, -16.135)
 script = ExtResource("1_wr4lx")
 
 [node name="MIDI" type="Node3D" parent="MIDI_Pivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.5, 0)
 script = ExtResource("1_jo87c")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="MIDI_Pivot/MIDI"]
@@ -94,7 +81,8 @@ offset_top = 211.0
 offset_right = 192.0
 offset_bottom = 242.0
 text = "Color Picker"
-color = Color(1.65, 0, 0, 1)
+color = Color(1, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="HowToTransform" type="Label" parent="MIDI_Pivot/MIDI/CanvasLayer"]
 offset_left = 39.0
@@ -453,22 +441,20 @@ mesh = SubResource("QuadMesh_pxhi1")
 script = ExtResource("7_hn4g7")
 bg_material = ExtResource("12_70sax")
 
-[node name="Virtual_Keyboard" type="Node3D" parent="MIDI_Pivot/MIDI"]
-transform = Transform3D(1, 1.48077e-11, 0, 1.62279e-11, 1, 0, 1.45519e-11, 3.63798e-12, 1, 1.81899e-12, 0, 0)
-script = ExtResource("1_7mq6q")
-white_key_meterial = SubResource("StandardMaterial3D_0nee3")
-black_key_material = ExtResource("3_mcpll")
-
-[node name="MIDI_Notes" type="Node3D" parent="MIDI_Pivot/MIDI"]
-script = ExtResource("1_3ll4w")
-white_note_material = SubResource("StandardMaterial3D_o6tcl")
-black_note_material = SubResource("StandardMaterial3D_u1dhp")
-
 [node name="MIDI_Particles" type="Node3D" parent="MIDI_Pivot/MIDI"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 script = ExtResource("13_7uhe6")
-particles_material = ExtResource("10_mr4d0")
-particles_flash_material = ExtResource("15_bskuw")
+note_on_white_key_particles_material = ExtResource("10_mr4d0")
 particle_scene = ExtResource("10_e3ntp")
+
+[node name="MIDI_Notes" parent="MIDI_Pivot/MIDI" instance=ExtResource("13_8radr")]
+script = ExtResource("1_3ll4w")
+white_keys_off_mat = ExtResource("10_wj7rp")
+black_keys_off_mat = ExtResource("11_0tc8c")
+white_notes_on_mat = ExtResource("12_kiwm3")
+black_notes_on_mat = ExtResource("13_bekje")
+white_note_mesh_scene = ExtResource("14_44per")
+shader = ExtResource("15_nsxvj")
 
 [node name="Timer" type="Timer" parent="MIDI_Pivot"]
 
