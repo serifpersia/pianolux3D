@@ -1,10 +1,7 @@
 extends Camera3D
 
-@onready var midi_notes: Node3D = $"../../MIDI_Pivot/MIDI_Pivot/MIDI/MIDI_Notes"
-@onready var midi_particles: Node3D = $"../../MIDI_Pivot/MIDI_Pivot/MIDI/MIDI_Particles"
-
-#@onready var midi_notes: Node3D = $"../MIDI_Pivot/MIDI_Pivot/MIDI/MIDI_Notes"
-#@onready var midi_particles: Node3D = $"../MIDI_Pivot/MIDI_Pivot/MIDI/MIDI_Particles"
+@onready var midi_notes: Node3D = $"../../MIDI/MIDI_Notes"
+@onready var midi_particles: Node3D = $"../../MIDI/MIDI_Particles"
 
 const LEFT_OFFSET_DIALOG = preload("res://scenes/left_offset_dialog.tscn")
 
