@@ -174,7 +174,6 @@ func send_command_note_on(note: int):
 		
 		send_command(COMMAND_NOTE_ON_RANDOM_SERIAL, [red, green, blue, note])
 
-
 func send_command_set_brightness(brightness: int):
 	send_command(COMMAND_SET_BRIGHTNESS, [brightness])
 
@@ -183,12 +182,12 @@ func send_command_splash(velocity: int, note: int):
 		send_command_default_note_on(note, velocity)
 	else:
 		send_command(COMMAND_SPLASH, [velocity, note])
-		
+
 func send_command_fade_rate(fade_rate: int):
 	send_command(COMMAND_FADE_RATE, [fade_rate])
 
 func send_command_animation(animation_index: int, hue: int):
-		send_command(COMMAND_ANIMATION, [animation_index, hue])
+	send_command(COMMAND_ANIMATION, [animation_index, hue])
 
 func send_command_blackout():
 	send_command(COMMAND_BLACKOUT, [])
@@ -217,7 +216,6 @@ func send_command_strip_direction(direction: int, num_leds: int):
 var transposition : int = 0
 
 func map_midi_note_to_led(midi_note: int, lowest_note: int, highest_note: int, strip_led_number: int, out_min: int) -> int:
-	
 	var offset = Global.offset_map.get(midi_note, 0)
 	
 	midi_note -= transposition
@@ -228,18 +226,19 @@ func map_midi_note_to_led(midi_note: int, lowest_note: int, highest_note: int, s
 	mapped_led += offset
 
 	return int(mapped_led) + out_min
-	
+
 func fixed_map_midi_note_to_led(midi_note: int, lowest_note: int, highest_note: int, strip_led_number: int, out_min: int) -> int:
 	midi_note -= transposition
+	
 	var out_max = out_min + strip_led_number - 1
 	var mapped_led = (midi_note - lowest_note) * float(out_max - out_min) / float(highest_note - lowest_note)
-	
+
 	if midi_note >= 57:
 		mapped_led -= 1
-		
+
 	if midi_note >= 93:
 		mapped_led -= 1
-		
+
 	return int(mapped_led) + out_min
 
 func _ready():
@@ -251,24 +250,25 @@ func _ready():
 
 	for mode in led_mode_list:
 		modes_list.add_item(mode)
-	
+
 	if led_mode_list.size() > 0:
 		modes_list.select(0)
 
 	for animation in led_animations_list:
 		animations_list.add_item(animation)
-	
+
 	if led_animations_list.size() > 0:
 		animations_list.select(0)
-			
+
 	update_serial()
-	
+
 	udp_peer.set_broadcast_enabled(true)
 	udp_peer.set_dest_address("255.255.255.255", udp_port)
+
 	_request_esp32_ip()
-	
+
 	serial_thread.start(_thread_serial_handler)
-	
+
 	OS.open_midi_inputs()
 
 func _exit_tree():
@@ -276,11 +276,11 @@ func _exit_tree():
 		send_command_set_bg(0,0,0)
 		send_command_blackout()
 		serial.close()
-		
+
 	is_running = false
+
 	if serial_thread:
 		serial_thread.wait_to_finish()
-
 
 func _input(event):
 	if event is InputEventMIDI:
@@ -291,6 +291,7 @@ func _input(event):
 			
 
 			var notePushed
+
 			if fixLED_Toggle:
 				notePushed = fixed_map_midi_note_to_led(event.pitch, firstNoteSelected, lastNoteSelected, stripLedNum, 1)
 			else:
@@ -313,6 +314,7 @@ func _input(event):
 			midi_particles.stop_particle(event.pitch)
 
 			var notePushed
+
 			if fixLED_Toggle:
 				notePushed = fixed_map_midi_note_to_led(event.pitch, firstNoteSelected, lastNoteSelected, stripLedNum, 1)
 			else:
@@ -330,12 +332,16 @@ func _input(event):
 
 func _thread_serial_handler():
 	while is_running:
+		
 		serial_lock.lock()
+
 		if serial_queue.size() > 0:
 			var command_data = serial_queue.pop_front()
+
 			serial_lock.unlock()
 
 			if command_data.type == "note_on":
+				
 				match command_data.mode:
 					0:
 						send_command_default_note_on(command_data.notePushed, command_data.velocity)
@@ -345,7 +351,7 @@ func _thread_serial_handler():
 						send_command_note_on(command_data.notePushed)
 					3:
 						send_command_velocity(command_data.velocity, command_data.notePushed)
-						
+
 			elif command_data.type == "note_off":
 				send_command_note_off(command_data.notePushed)
 		else:
@@ -353,20 +359,20 @@ func _thread_serial_handler():
 
 		OS.delay_msec(10)
 
-
 func _process(_delta):
 	if useESP32:
 		web_socket.poll()
 		udp_peer.set_broadcast_enabled(true)
-		
+
 		var state = web_socket.get_ready_state()
-		
+
 		if state == WebSocketPeer.STATE_OPEN:
 			if not has_printed_open_message:
 				print("WebSocket is open.")
 				has_printed_open_message = true
 			
 			while web_socket.get_available_packet_count() > 0:
+
 				var packet = web_socket.get_packet()
 				var json_string = packet.get_string_from_utf8()
 				
@@ -382,21 +388,22 @@ func _process(_delta):
 		elif state == WebSocketPeer.STATE_CLOSED:
 			var code = web_socket.get_close_code()
 			var reason = web_socket.get_close_reason()
+
 			print("WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
+
 			set_process(false)
-			
+
 		while udp_peer.get_available_packet_count() > 0:
+
 			_on_data_received()
 			udp_peer.set_broadcast_enabled(false)
 
 func update_serial():
 	port = serial_list.get_item_text(serial_list.selected)
 	serial.port = port
-	
 
 func _on_serial_list_item_selected(index):
 	port = serial_list.get_item_text(index)
-
 
 func _on_open_close_toggled(button_pressed):
 	if button_pressed:
@@ -416,7 +423,6 @@ func _on_open_close_toggled(button_pressed):
 				print("Failed to open serial port.")
 	else:
 		if web_socket_toggle.button_pressed:
-			# Close the WebSocket connection
 			if web_socket.get_ready_state() == web_socket.STATE_OPEN:
 				web_socket.close()
 				print("WebSocket closed.")
@@ -430,7 +436,7 @@ func _on_open_close_toggled(button_pressed):
 				print("serial closed: ", serial.port)
 			else:
 				print("Failed to close serial port.")
-	
+
 func _on_modes_list_item_selected(index):
 	send_command_blackout()
 	match index:
@@ -460,7 +466,6 @@ func _on_modes_list_item_selected(index):
 				send_json_command("ChangeLEDModeAction", 4)
 				set_defaults(8, 255, 0)
 			send_command_animation(0, 0)
-
 
 func _on_animations_list_item_selected(index):
 	if MODE == 4:
@@ -518,7 +523,7 @@ func _on_animations_list_item_selected(index):
 					send_json_command("ChangeAnimationAction", 8)
 				else:
 					send_command_animation(index, 8)
-				
+
 			9:
 				if useESP32:
 					send_json_command("ChangeAnimationAction", 9)
@@ -563,18 +568,18 @@ func rgb_to_hsb(r: float, g: float, b: float) -> Dictionary:
 
 	if delta > 0.0:
 		saturation = delta / max_val
-		
+
 		if max_val == r:
 			hue = (g - b) / delta
 		elif max_val == g:
 			hue = 2.0 + (b - r) / delta
 		else:
 			hue = 4.0 + (r - g) / delta
-		
+
 		hue *= 60.0
 		if hue < 0.0:
 			hue += 360.0
-	
+
 	return {
 		"hue": hue / 360.0 * 255,
 		"saturation": saturation * 255,
@@ -602,19 +607,18 @@ func _on_bg_brightness_slider_value_changed(value):
 	else:
 		update_bg_color(value)
 
-
 func _on_bgled_toggle_toggled(toggled_on):
 	if toggled_on:
 		bgLED_Toggle = true
-		
+
 		if useESP32:
 			send_json_command("BGAction", 1)
 		else:
-			
+
 			send_command_set_bg(0,0,50)
 	else:
 		bgLED_Toggle = false
-		
+
 		if useESP32:
 			send_json_command("BGAction", 0)
 		else:
@@ -645,15 +649,18 @@ func update_piano_size_settings():
 			stripLedNum = 98
 			firstNoteSelected = 36
 			lastNoteSelected = 84
+
 func _on_piano_size_decrease_button_pressed():
 	if counter > 0:
 		counter -= 1
+
 		update_piano_size_settings()
 		update_piano_size_label()
 
 func _on_piano_size_increase_button_pressed():
 	if counter < 4:
 		counter += 1
+
 		update_piano_size_settings()
 		update_piano_size_label()
 
@@ -759,7 +766,7 @@ func _on_color_picker_color_changed(color: Color) -> void:
 	for key_name in midi_keyboard.light_nodes.keys():
 		var light_holder = midi_keyboard.light_nodes[key_name]
 		var is_black = midi_keyboard.is_black_key(int(key_name))
-		
+
 		var light: OmniLight3D = light_holder.get_child(0)
 		if light:
 			light.light_color = midi_keyboard.black_note_mesh_color if is_black else midi_keyboard.white_note_mesh_color
@@ -781,7 +788,7 @@ func _on_save_profile_file_dialog_file_selected(path: String) -> void:
 	if file:
 		var position = midi_pivot.position
 		var rotation = midi_pivot.rotation
-		
+
 		var offsets = {}
 		for pitch in Global.offset_map.keys():
 			offsets[str(pitch)] = Global.offset_map[pitch]

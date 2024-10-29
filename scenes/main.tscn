@@ -13,10 +13,12 @@ script = ExtResource("2_l1ve6")
 [node name="WorldEnvironment" parent="." instance=ExtResource("1_o1vt1")]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-light_energy = 0.05
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 100, 0)
+light_energy = 0.025
 
 [node name="MIDI" parent="." instance=ExtResource("1_gd7mg")]
 
 [node name="FPS" parent="." instance=ExtResource("4_jleid")]
 transform = Transform3D(0.511293, 0.448455, -0.733122, 0, 0.853056, 0.52182, 0.859407, -0.266803, 0.436161, -77.5542, 29.4369, 22.7174)
+
+[editable path="FPS"]

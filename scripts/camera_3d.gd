@@ -36,8 +36,10 @@ func shoot_ray():
 	var to = from + project_ray_normal(mouse_pos) * ray_length
 	var space = get_world_3d().direct_space_state
 	var ray_query = PhysicsRayQueryParameters3D.new()
+	
 	ray_query.from = from
 	ray_query.to = to
+
 	return space.intersect_ray(ray_query)
 
 func handle_key_action(pitch):
@@ -47,12 +49,11 @@ func handle_key_action(pitch):
 	midi_particles.spawn_particle(pitch)
 
 func stop_note_on_release():
-	
 	for pitch in current_pressed_keys:
 		midi_keyboard.update_key_material(pitch, false)
 		midi_notes.on_note_off(pitch)
 		midi_particles.stop_particle(pitch)
-		
+
 func show_offset_dialog():
 	var raycast_result = shoot_ray()
 	if raycast_result and raycast_result.collider:
@@ -61,9 +62,7 @@ func show_offset_dialog():
 		if hit_object is StaticBody3D:
 			var key_number_str = String(hit_object.get_parent().name)
 			var pitch = int(key_number_str)
-			
 			var offset_dialog = LEFT_OFFSET_DIALOG.instantiate()
 
 			add_child(offset_dialog)
-
 			offset_dialog.initialize_dialog(pitch)

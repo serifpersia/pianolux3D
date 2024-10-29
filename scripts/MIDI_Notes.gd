@@ -28,6 +28,7 @@ func _ready() -> void:
 	
 	var key_mesh_instance: Node3D = white_note_mesh_scene.instantiate()
 	var mesh_instance_get_mesh_data: MeshInstance3D = key_mesh_instance.get_child(0)
+	
 	select_vertices_automatically(mesh_instance_get_mesh_data.mesh)
 	
 	shader_material_prototype.set_shader_parameter("target_vertex_count", target_vertex_indices.size())
@@ -42,7 +43,6 @@ func create_shader_material() -> ShaderMaterial:
 	return shader_material_prototype.duplicate()
 
 func create_note_data(instance: MeshInstance3D, shader_material: ShaderMaterial) -> NoteData:
-	
 	var data := NoteData.new()
 	
 	data.instance = instance
@@ -56,7 +56,6 @@ func create_note_data(instance: MeshInstance3D, shader_material: ShaderMaterial)
 	return data
 
 func on_note_on(pitch: int) -> void:
-	
 	var key_mesh_instance: Node3D = white_note_mesh_scene.instantiate()
 	var new_mesh_instance: MeshInstance3D = key_mesh_instance.get_child(0)
 

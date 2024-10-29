@@ -4,7 +4,7 @@ extends Node3D
 
 @onready var midi_keyboard = $MIDI_Keyboard
 @onready var midi_notes = $MIDI_Notes
-@onready var bg = $BG
+@onready var piano_bg: MeshInstance3D = $MIDI_Keyboard/Piano_BG
 @onready var midi_particles = $MIDI_Particles
 
 func _input(event: InputEvent) -> void:
@@ -19,7 +19,7 @@ func _on_toggle_midi_toggled(toggled_on):
 	midi_notes.visible = toggled_on
 
 func _on_toggle_bg_toggled(toggled_on):
-	bg.visible = toggled_on
+	piano_bg.visible = toggled_on
 
 func _on_toggle_particles_toggled(toggled_on):
 	Global.particles_state = toggled_on
