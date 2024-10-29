@@ -4,7 +4,7 @@ extends Node3D
 
 @export var particle_scene : PackedScene
 
-@onready var midi_notes: Node3D = $"../MIDI_Notes"
+@onready var midi_keyboard: Node3D = $"../MIDI_Keyboard"
 
 var active_particles = {}
 var child_particles = {}
@@ -16,9 +16,9 @@ func spawn_particle(pitch):
 	if Global.particles_state:
 		var particle_instance = particle_scene.instantiate()
 		
-		var is_black = midi_notes.is_black_key(pitch)
+		var is_black = midi_keyboard.is_black_key(pitch)
 
-		var note_mesh := midi_notes.get_node(str(pitch))
+		var note_mesh := midi_keyboard.get_node(str(pitch))
 		
 		var note_mesh_y =  note_mesh.position.y + 3.65 if is_black else note_mesh.position.y + 6.25
 		var note_mesh_z = note_mesh.position.z + 11.35 if is_black else note_mesh.position.z + 9.35
@@ -27,9 +27,9 @@ func spawn_particle(pitch):
 		particle_instance.scale = Vector3(2.75, 2.75, 2.75)
 
 		if is_black:
-			note_on_white_key_particles_material.emission = midi_notes.black_note_mesh_color
+			note_on_white_key_particles_material.emission = midi_keyboard.black_note_mesh_color
 		else:
-			note_on_white_key_particles_material.emission = midi_notes.white_note_mesh_color
+			note_on_white_key_particles_material.emission = midi_keyboard.white_note_mesh_color
 			
 		add_child(particle_instance)
 		

@@ -1,83 +1,76 @@
-@tool
 extends Node3D
 
-@export var white_key_meterial : Material
-@export var black_key_material : Material
+@export var white_keys_off_mat: StandardMaterial3D
+@export var black_keys_off_mat: StandardMaterial3D
+@export var white_notes_on_mat: StandardMaterial3D
+@export var black_notes_on_mat: StandardMaterial3D
 
-@export var speed_multiplier : float = 10.0
+@export var white_light_offset: Vector3 = Vector3(0, 0.2, 0)  # Adjust for white keys
+@export var black_light_offset: Vector3 = Vector3(0, 0.4, 0)  # Adjust for black keys
+@export var light_range: float = 6.0
+@export var light_attenuation: float = -1.25
 
-var note_width = 0.792
+@export var white_note_mesh_scene: PackedScene
 
-func _ready():
-	create_midi_keyboard()
+var light_nodes: Dictionary = {}
 
-func create_midi_keyboard():
-	var white_key_width = note_width
-	var black_key_width = white_key_width * 0.65
+var black_keys: PackedInt32Array = PackedInt32Array([1, 3, 6, 8, 10])
 
-	for note in range(21,109):
-		
-		var key_body = StaticBody3D.new()
-		var key_mesh_instance = MeshInstance3D.new()
-		var mesh = QuadMesh.new()
-		
-		key_mesh_instance.mesh = mesh
-		
-		var z_position = 0.2 if is_black_key(note) else 0.1
-		var x_offset = calculate_x_offset(note)
-		var y_offset = -9.75 if is_black_key(note) else -10.502
-		key_body.position = Vector3(x_offset-31.57, y_offset, z_position)
-		
-		if is_black_key(note):
-			key_mesh_instance.scale = Vector3(black_key_width, 2.4, 0.1)
-			key_mesh_instance.material_override = black_key_material
-		else:
-			key_mesh_instance.scale = Vector3(white_key_width, 3.8, 0.1)
-			key_mesh_instance.material_override = white_key_meterial
-		
-		key_body.add_child(key_mesh_instance)
+@export var white_note_mesh_color: Color = Color(1.0, 0.0, 0.0, 1.0)
+@export var black_note_mesh_color: Color = Color(0.8, 0.0, 0.0, 1.0)
 
-		var collision_shape = CollisionShape3D.new()
-		var shape = BoxShape3D.new()
-		
-		shape.size = key_mesh_instance.scale
-		collision_shape.shape = shape
-		
-		key_body.add_child(collision_shape)
 
-		key_body.name = "key_" + str(note)
 
-		add_child(key_body)
+func _ready() -> void:
 
-func calculate_x_offset(note):
-	var spacing = 0.05
-	var white_key_width = note_width + spacing
-	var octave = int(note / 12)  # Calculate octave based on MIDI note
-	var key_in_octave = note % 12  # Key within the octave
-	var x_offset = octave * 7 * white_key_width
+	var keys = get_children()
+	
+	for key in keys:
+		setup_key_light(key)
 
-	# Adjusted offsets for keys in an octave
-	var key_offsets = [
-		0,  # C
-		white_key_width * 0.5,  # C#
-		white_key_width * 1,  # D
-		white_key_width * 1.5,  # D#
-		white_key_width * 2,  # E
-		white_key_width * 3,  # F
-		white_key_width * 3.5,  # F#
-		white_key_width * 4,  # G
-		white_key_width * 4.5,  # G#
-		white_key_width * 5,  # A
-		white_key_width * 5.5, # A#
-		white_key_width * 6  # B
-	]
-
-	x_offset += key_offsets[key_in_octave]
-
-	return x_offset
-
-## Revised Function: `is_black_key`
-
-func is_black_key(note):
-	var black_keys = [1, 3, 6, 8, 10] # C#, D#, F#, G#, A#
+func is_black_key(note: int) -> bool:
 	return (note % 12) in black_keys
+
+func update_key_material(pitch: int, is_note_on: bool) -> void:
+	var pitch_str := str(pitch)
+	var is_black := is_black_key(pitch)
+
+	for key in get_children():
+		if key.name == pitch_str:
+			var mesh_instance := key
+			mesh_instance.material_override = (
+				black_notes_on_mat if is_note_on else black_keys_off_mat
+			) if is_black else (
+				white_notes_on_mat if is_note_on else white_keys_off_mat
+			)
+
+			if light_nodes.has(pitch_str):
+				light_nodes[pitch_str].visible = is_note_on
+			return
+
+func setup_key_light(key: Node3D) -> void:
+	
+	var light_holder = Node3D.new()
+	light_holder.name = "LightHolder"
+	
+	var key_id = int(String(key.name))
+	var is_black = is_black_key(key_id)
+	
+	key.add_child(light_holder)
+	
+	light_holder.position += black_light_offset if is_black else white_light_offset
+	
+	var omni_light = OmniLight3D.new()
+	omni_light.name = "KeyLight"
+	
+	# Set the light color based on whether it's a black or white key
+	omni_light.light_color = black_note_mesh_color if is_black else white_note_mesh_color
+	
+	omni_light.omni_range = light_range
+	omni_light.omni_attenuation = light_attenuation
+	
+	light_holder.add_child(omni_light)
+	
+	light_holder.visible = false
+	
+	light_nodes[key.name] = light_holder

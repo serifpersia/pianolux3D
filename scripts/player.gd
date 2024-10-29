@@ -25,9 +25,14 @@ func _ready():
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_mouse_lock"):
+		
 		if fps_mode:
 			mouse_lock = !mouse_lock
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if mouse_lock else Input.MOUSE_MODE_CAPTURED
+			if mouse_lock:
+				texture_rect.visible = false
+			else:
+				texture_rect.visible = true
 	
 	elif Input.is_action_just_pressed("ui_fps_mode"):
 		fps_mode = !fps_mode

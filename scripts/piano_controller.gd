@@ -14,6 +14,7 @@ extends Node
 @onready var save_profile_file_dialog: FileDialog = $"../CanvasLayer/SaveProfileFileDialog"
 @onready var midi_pivot: Node3D = $"../.."
 
+@onready var midi_keyboard: Node3D = $"../MIDI_Keyboard"
 @onready var midi_notes: Node3D = $"../MIDI_Notes"
 @onready var midi_particles: Node3D = $"../MIDI_Particles"
 
@@ -285,7 +286,7 @@ func _input(event):
 	if event is InputEventMIDI:
 		if event.message == MIDI_MESSAGE_NOTE_ON:
 			midi_notes.on_note_on(event.pitch)
-			midi_notes.update_key_material(event.pitch, true)
+			midi_keyboard.update_key_material(event.pitch, true)
 			midi_particles.spawn_particle(event.pitch)
 			
 
@@ -308,7 +309,7 @@ func _input(event):
 
 		elif event.message == MIDI_MESSAGE_NOTE_OFF:
 			midi_notes.on_note_off(event.pitch)
-			midi_notes.update_key_material(event.pitch, false)
+			midi_keyboard.update_key_material(event.pitch, false)
 			midi_particles.stop_particle(event.pitch)
 
 			var notePushed
@@ -739,29 +740,29 @@ func _on_color_picker_color_changed(color: Color) -> void:
 
 	stop_all_notes_and_particles()
 
-	midi_notes.white_note_mesh_color = color
-	midi_notes.black_note_mesh_color = dark_color
+	midi_keyboard.white_note_mesh_color = color
+	midi_keyboard.black_note_mesh_color = dark_color
 
-	midi_notes.white_notes_on_mat.emission = color
-	midi_notes.black_notes_on_mat.emission = dark_color
+	midi_keyboard.white_notes_on_mat.emission = color
+	midi_keyboard.black_notes_on_mat.emission = dark_color
 	
-	midi_notes.white_notes_on_mat.albedo_color = color
-	midi_notes.black_notes_on_mat.albedo_color = dark_color
+	midi_keyboard.white_notes_on_mat.albedo_color = color
+	midi_keyboard.black_notes_on_mat.albedo_color = dark_color
 
 	for note_array in midi_notes.active_notes.values():
 		for note_data in note_array:
 			var shader_material = note_data.shader_material
 			if shader_material:
-				shader_material.set_shader_parameter("white_key_color", midi_notes.white_note_mesh_color)
-				shader_material.set_shader_parameter("black_key_color", midi_notes.black_note_mesh_color)
+				shader_material.set_shader_parameter("white_key_color", midi_keyboard.white_note_mesh_color)
+				shader_material.set_shader_parameter("black_key_color", midi_keyboard.black_note_mesh_color)
 
-	for key_name in midi_notes.light_nodes.keys():
-		var light_holder = midi_notes.light_nodes[key_name]
-		var is_black = midi_notes.is_black_key(int(key_name))
+	for key_name in midi_keyboard.light_nodes.keys():
+		var light_holder = midi_keyboard.light_nodes[key_name]
+		var is_black = midi_keyboard.is_black_key(int(key_name))
 		
 		var light: OmniLight3D = light_holder.get_child(0)
 		if light:
-			light.light_color = midi_notes.black_note_mesh_color if is_black else midi_notes.white_note_mesh_color
+			light.light_color = midi_keyboard.black_note_mesh_color if is_black else midi_keyboard.white_note_mesh_color
 
 	currentColor = color
 	send_command_update_color(color)
@@ -770,7 +771,7 @@ func stop_all_notes_and_particles() -> void:
 	for pitch in midi_particles.active_particles.keys() + midi_notes.active_notes.keys():
 		midi_particles.stop_particle(pitch)
 		midi_notes.on_note_off(pitch)
-		midi_notes.update_key_material(pitch, false)
+		midi_keyboard.update_key_material(pitch, false)
 
 func _on_save_profile_button_pressed() -> void:
 	save_profile_file_dialog.visible = true

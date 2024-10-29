@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=20 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/MIDI_Notes.gd" id="1_3ll4w"]
 [ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_jo87c"]
@@ -11,6 +11,7 @@
 [ext_resource type="Material" uid="uid://cj7e5yhxqclf5" path="res://materials/black_keys_mat.tres" id="11_0tc8c"]
 [ext_resource type="Material" uid="uid://c87r7xa3yubcp" path="res://materials/bg_mat.tres" id="12_70sax"]
 [ext_resource type="Material" uid="uid://cu3axujswfcr1" path="res://materials/white_notes_on.tres" id="12_kiwm3"]
+[ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="12_nnbsg"]
 [ext_resource type="Script" path="res://scripts/piano_controller.gd" id="13_0vjy6"]
 [ext_resource type="Script" path="res://scripts/MIDI_Particles.gd" id="13_7uhe6"]
 [ext_resource type="PackedScene" uid="uid://bh26616vg2jet" path="res://models/beta_keys.blend" id="13_8radr"]
@@ -441,10 +442,16 @@ script = ExtResource("13_7uhe6")
 note_on_white_key_particles_material = ExtResource("10_mr4d0")
 particle_scene = ExtResource("10_e3ntp")
 
-[node name="MIDI_Notes" parent="." instance=ExtResource("13_8radr")]
-script = ExtResource("1_3ll4w")
+[node name="MIDI_Keyboard" parent="." instance=ExtResource("13_8radr")]
+script = ExtResource("12_nnbsg")
 white_keys_off_mat = ExtResource("10_wj7rp")
 black_keys_off_mat = ExtResource("11_0tc8c")
+white_notes_on_mat = ExtResource("12_kiwm3")
+black_notes_on_mat = ExtResource("13_bekje")
+white_note_mesh_scene = ExtResource("14_44per")
+
+[node name="MIDI_Notes" type="Node3D" parent="."]
+script = ExtResource("1_3ll4w")
 white_notes_on_mat = ExtResource("12_kiwm3")
 black_notes_on_mat = ExtResource("13_bekje")
 white_note_mesh_scene = ExtResource("14_44per")
