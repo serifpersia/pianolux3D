@@ -756,6 +756,14 @@ func _on_color_picker_color_changed(color: Color) -> void:
 	midi_keyboard.white_notes_on_mat.albedo_color = color
 	midi_keyboard.black_notes_on_mat.albedo_color = dark_color
 
+	for key_name in midi_keyboard.light_nodes.keys():
+		var light_holder = midi_keyboard.light_nodes[key_name]
+		var is_black = midi_keyboard.is_black_key(int(key_name))
+
+		var light: SpotLight3D = light_holder.get_child(0)
+		if light:
+			light.light_color = midi_keyboard.black_note_mesh_color if is_black else midi_keyboard.white_note_mesh_color
+
 	for note_array in midi_notes.active_notes.values():
 		for note_data in note_array:
 			var shader_material = note_data.shader_material

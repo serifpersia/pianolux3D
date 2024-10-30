@@ -24,6 +24,7 @@ func _on_bg_image_file_dialog_file_selected(path: String) -> void:
 	image_texture.set_image(image)
 	
 	bg_material.albedo_color.a = 1
+	bg_material.albedo_color = Color(1,1,1)
 	bg_material.albedo_texture = image_texture
 	
 	bg_transparency_slider.value = 1
