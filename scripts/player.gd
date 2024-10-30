@@ -11,12 +11,17 @@ var fps_mode : bool = false
 
 var last_position
 var last_rotation
-var last_camera_rotation
+
+var initial_position
+var initial_rotation
 
 func _ready():
 	last_position = position
 	last_rotation = rotation
-
+	
+	initial_position = position
+	initial_rotation = rotation
+	
 	switch_camera_mode()
 
 func _input(_event: InputEvent) -> void:
@@ -34,6 +39,11 @@ func _input(_event: InputEvent) -> void:
 		fps_mode = !fps_mode
 
 		switch_camera_mode()
+		
+	elif Input.is_action_just_pressed("ui_reset_fps_view"):
+		if fps_mode:
+			position = initial_position
+			rotation = initial_rotation
 
 func switch_camera_mode():
 	if fps_mode:
@@ -99,4 +109,8 @@ func _physics_process(_delta: float) -> void:
 
 	if fps_mode:
 		if not mouse_lock:
+			
+			last_position = position
+			last_rotation = rotation
+			
 			move_and_slide()

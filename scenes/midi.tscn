@@ -437,7 +437,13 @@ white_keys_off_mat = ExtResource("10_wj7rp")
 black_keys_off_mat = ExtResource("11_0tc8c")
 white_notes_on_mat = ExtResource("12_kiwm3")
 black_notes_on_mat = ExtResource("13_bekje")
+white_light_offset = Vector3(0, 3, 1)
+black_light_offset = Vector3(0, 3, 1)
+light_range = 9.0
+light_attenuation = 0.5
 white_note_mesh_scene = ExtResource("14_44per")
+white_note_mesh_color = Color(1, 1, 1, 1)
+black_note_mesh_color = Color(1, 1, 1, 1)
 
 [node name="MIDI_Notes" type="Node3D" parent="."]
 script = ExtResource("1_3ll4w")
@@ -448,7 +454,7 @@ shader = ExtResource("15_nsxvj")
 white_light_offset = Vector3(0, 0, 0)
 black_light_offset = Vector3(0, 0, 0)
 light_range = 0.0
-light_attenuation = -1.0
+light_attenuation = 0.0
 
 [node name="MIDI_BG" parent="." instance=ExtResource("17_nwwxk")]
 
