@@ -428,7 +428,6 @@ use_native_dialog = true
 script = ExtResource("13_0vjy6")
 
 [node name="MIDI_Particles" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 script = ExtResource("13_7uhe6")
 note_on_white_key_particles_material = ExtResource("10_mr4d0")
 particle_scene = ExtResource("10_e3ntp")

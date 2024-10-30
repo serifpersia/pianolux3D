@@ -733,14 +733,14 @@ func send_midi_note_on(note: int, velocity: int):
 		message.append(velocity)
 		
 		udp_peer.put_packet(message)
-		print("MIDI message sent:", message)
+		#print("MIDI message sent:", message)
 
 func send_midi_note_off(note: int):
 	if MODE != 4:
 		var message: PackedByteArray = PackedByteArray()
 		message.append(note-1)
 		udp_peer.put_packet(message)
-		print("MIDI message sent:", message)
+		#print("MIDI message sent:", message)
 		
 func _on_color_picker_color_changed(color: Color) -> void:
 	var dark_color = Color(color.r * 0.8, color.g * 0.8, color.b * 0.8, color.a)

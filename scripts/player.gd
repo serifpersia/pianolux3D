@@ -76,7 +76,7 @@ func switch_camera_mode():
 		camera_3d.rotation_degrees = Vector3(-90, 0, 0)
 		camera_3d.size = 71.2
 		camera_3d.h_offset = 0.2
-		camera_3d.v_offset = 28.3
+		camera_3d.v_offset = 21.0
 
 		position = Vector3(0, 17, 0)
 		rotation = Vector3(0,0,0)

@@ -59,6 +59,7 @@ material = ExtResource("1_quc5v")
 size = Vector2(0.25, 0.25)
 
 [node name="SpiralParticles" type="GPUParticles3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 amount = 64
 lifetime = 0.85
 fixed_fps = 60

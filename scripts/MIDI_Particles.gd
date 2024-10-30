@@ -17,8 +17,8 @@ func spawn_particle(pitch):
 	var is_black = midi_keyboard.is_black_key(pitch)
 	var note_mesh := midi_keyboard.get_node(str(pitch))
 	
-	var note_mesh_y = note_mesh.position.y + (3.65 if is_black else 6.25)
-	var note_mesh_z = note_mesh.position.z + (11.35 if is_black else 9.35)
+	var note_mesh_y = note_mesh.position.y + (0.0 if is_black else 0.0)
+	var note_mesh_z = note_mesh.position.z + (0.0 if is_black else 0.0)
 	
 	particle_instance.position = Vector3(note_mesh.position.x, note_mesh_y, note_mesh_z)
 	particle_instance.scale = Vector3(2.75, 2.75, 2.75)
