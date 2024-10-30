@@ -74,7 +74,7 @@ func on_note_on(pitch: int) -> void:
 		active_notes[pitch] = []
 
 	var note_mesh := midi_keyboard.get_node(str(pitch))
-	var note_mesh_z = note_mesh.position.z - 0.65 if is_black else note_mesh.position.z - 1.25
+	var note_mesh_z = note_mesh.position.z - 0.635 if is_black else note_mesh.position.z - 1.215
 
 	var note_shader_material := create_shader_material()
 	

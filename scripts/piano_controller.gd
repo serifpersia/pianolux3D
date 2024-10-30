@@ -12,7 +12,7 @@ extends Node
 @onready var web_socket_toggle = $"../CanvasLayer/WebSocket_Toggle"
 @onready var load_profile_file_dialog: FileDialog = $"../CanvasLayer/LoadProfileFileDialog"
 @onready var save_profile_file_dialog: FileDialog = $"../CanvasLayer/SaveProfileFileDialog"
-@onready var midi_pivot: Node3D = $"../.."
+#@onready var midi_pivot: Node3D = $"../.."
 
 @onready var midi_keyboard: Node3D = $"../MIDI_Keyboard"
 @onready var midi_notes: Node3D = $"../MIDI_Notes"
@@ -786,6 +786,8 @@ func _on_save_profile_button_pressed() -> void:
 func _on_save_profile_file_dialog_file_selected(path: String) -> void:
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	if file:
+		var midi_pivot = null # temp var
+		
 		var position = midi_pivot.position
 		var rotation = midi_pivot.rotation
 
@@ -825,7 +827,7 @@ func _on_load_profile_file_dialog_file_selected(path: String) -> void:
 
 			var position = Vector3(data["position"]["x"], data["position"]["y"], data["position"]["z"])
 			var rotation = Vector3(data["rotation"]["x"], data["rotation"]["y"], data["rotation"]["z"])
-
+			var midi_pivot = null # temp var
 			midi_pivot.position = position
 			midi_pivot.rotation = rotation
 
