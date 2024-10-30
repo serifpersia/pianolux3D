@@ -10,10 +10,6 @@ extends Node3D
 @export var shader: Shader
 @export var speed: float = 18.0
 
-@export var white_light_offset: Vector3 = Vector3(0, 0.2, 0)
-@export var black_light_offset: Vector3 = Vector3(0, 0.4, 0)
-@export var light_range: float = 6.0
-@export var light_attenuation: float = -1.25
 
 class NoteData:
 	var instance: MeshInstance3D
@@ -21,7 +17,6 @@ class NoteData:
 	var released: bool
 	var shader_material: ShaderMaterial
 	var offset: float
-	var light_holder: Node3D
 
 var active_notes: Dictionary = {}
 var notes_to_remove: Array[int] = []
@@ -59,7 +54,6 @@ func create_note_data(instance: MeshInstance3D, parent: Node3D, shader_material:
 	data.released = false
 	data.shader_material = shader_material
 	data.offset = 0.0
-	data.light_holder = instance.get_node("NoteLightHolder")
 
 	shader_material.set_shader_parameter("white_key_color", midi_keyboard.white_note_mesh_color)
 	shader_material.set_shader_parameter("black_key_color", midi_keyboard.black_note_mesh_color)
@@ -86,18 +80,6 @@ func on_note_on(pitch: int) -> void:
 	
 	new_mesh_instance.material_override = note_shader_material
 	new_mesh_instance.position = Vector3(note_mesh.position.x, note_mesh.position.y, note_mesh_z)
-
-	var light_holder = Node3D.new()
-	light_holder.name = "NoteLightHolder"
-	new_mesh_instance.add_child(light_holder)
-	
-	var omni_light = OmniLight3D.new()
-	omni_light.name = "NoteLight"
-	omni_light.light_color = midi_keyboard.black_note_mesh_color if is_black else midi_keyboard.white_note_mesh_color
-	omni_light.omni_range = light_range
-	omni_light.omni_attenuation = light_attenuation
-	
-	light_holder.add_child(omni_light)
 
 	note_shader_material.set_shader_parameter("is_black_key", is_black)
 

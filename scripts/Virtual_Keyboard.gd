@@ -7,8 +7,9 @@ extends Node3D
 
 @export var white_light_offset: Vector3 = Vector3(0, 0.2, 0)
 @export var black_light_offset: Vector3 = Vector3(0, 0.4, 0)
-@export var light_range: float = 6.0
+@export var light_range: float = 16.0
 @export var light_attenuation: float = -1.25
+@export var  light_angle_attenuation: float = 7.0
 
 @export var white_note_mesh_scene: PackedScene
 
@@ -56,13 +57,16 @@ func setup_key_light(key: Node3D) -> void:
 
 	light_holder.position += black_light_offset if is_black else white_light_offset
 
-	var omni_light = OmniLight3D.new()
+	var spot_light = SpotLight3D.new()
+	spot_light.rotation.x = -90
 	
-	omni_light.name = "KeyLight"
-	omni_light.light_color = black_note_mesh_color if is_black else white_note_mesh_color
-	omni_light.omni_range = light_range
-	omni_light.omni_attenuation = light_attenuation
+	spot_light.name = "KeyLight"
+	spot_light.light_color = black_note_mesh_color if is_black else white_note_mesh_color
+	spot_light.spot_range = light_range
+	spot_light.spot_attenuation = light_attenuation
+	spot_light.spot_angle_attenuation = light_angle_attenuation
+	spot_light.shadow_enabled = true
 	
-	light_holder.add_child(omni_light)
+	light_holder.add_child(spot_light)
 	light_holder.visible = false
 	light_nodes[key.name] = light_holder

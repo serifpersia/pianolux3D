@@ -8,12 +8,16 @@ sky_material = SubResource("ProceduralSkyMaterial_hnn6n")
 [sub_resource type="Environment" id="Environment_yn802"]
 background_mode = 1
 sky = SubResource("Sky_eibcw")
+ambient_light_source = 2
+ambient_light_color = Color(0.61339, 0.61339, 0.61339, 1)
+ambient_light_energy = 0.1
 glow_enabled = true
-glow_levels/1 = 0.42
-glow_levels/2 = 0.3
-glow_levels/3 = 0.48
+glow_levels/1 = 1.0
+glow_levels/2 = 0.8
+glow_levels/3 = 0.5
 glow_levels/5 = 0.0
 glow_blend_mode = 1
+glow_hdr_threshold = 0.58
 
 [node name="WorldEnvironment" type="WorldEnvironment"]
 environment = SubResource("Environment_yn802")

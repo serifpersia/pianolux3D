@@ -1,18 +1,20 @@
-extends MeshInstance3D
+extends Node3D
 
 @export var bg_material : Material
 
-@onready var change_bg_image_button = $"../CanvasLayer/ChangeBGImage_Button"
-@onready var file_dialog = $"../CanvasLayer/BGImage_FileDialog"
+@onready var change_bg_image_button: Button = $"../CanvasLayer/ChangeBGImage_Button"
+@onready var bg_image_file_dialog: FileDialog = $"../CanvasLayer/BGImage_FileDialog"
+@onready var bg_transparency_slider: HSlider = $"../CanvasLayer/BGTransparency_Slider"
 
-@onready var bg_transparency_slider = $"../CanvasLayer/BGTransparency_Slider"
+@onready var toggle_bg: CheckButton = $"../CanvasLayer/ToggleBG"
 
-@onready var toggle_bg = $"../CanvasLayer/ToggleBG"
-
+func _ready() -> void:
+	get_child(0).material_override = bg_material
+	
 func _on_change_bg_image_button_pressed():
-	file_dialog.popup()
+	bg_image_file_dialog.popup()
 
-func _on_file_dialog_file_selected(path):
+func _on_bg_image_file_dialog_file_selected(path: String) -> void:
 	var image = Image.new()
 	
 	image.load(path)
@@ -29,6 +31,7 @@ func _on_file_dialog_file_selected(path):
 
 func _on_clear_bg_image_button_pressed():
 	bg_material.albedo_texture = null
+	bg_material.albedo_color = Color(0.1, 0.1, 0.1)
 	toggle_bg.button_pressed = false
 
 func _on_bg_transparency_slider_value_changed(value):

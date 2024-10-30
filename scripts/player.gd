@@ -11,16 +11,21 @@ var fps_mode : bool = false
 
 var last_position
 var last_rotation
+var last_camera_rotation_degrees
+
 
 var initial_position
 var initial_rotation
+var initial_rotation_degrees
 
 func _ready():
 	last_position = position
 	last_rotation = rotation
+	last_camera_rotation_degrees = camera_3d.rotation_degrees
 	
 	initial_position = position
 	initial_rotation = rotation
+	initial_rotation_degrees = camera_3d.rotation_degrees
 	
 	switch_camera_mode()
 
@@ -44,6 +49,7 @@ func _input(_event: InputEvent) -> void:
 		if fps_mode:
 			position = initial_position
 			rotation = initial_rotation
+			camera_3d.rotation_degrees = initial_rotation_degrees
 
 func switch_camera_mode():
 	if fps_mode:
@@ -58,8 +64,7 @@ func switch_camera_mode():
 
 		position = last_position
 		rotation = last_rotation
-
-		camera_3d.rotation_degrees = Vector3(0,0,0)
+		camera_3d.rotation_degrees = last_camera_rotation_degrees
 
 	else:
 		mouse_lock = true
@@ -112,5 +117,6 @@ func _physics_process(_delta: float) -> void:
 			
 			last_position = position
 			last_rotation = rotation
-			
+			last_camera_rotation_degrees = camera_3d.rotation_degrees
+
 			move_and_slide()

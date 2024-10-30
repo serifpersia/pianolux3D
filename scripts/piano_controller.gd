@@ -763,14 +763,6 @@ func _on_color_picker_color_changed(color: Color) -> void:
 				shader_material.set_shader_parameter("white_key_color", midi_keyboard.white_note_mesh_color)
 				shader_material.set_shader_parameter("black_key_color", midi_keyboard.black_note_mesh_color)
 
-	for key_name in midi_keyboard.light_nodes.keys():
-		var light_holder = midi_keyboard.light_nodes[key_name]
-		var is_black = midi_keyboard.is_black_key(int(key_name))
-
-		var light: OmniLight3D = light_holder.get_child(0)
-		if light:
-			light.light_color = midi_keyboard.black_note_mesh_color if is_black else midi_keyboard.white_note_mesh_color
-
 	currentColor = color
 	send_command_update_color(color)
 
