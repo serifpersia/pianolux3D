@@ -76,16 +76,6 @@ text = "Color Picker"
 color = Color(1, 0, 0, 1)
 metadata/_edit_use_anchors_ = true
 
-[node name="HowToTransform" type="Label" parent="CanvasLayer"]
-offset_left = 39.0
-offset_top = 252.0
-offset_right = 354.0
-offset_bottom = 353.0
-text = "Press A S D  to select Position Axis Mode
-Press Q W E to select Rotation Axis Mode
-Press R to reset to default
-Press ,  . to change values -/+. Space key to show/hide UI"
-
 [node name="BGTransparency_Label" type="Label" parent="CanvasLayer"]
 offset_left = 37.0
 offset_top = 178.0
@@ -101,29 +91,6 @@ offset_right = 80.0
 offset_bottom = 240.0
 text = "Color"
 vertical_alignment = 1
-
-[node name="Mode_Label" type="Label" parent="CanvasLayer"]
-offset_left = 39.0
-offset_top = 363.0
-offset_right = 168.0
-offset_bottom = 386.0
-text = "Mode: Position Z"
-
-[node name="Position_Label" type="Label" parent="CanvasLayer"]
-offset_left = 39.0
-offset_top = 386.0
-offset_right = 268.0
-offset_bottom = 409.0
-text = "Position: X = 0.0 Y = 0.0 Z = 0.0
-"
-
-[node name="Rotation_Label" type="Label" parent="CanvasLayer"]
-offset_left = 39.0
-offset_top = 409.0
-offset_right = 272.0
-offset_bottom = 432.0
-text = "Rotation: X = 0.0 Y = 0.0 Z = 0.0
-"
 
 [node name="ChangeBGImage_Button" type="Button" parent="CanvasLayer"]
 offset_left = 37.0
@@ -162,6 +129,31 @@ offset_right = -1583.0
 offset_bottom = -337.0
 grow_horizontal = 2
 grow_vertical = 2
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="SizeSliderLabel" type="Label" parent="CanvasLayer"]
+offset_left = 31.0
+offset_top = 257.0
+offset_right = 163.0
+offset_bottom = 280.0
+text = "Scale
+"
+horizontal_alignment = 1
+
+[node name="ScaleSlider" type="HSlider" parent="CanvasLayer"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 173.0
+offset_top = -283.0
+offset_right = -1589.0
+offset_bottom = -258.0
+grow_horizontal = 2
+grow_vertical = 2
+min_value = 0.1
 max_value = 1.0
 step = 0.05
 value = 1.0
@@ -464,6 +456,7 @@ bg_material = ExtResource("19_pymkk")
 [connection signal="pressed" from="CanvasLayer/ClearBGImage_Button" to="MIDI_BG" method="_on_clear_bg_image_button_pressed"]
 [connection signal="file_selected" from="CanvasLayer/BGImage_FileDialog" to="MIDI_BG" method="_on_bg_image_file_dialog_file_selected"]
 [connection signal="value_changed" from="CanvasLayer/BGTransparency_Slider" to="MIDI_BG" method="_on_bg_transparency_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/ScaleSlider" to="." method="_on_scale_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/Brightness_Slider" to="PianoController" method="_on_brightness_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/Transposition_Slider" to="PianoController" method="_on_transposition_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/BGBrightness_Slider" to="PianoController" method="_on_bg_brightness_slider_value_changed"]

@@ -98,15 +98,20 @@ func on_note_off(pitch: int) -> void:
 func move_notes(delta: float) -> void:
 	var move_amount := delta * 18.0
 	var speed_delta := speed * delta
-	
+
+	var black_key_speed_multiplier: float = 2.0
+
 	for note_array in active_notes.values():
 		for note_data in note_array:
 			var typed_data := note_data as NoteData
 			var note_instance: MeshInstance3D = typed_data.instance
 			if note_instance and note_instance.is_inside_tree():
 				if not typed_data.released:
-					typed_data.offset -= speed_delta
+					var effective_speed_delta = speed_delta * (1.0 if not typed_data.shader_material.get_shader_parameter("is_black_key") else black_key_speed_multiplier)
+					
+					typed_data.offset -= effective_speed_delta
 					typed_data.shader_material.set_shader_parameter("z_offset", typed_data.offset)
+					typed_data.shader_material.set_shader_parameter("parent_scale", midi_keyboard.scale)
 				else:
 					note_instance.position.z -= move_amount
 

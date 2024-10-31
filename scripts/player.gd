@@ -4,6 +4,8 @@ extends CharacterBody3D
 @export var mouse_sensitivity := 0.1
 @onready var texture_rect: TextureRect = $CanvasLayer/TextureRect
 
+@export var midi_scene : Node3D
+
 const SPEED = 25.0
 var rotation_x := 0.0
 var mouse_lock : bool = false
@@ -13,36 +15,31 @@ var last_position
 var last_rotation
 var last_camera_rotation_degrees
 
-
 var initial_position
 var initial_rotation
 var initial_rotation_degrees
 
 func _ready():
-	last_position = position
-	last_rotation = rotation
-	last_camera_rotation_degrees = camera_3d.rotation_degrees
-	
 	initial_position = position
 	initial_rotation = rotation
 	initial_rotation_degrees = camera_3d.rotation_degrees
+	
+	last_position = initial_position
+	last_rotation = initial_rotation
+	last_camera_rotation_degrees = initial_rotation_degrees
 	
 	switch_camera_mode()
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_mouse_lock"):
-
 		if fps_mode:
 			mouse_lock = !mouse_lock
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if mouse_lock else Input.MOUSE_MODE_CAPTURED
-			if mouse_lock:
-				texture_rect.visible = false
-			else:
-				texture_rect.visible = true
+			texture_rect.visible = mouse_lock
 
 	elif Input.is_action_just_pressed("ui_fps_mode"):
 		fps_mode = !fps_mode
-
+		rotation_x = 0.0
 		switch_camera_mode()
 		
 	elif Input.is_action_just_pressed("ui_reset_fps_view"):
@@ -50,11 +47,14 @@ func _input(_event: InputEvent) -> void:
 			position = initial_position
 			rotation = initial_rotation
 			camera_3d.rotation_degrees = initial_rotation_degrees
+			rotation_x = 0.0
+		else:
+			midi_scene.scale = Vector3(1, 1, 1)
+			midi_scene.position.z = 0
 
 func switch_camera_mode():
 	if fps_mode:
 		mouse_lock = false
-
 		texture_rect.visible = true
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
@@ -68,9 +68,12 @@ func switch_camera_mode():
 
 	else:
 		mouse_lock = true
-		texture_rect. visible = false
-
+		texture_rect.visible = false
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+		last_position = position
+		last_rotation = rotation
+		last_camera_rotation_degrees = camera_3d.rotation_degrees
 
 		camera_3d.projection = Camera3D.PROJECTION_ORTHOGONAL
 		camera_3d.rotation_degrees = Vector3(-90, 0, 0)
@@ -79,22 +82,21 @@ func switch_camera_mode():
 		camera_3d.v_offset = 21.0
 
 		position = Vector3(0, 17, 0)
-		rotation = Vector3(0,0,0)
+		rotation = Vector3(0, 0, 0)
 
 func _unhandled_input(event):
-	if event is InputEventMouseMotion:
-		if not mouse_lock:
-			rotate_camera(event.relative)
+	if event is InputEventMouseMotion and fps_mode and not mouse_lock:
+		rotate_camera(event.relative)
 
 func rotate_camera(mouse_delta: Vector2):
-	rotation_x -= mouse_delta.y * mouse_sensitivity
-	rotation_x = clamp(rotation_x, -90, 90)
-
+	rotation_x = clamp(rotation_x - mouse_delta.y * mouse_sensitivity, -90, 90)
 	camera_3d.rotation_degrees.x = rotation_x
-
-	rotation_degrees.y -= mouse_delta.x * mouse_sensitivity
+	rotate_y(-mouse_delta.x * mouse_sensitivity * PI / 180.0)
 
 func _physics_process(_delta: float) -> void:
+	if not fps_mode:
+		return
+		
 	var input_dir := Input.get_vector("ui_a", "ui_d", "ui_w", "ui_s")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
@@ -112,11 +114,8 @@ func _physics_process(_delta: float) -> void:
 	else:
 		velocity.y = 0
 
-	if fps_mode:
-		if not mouse_lock:
-			
-			last_position = position
-			last_rotation = rotation
-			last_camera_rotation_degrees = camera_3d.rotation_degrees
-
-			move_and_slide()
+	if not mouse_lock:
+		last_position = position
+		last_rotation = rotation
+		last_camera_rotation_degrees = camera_3d.rotation_degrees
+		move_and_slide()

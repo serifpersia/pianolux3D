@@ -12,7 +12,8 @@ extends Node
 @onready var web_socket_toggle = $"../CanvasLayer/WebSocket_Toggle"
 @onready var load_profile_file_dialog: FileDialog = $"../CanvasLayer/LoadProfileFileDialog"
 @onready var save_profile_file_dialog: FileDialog = $"../CanvasLayer/SaveProfileFileDialog"
-#@onready var midi_pivot: Node3D = $"../.."
+
+@onready var midi: Node3D = $".."
 
 @onready var midi_keyboard: Node3D = $"../MIDI_Keyboard"
 @onready var midi_notes: Node3D = $"../MIDI_Notes"
@@ -371,20 +372,19 @@ func _process(_delta):
 				print("WebSocket is open.")
 				has_printed_open_message = true
 			
-			while web_socket.get_available_packet_count() > 0:
+			#while web_socket.get_available_packet_count() > 0:
 
-				var packet = web_socket.get_packet()
-				var json_string = packet.get_string_from_utf8()
+			#	var packet = web_socket.get_packet()
+			#	var json_string = packet.get_string_from_utf8()
 				
-				var json = JSON.new()
-				var error = json.parse(json_string)
-				if error == OK:
-					var json_data = json.data
-					print("Parsed JSON Data: ", json_data)
-				else:
-					print("Failed to parse JSON: ", json.get_error_message(), " at line ", json.get_error_line())
-		elif state == WebSocketPeer.STATE_CLOSING:
-			pass
+			#	var json = JSON.new()
+			#	var error = json.parse(json_string)
+			#	if error == OK:
+			#		var json_data = json.data
+			#		print("Parsed JSON Data: ", json_data)
+			#	else:
+			#		print("Failed to parse JSON: ", json.get_error_message(), " at line ", json.get_error_line())
+
 		elif state == WebSocketPeer.STATE_CLOSED:
 			var code = web_socket.get_close_code()
 			var reason = web_socket.get_close_reason()
@@ -786,18 +786,17 @@ func _on_save_profile_button_pressed() -> void:
 func _on_save_profile_file_dialog_file_selected(path: String) -> void:
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	if file:
-		var midi_pivot = null # temp var
 		
-		var position = midi_pivot.position
-		var rotation = midi_pivot.rotation
+		var position_z = midi.position.z
+		var scale = midi.scale
 
 		var offsets = {}
 		for pitch in Global.offset_map.keys():
 			offsets[str(pitch)] = Global.offset_map[pitch]
 
 		var data = {
-			"position": {"x": position.x, "y": position.y, "z": position.z},
-			"rotation": {"x": rotation.x, "y": rotation.y, "z": rotation.z},
+			"position": {"z": position_z},
+			"scale": {"x": scale.x, "y": scale.y, "z": scale.z},
 			"offsets": offsets
 		}
 
@@ -825,11 +824,10 @@ func _on_load_profile_file_dialog_file_selected(path: String) -> void:
 		if error_code == OK:
 			var data = json_parser.get_data()
 
-			var position = Vector3(data["position"]["x"], data["position"]["y"], data["position"]["z"])
-			var rotation = Vector3(data["rotation"]["x"], data["rotation"]["y"], data["rotation"]["z"])
-			var midi_pivot = null # temp var
-			midi_pivot.position = position
-			midi_pivot.rotation = rotation
+			var position_z = data["position"]["z"]
+			var scale = Vector3(data["scale"]["x"], data["scale"]["y"], data["scale"]["z"])
+			midi.scale = scale
+			midi.position.z = position_z
 
 			Global.offset_map.clear()
 			for pitch in data["offsets"].keys():
