@@ -29,6 +29,7 @@ shader_parameter/amount = 3.0
 script = ExtResource("1_jo87c")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
 material = SubResource("ShaderMaterial_ep5ho")

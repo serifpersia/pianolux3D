@@ -13,7 +13,7 @@ extends Node3D
 var max_z_offset: float
 var base_z_position: float
 
-var pause_menu: bool = true
+var pause_menu: bool = false
 
 func _ready() -> void:
 	max_z_offset = -calculate_max_z_offset() / 4

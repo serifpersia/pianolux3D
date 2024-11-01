@@ -8,6 +8,8 @@ const LEFT_OFFSET_DIALOG = preload("res://scenes/left_offset_dialog.tscn")
 
 var current_pressed_keys: Array[int] = []
 
+@onready var player: CharacterBody3D = $".."
+
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
@@ -18,7 +20,10 @@ func _input(event):
 
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			if event.is_released():
-				show_offset_dialog()
+				if not player.is_paused:
+					show_offset_dialog()
+					player.mouse_lock = true
+					player.set_mouse_lock_and_texture_visibility()
 
 func detect_key():
 	var raycast_result = shoot_ray()
@@ -65,4 +70,4 @@ func show_offset_dialog():
 			var offset_dialog = LEFT_OFFSET_DIALOG.instantiate()
 
 			add_child(offset_dialog)
-			offset_dialog.initialize_dialog(pitch)
+			offset_dialog.initialize_dialog(pitch, player)

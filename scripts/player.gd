@@ -8,9 +8,10 @@ extends CharacterBody3D
 
 const SPEED = 25.0
 var rotation_x := 0.0
-var mouse_lock: bool = false
-var fps_mode: bool = false
-var is_paused: bool = false
+
+var mouse_lock: bool
+var fps_mode: bool
+var is_paused: bool
 
 var last_position
 var last_rotation
@@ -30,6 +31,56 @@ func _ready() -> void:
 	last_camera_rotation_degrees = initial_rotation_degrees
 
 	setup_camera()
+
+func _input(_event: InputEvent) -> void:
+	if Input.is_action_just_pressed("ui_mouse_lock") and fps_mode:
+		mouse_lock = !mouse_lock
+		set_mouse_lock_and_texture_visibility()
+
+	elif Input.is_action_just_pressed("ui_fps_mode"):
+		toggle_fps_mode()
+
+	elif Input.is_action_just_pressed("ui_reset_fps_view"):
+		if fps_mode:
+			position = initial_position
+			rotation = initial_rotation
+			camera_3d.rotation_degrees = initial_rotation_degrees
+			rotation_x = 0.0
+		else:
+			midi_scene.scale = Vector3(1, 1, 1)
+			midi_scene.get_child(0).get_child(16).value = 0
+			midi_scene.position.z = 0
+
+func _unhandled_input(event):
+	if event is InputEventMouseMotion and fps_mode and not mouse_lock:
+		rotate_camera(event.relative)
+
+func _physics_process(_delta: float) -> void:
+	if not fps_mode:
+		return
+
+	var input_dir := Input.get_vector("ui_a", "ui_d", "ui_w", "ui_s")
+	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+
+	if direction:
+		velocity.x = direction.x * SPEED
+		velocity.z = direction.z * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.z = move_toward(velocity.z, 0, SPEED)
+		
+	if Input.is_action_pressed("ui_go_up"):
+		velocity.y = SPEED
+	elif Input.is_action_pressed("ui_go_down"):
+		velocity.y = -SPEED
+	else:
+		velocity.y = 0
+
+	if not mouse_lock and not is_paused:
+		last_position = position
+		last_rotation = rotation
+		last_camera_rotation_degrees = camera_3d.rotation_degrees
+		move_and_slide()
 
 func set_mouse_lock_and_texture_visibility() -> void:
 	texture_rect.visible = not mouse_lock
@@ -55,25 +106,17 @@ func setup_camera() -> void:
 func toggle_fps_mode() -> void:
 	fps_mode = !fps_mode
 	rotation_x = 0.0
+
+	if fps_mode:
+		mouse_lock = false
+		texture_rect.visible = true
+	else:
+		mouse_lock = true
+		texture_rect.visible = false
+
 	setup_camera()
 	set_mouse_lock_and_texture_visibility()
 
-func _input(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("ui_mouse_lock"):
-		if fps_mode:
-			mouse_lock = !mouse_lock
-			set_mouse_lock_and_texture_visibility()
-	elif Input.is_action_just_pressed("ui_fps_mode"):
-		toggle_fps_mode()
-	elif Input.is_action_just_pressed("ui_reset_fps_view"):
-		if fps_mode:
-			position = initial_position
-			rotation = initial_rotation
-			camera_3d.rotation_degrees = initial_rotation_degrees
-			rotation_x = 0.0
-		else:
-			midi_scene.scale = Vector3(1, 1, 1)
-			midi_scene.position.z = 0
 
 func handle_pause(pause_state: bool) -> void:
 	is_paused = pause_state
@@ -81,40 +124,9 @@ func handle_pause(pause_state: bool) -> void:
 	if fps_mode:
 		set_mouse_lock_and_texture_visibility()
 
-func _physics_process(_delta: float) -> void:
-	if not fps_mode:
-		return
-		
-	var input_dir := Input.get_vector("ui_a", "ui_d", "ui_w", "ui_s")
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-
-	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
-		
-	if Input.is_action_pressed("ui_go_up"):
-		velocity.y = SPEED
-	elif Input.is_action_pressed("ui_go_down"):
-		velocity.y = -SPEED
-	else:
-		velocity.y = 0
-
-	if not mouse_lock and not is_paused:
-		last_position = position
-		last_rotation = rotation
-		last_camera_rotation_degrees = camera_3d.rotation_degrees
-		move_and_slide()
-
 func switch_camera_mode():
 	setup_camera()
 	set_mouse_lock_and_texture_visibility()
-
-func _unhandled_input(event):
-	if event is InputEventMouseMotion and fps_mode and not mouse_lock:
-		rotate_camera(event.relative)
 
 func rotate_camera(mouse_delta: Vector2):
 	rotation_x = clamp(rotation_x - mouse_delta.y * mouse_sensitivity, -90, 90)
