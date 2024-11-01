@@ -1,7 +1,8 @@
-[gd_scene load_steps=20 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=22 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/MIDI_Notes.gd" id="1_3ll4w"]
 [ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_jo87c"]
+[ext_resource type="Shader" path="res://shaders/pause_menu_blur.gdshader" id="2_vs6fs"]
 [ext_resource type="PackedScene" uid="uid://bjgxxihfcew33" path="res://scenes/serial_list.tscn" id="3_y44n4"]
 [ext_resource type="PackedScene" uid="uid://b8sjcwx28odsw" path="res://scenes/open_close.tscn" id="4_pgseb"]
 [ext_resource type="PackedScene" uid="uid://dtacf6kg6rwxg" path="res://scenes/spiral_particles.tscn" id="10_e3ntp"]
@@ -20,10 +21,22 @@
 [ext_resource type="Script" path="res://scripts/bg.gd" id="18_yi44b"]
 [ext_resource type="Material" uid="uid://c87r7xa3yubcp" path="res://materials/bg_mat.tres" id="19_pymkk"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ep5ho"]
+shader = ExtResource("2_vs6fs")
+shader_parameter/amount = 3.0
+
 [node name="MIDI" type="Node3D"]
 script = ExtResource("1_jo87c")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_ep5ho")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ToggleKeyboard" type="CheckButton" parent="CanvasLayer"]
 offset_left = 31.0
@@ -157,6 +170,29 @@ min_value = 0.1
 max_value = 1.0
 step = 0.05
 value = 1.0
+
+[node name="PositionZSliderLabel" type="Label" parent="CanvasLayer"]
+offset_left = 32.0
+offset_top = 282.0
+offset_right = 164.0
+offset_bottom = 305.0
+text = "Position Z"
+horizontal_alignment = 1
+
+[node name="PositionZSlider" type="HSlider" parent="CanvasLayer"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 174.0
+offset_top = -258.0
+offset_right = -1588.0
+offset_bottom = -233.0
+grow_horizontal = 2
+grow_vertical = 2
+min_value = -15.0
+max_value = 15.0
+step = 0.5
 
 [node name="BrightnessSlider_Label" type="Label" parent="CanvasLayer"]
 offset_left = 39.0
@@ -457,6 +493,7 @@ bg_material = ExtResource("19_pymkk")
 [connection signal="file_selected" from="CanvasLayer/BGImage_FileDialog" to="MIDI_BG" method="_on_bg_image_file_dialog_file_selected"]
 [connection signal="value_changed" from="CanvasLayer/BGTransparency_Slider" to="MIDI_BG" method="_on_bg_transparency_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/ScaleSlider" to="." method="_on_scale_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/PositionZSlider" to="." method="_on_position_z_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/Brightness_Slider" to="PianoController" method="_on_brightness_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/Transposition_Slider" to="PianoController" method="_on_transposition_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/BGBrightness_Slider" to="PianoController" method="_on_bg_brightness_slider_value_changed"]
