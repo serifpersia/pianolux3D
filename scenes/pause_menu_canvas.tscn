@@ -1,0 +1,234 @@
+[gd_scene load_steps=13 format=3 uid="uid://lt73xdtfgyuo"]
+
+[ext_resource type="Texture2D" uid="uid://bj7i2r34yhx0" path="res://img/v_keyboard_checked.png" id="1_2riw0"]
+[ext_resource type="Texture2D" uid="uid://dokri0567k1nv" path="res://img/v_keyboard_unchecked.png" id="2_chgxr"]
+[ext_resource type="Texture2D" uid="uid://c5rttimxocf75" path="res://img/bg_checked.png" id="3_3jdt5"]
+[ext_resource type="Texture2D" uid="uid://cm4ho85hr4x72" path="res://img/bg_unchecked.png" id="4_5dubv"]
+[ext_resource type="Texture2D" uid="uid://cjh7lf8wpxyqq" path="res://img/midi_note_checked.png" id="5_gjj04"]
+[ext_resource type="Texture2D" uid="uid://b35s061d0rs6w" path="res://img/midi_note_unchecked.png" id="6_qi3dm"]
+[ext_resource type="Texture2D" uid="uid://ch6a5mue8kcsh" path="res://img/midi_particles_checked.png" id="7_8ix5g"]
+[ext_resource type="Texture2D" uid="uid://bwt2tc877grqu" path="res://img/midi_particles_unchecked.png" id="8_1vg8t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gviss"]
+bg_color = Color(0.129412, 0.145098, 0.196078, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="SystemFont" id="SystemFont_bt2da"]
+font_names = PackedStringArray("Impact")
+
+[sub_resource type="SystemFont" id="SystemFont_tu4sd"]
+font_names = PackedStringArray("Impact")
+
+[sub_resource type="SystemFont" id="SystemFont_32ltq"]
+font_names = PackedStringArray("Impact")
+
+[node name="Menu" type="MarginContainer"]
+offset_right = 536.0
+offset_bottom = 296.0
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Panel_Container" type="PanelContainer" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gviss")
+
+[node name="Margin_Sub" type="MarginContainer" parent="Panel_Container"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBox_Root" type="VBoxContainer" parent="Panel_Container/Margin_Sub"]
+layout_mode = 2
+
+[node name="VisibilityLabel" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_bt2da")
+theme_override_font_sizes/font_size = 35
+text = "Visibility"
+horizontal_alignment = 1
+
+[node name="HBox_V_B_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
+alignment = 1
+
+[node name="Virtual_Keyboard_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_V_B_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+tooltip_text = "Toggle visibility of virtual keyboard"
+theme_override_fonts/font = SubResource("SystemFont_tu4sd")
+theme_override_font_sizes/font_size = 25
+theme_override_icons/checked = ExtResource("1_2riw0")
+theme_override_icons/unchecked = ExtResource("2_chgxr")
+button_pressed = true
+text = "Virtual Keyboard: "
+
+[node name="BG_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_V_B_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+tooltip_text = "Toggle visibility of background image"
+theme_override_fonts/font = SubResource("SystemFont_tu4sd")
+theme_override_font_sizes/font_size = 25
+theme_override_icons/checked = ExtResource("3_3jdt5")
+theme_override_icons/unchecked = ExtResource("4_5dubv")
+button_pressed = true
+text = "Background: "
+
+[node name="HBox_N_P_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
+alignment = 1
+
+[node name="MIDI_Notes_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_N_P_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+tooltip_text = "Toggle visibility of MIDI notes"
+theme_override_fonts/font = SubResource("SystemFont_tu4sd")
+theme_override_font_sizes/font_size = 25
+theme_override_icons/checked = ExtResource("5_gjj04")
+theme_override_icons/unchecked = ExtResource("6_qi3dm")
+button_pressed = true
+text = "MIDI Notes: "
+
+[node name="Particles_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_N_P_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+tooltip_text = "Toggle visibility of particles"
+theme_override_fonts/font = SubResource("SystemFont_tu4sd")
+theme_override_font_sizes/font_size = 25
+theme_override_icons/checked = ExtResource("7_8ix5g")
+theme_override_icons/unchecked = ExtResource("8_1vg8t")
+button_pressed = true
+text = "Particles: "
+
+[node name="HBox_N_P_Container2" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="Change_BG_Image_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_N_P_Container2"]
+layout_mode = 2
+tooltip_text = "Change background image"
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+text = "Change BG Image
+"
+
+[node name="Clear_BG_Image_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_N_P_Container2"]
+layout_mode = 2
+tooltip_text = "Clear  background image"
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+text = "Clear BG Image
+"
+
+[node name="HBox_B_S_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
+
+[node name="BG Transparency_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_B_S_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+text = "BG Image Transparency: 
+"
+
+[node name="BGTransparency_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_B_S_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Change transparency value for background image"
+max_value = 1.0
+step = 0.05
+
+[node name="VisibilityLabel2" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_bt2da")
+theme_override_font_sizes/font_size = 35
+text = "Appearance"
+horizontal_alignment = 1
+
+[node name="HBox_V_B_Container2" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
+alignment = 1
+
+[node name="BG Transparency_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_V_B_Container2"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+text = "Color: 
+"
+
+[node name="ColorPicker" type="ColorPickerButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_V_B_Container2"]
+layout_mode = 2
+tooltip_text = "Change color"
+text = "       "
+color = Color(1, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="VisibilityLabel3" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_bt2da")
+theme_override_font_sizes/font_size = 35
+text = "Transforms"
+horizontal_alignment = 1
+
+[node name="HBox_B_S_Container3" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
+
+[node name="BG Transparency_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_B_S_Container3"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+text = "Scale: "
+
+[node name="BGTransparency_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_B_S_Container3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Change scale
+"
+max_value = 1.0
+step = 0.05
+
+[node name="HBox_B_S_Container4" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
+size_flags_vertical = 6
+alignment = 1
+
+[node name="BG Transparency_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_B_S_Container4"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+text = "Position Y: 
+"
+
+[node name="BGTransparency_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_B_S_Container4"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Change up and down position"
+max_value = 1.0
+step = 0.05
+
+[node name="VisibilityLabel4" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_bt2da")
+theme_override_font_sizes/font_size = 35
+text = "Connections"
+horizontal_alignment = 1
+
+[node name="HBox_B_S_Container5" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
