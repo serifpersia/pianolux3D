@@ -1,10 +1,9 @@
-[gd_scene load_steps=22 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=21 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/MIDI_Notes.gd" id="1_3ll4w"]
 [ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_jo87c"]
 [ext_resource type="Shader" path="res://shaders/pause_menu_blur.gdshader" id="2_vs6fs"]
-[ext_resource type="PackedScene" uid="uid://bjgxxihfcew33" path="res://scenes/serial_list.tscn" id="3_y44n4"]
-[ext_resource type="PackedScene" uid="uid://b8sjcwx28odsw" path="res://scenes/open_close.tscn" id="4_pgseb"]
+[ext_resource type="PackedScene" uid="uid://lt73xdtfgyuo" path="res://scenes/pause_menu.tscn" id="3_vf2tp"]
 [ext_resource type="PackedScene" uid="uid://dtacf6kg6rwxg" path="res://scenes/spiral_particles.tscn" id="10_e3ntp"]
 [ext_resource type="Material" uid="uid://b5qeey5ruelw1" path="res://materials/particles_mat.tres" id="10_mr4d0"]
 [ext_resource type="Material" uid="uid://cj3ujrwh48kgc" path="res://materials/white_keys_mat.tres" id="10_wj7rp"]
@@ -29,6 +28,7 @@ shader_parameter/amount = 3.0
 script = ExtResource("1_jo87c")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
 material = SubResource("ShaderMaterial_ep5ho")
@@ -38,88 +38,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ToggleKeyboard" type="CheckButton" parent="CanvasLayer"]
-offset_left = 31.0
-offset_top = 31.0
-offset_right = 209.0
-offset_bottom = 62.0
-button_pressed = true
-text = "Virtual Keyboard"
-
-[node name="ToggleParticles" type="CheckButton" parent="CanvasLayer"]
-offset_left = 206.0
-offset_top = 93.0
-offset_right = 321.0
-offset_bottom = 124.0
-button_pressed = true
-text = "Particles
-"
-
-[node name="WebSocket_Toggle" type="CheckButton" parent="CanvasLayer"]
-offset_left = 331.0
-offset_top = 443.0
-offset_right = 425.0
-offset_bottom = 474.0
-text = "ESP32"
-
-[node name="ToggleMIDI" type="CheckButton" parent="CanvasLayer"]
-offset_left = 31.0
-offset_top = 62.0
-offset_right = 166.0
-offset_bottom = 93.0
-size_flags_horizontal = 4
-size_flags_vertical = 4
-button_pressed = true
-text = "MIDI Notes"
-
-[node name="ToggleBG" type="CheckButton" parent="CanvasLayer"]
-offset_left = 31.0
-offset_top = 93.0
-offset_right = 172.0
-offset_bottom = 124.0
-button_pressed = true
-text = "Background"
-
-[node name="ColorPicker" type="ColorPickerButton" parent="CanvasLayer"]
-offset_left = 91.0
-offset_top = 211.0
-offset_right = 192.0
-offset_bottom = 242.0
-text = "Color Picker"
-color = Color(1, 0, 0, 1)
-metadata/_edit_use_anchors_ = true
-
-[node name="BGTransparency_Label" type="Label" parent="CanvasLayer"]
-offset_left = 37.0
-offset_top = 178.0
-offset_right = 169.0
-offset_bottom = 201.0
-text = "BG Transparency
-"
-
-[node name="Color_Label" type="Label" parent="CanvasLayer"]
-offset_left = 38.0
-offset_top = 211.0
-offset_right = 80.0
-offset_bottom = 240.0
-text = "Color"
-vertical_alignment = 1
-
-[node name="ChangeBGImage_Button" type="Button" parent="CanvasLayer"]
-offset_left = 37.0
-offset_top = 134.0
-offset_right = 181.0
-offset_bottom = 165.0
-text = "Change BG Image
-"
-
-[node name="ClearBGImage_Button" type="Button" parent="CanvasLayer"]
-offset_left = 184.0
-offset_top = 134.0
-offset_right = 328.0
-offset_bottom = 165.0
-text = "Clear BG Image
-"
+[node name="Menu" parent="CanvasLayer" instance=ExtResource("3_vf2tp")]
 
 [node name="BGImage_FileDialog" type="FileDialog" parent="CanvasLayer"]
 title = "Open a File"
@@ -130,310 +49,6 @@ file_mode = 0
 access = 2
 filters = PackedStringArray("*.png, *.jpg, *.jpeg, *.bmp, *.gif, *.tiff, *.tif, *.webp, *.dds, *.tga")
 use_native_dialog = true
-
-[node name="BGTransparency_Slider" type="HSlider" parent="CanvasLayer"]
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 179.0
-offset_top = -362.0
-offset_right = -1583.0
-offset_bottom = -337.0
-grow_horizontal = 2
-grow_vertical = 2
-max_value = 1.0
-step = 0.05
-value = 1.0
-
-[node name="SizeSliderLabel" type="Label" parent="CanvasLayer"]
-offset_left = 31.0
-offset_top = 257.0
-offset_right = 163.0
-offset_bottom = 280.0
-text = "Scale
-"
-horizontal_alignment = 1
-
-[node name="ScaleSlider" type="HSlider" parent="CanvasLayer"]
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 173.0
-offset_top = -283.0
-offset_right = -1589.0
-offset_bottom = -258.0
-grow_horizontal = 2
-grow_vertical = 2
-min_value = 0.1
-max_value = 1.0
-step = 0.05
-value = 1.0
-
-[node name="PositionZSliderLabel" type="Label" parent="CanvasLayer"]
-offset_left = 32.0
-offset_top = 282.0
-offset_right = 164.0
-offset_bottom = 305.0
-text = "Position Z"
-horizontal_alignment = 1
-
-[node name="PositionZSlider" type="HSlider" parent="CanvasLayer"]
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 174.0
-offset_top = -258.0
-offset_right = -1588.0
-offset_bottom = -233.0
-grow_horizontal = 2
-grow_vertical = 2
-min_value = -15.0
-max_value = 15.0
-step = 0.5
-
-[node name="BrightnessSlider_Label" type="Label" parent="CanvasLayer"]
-offset_left = 39.0
-offset_top = 546.0
-offset_right = 122.0
-offset_bottom = 569.0
-text = "Brightness
-"
-vertical_alignment = 1
-
-[node name="BrightnessSlider_Label2" type="Label" parent="CanvasLayer"]
-offset_left = 39.0
-offset_top = 444.0
-offset_right = 120.0
-offset_bottom = 475.0
-text = "Serial Port"
-vertical_alignment = 1
-
-[node name="BrightnessSlider_Label3" type="Label" parent="CanvasLayer"]
-offset_left = 40.0
-offset_top = 480.0
-offset_right = 118.0
-offset_bottom = 511.0
-text = "LED Mode"
-vertical_alignment = 1
-
-[node name="BrightnessSlider_Label4" type="Label" parent="CanvasLayer"]
-offset_left = 40.0
-offset_top = 515.0
-offset_right = 121.0
-offset_bottom = 546.0
-text = "Animation"
-vertical_alignment = 1
-
-[node name="Brightness_Slider" type="HSlider" parent="CanvasLayer"]
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 154.0
-offset_top = 6.0
-offset_right = -1590.0
-offset_bottom = 31.0
-grow_horizontal = 2
-grow_vertical = 2
-max_value = 255.0
-value = 255.0
-
-[node name="TranspositionSlider_Label" type="Label" parent="CanvasLayer"]
-offset_left = 40.0
-offset_top = 646.0
-offset_right = 146.0
-offset_bottom = 669.0
-text = "Transposition"
-vertical_alignment = 1
-
-[node name="Transposition_Slider" type="HSlider" parent="CanvasLayer"]
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 155.0
-offset_top = 106.0
-offset_right = -1648.0
-offset_bottom = 129.0
-grow_horizontal = 2
-grow_vertical = 2
-min_value = -6.0
-max_value = 6.0
-
-[node name="BGBrightnessSlider_Label" type="Label" parent="CanvasLayer"]
-offset_left = 40.0
-offset_top = 621.0
-offset_right = 149.0
-offset_bottom = 644.0
-text = "BG Brightness"
-vertical_alignment = 1
-
-[node name="BGBrightness_Slider" type="HSlider" parent="CanvasLayer"]
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 155.0
-offset_top = 81.0
-offset_right = -1589.0
-offset_bottom = 106.0
-grow_horizontal = 2
-grow_vertical = 2
-min_value = 10.0
-value = 100.0
-
-[node name="FadeRateSlider_Label" type="Label" parent="CanvasLayer"]
-offset_left = 40.0
-offset_top = 571.0
-offset_right = 149.0
-offset_bottom = 594.0
-text = "Fade"
-vertical_alignment = 1
-
-[node name="FadeRate_Slider" type="HSlider" parent="CanvasLayer"]
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 155.0
-offset_top = 31.0
-offset_right = -1589.0
-offset_bottom = 56.0
-grow_horizontal = 2
-grow_vertical = 2
-max_value = 255.0
-value = 255.0
-
-[node name="SplashLengthSlider_Label" type="Label" parent="CanvasLayer"]
-offset_left = 40.0
-offset_top = 596.0
-offset_right = 149.0
-offset_bottom = 619.0
-text = "Splash Length"
-vertical_alignment = 1
-
-[node name="SplashLength_Slider" type="HSlider" parent="CanvasLayer"]
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 155.0
-offset_top = 56.0
-offset_right = -1589.0
-offset_bottom = 81.0
-grow_horizontal = 2
-grow_vertical = 2
-min_value = 4.0
-max_value = 16.0
-value = 8.0
-
-[node name="SerialList" parent="CanvasLayer" instance=ExtResource("3_y44n4")]
-offset_left = 123.0
-offset_top = 444.0
-offset_right = 243.0
-offset_bottom = 474.0
-
-[node name="ModesList" parent="CanvasLayer" instance=ExtResource("3_y44n4")]
-offset_left = 123.0
-offset_top = 480.0
-offset_right = 328.0
-offset_bottom = 510.0
-
-[node name="AnimationsList" parent="CanvasLayer" instance=ExtResource("3_y44n4")]
-offset_left = 123.0
-offset_top = 515.0
-offset_right = 328.0
-offset_bottom = 545.0
-
-[node name="OpenClose" parent="CanvasLayer" instance=ExtResource("4_pgseb")]
-offset_left = 248.0
-offset_top = 444.0
-offset_right = 328.0
-offset_bottom = 475.0
-
-[node name="TranspositionOctaveShift_Toggle" parent="CanvasLayer" instance=ExtResource("4_pgseb")]
-custom_minimum_size = Vector2(55, 0)
-offset_left = 276.0
-offset_top = 644.0
-offset_right = 331.0
-offset_bottom = 675.0
-text = "Oct
-"
-
-[node name="PianoSize_Label" type="Label" parent="CanvasLayer"]
-offset_left = 40.0
-offset_top = 678.0
-offset_right = 149.0
-offset_bottom = 711.0
-text = "Piano 88 Keys
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PianoSizeDecrease_Button" parent="CanvasLayer" instance=ExtResource("4_pgseb")]
-custom_minimum_size = Vector2(55, 0)
-offset_left = 161.0
-offset_top = 680.0
-offset_right = 216.0
-offset_bottom = 711.0
-toggle_mode = false
-text = "<"
-
-[node name="PianoSizeIncrease_Button" parent="CanvasLayer" instance=ExtResource("4_pgseb")]
-custom_minimum_size = Vector2(55, 0)
-offset_left = 219.0
-offset_top = 680.0
-offset_right = 274.0
-offset_bottom = 711.0
-toggle_mode = false
-text = ">"
-
-[node name="SetBG_Button" parent="CanvasLayer" instance=ExtResource("4_pgseb")]
-custom_minimum_size = Vector2(55, 0)
-offset_left = 277.0
-offset_top = 680.0
-offset_right = 332.0
-offset_bottom = 711.0
-toggle_mode = false
-text = "BG"
-
-[node name="FixLED_Toggle" type="CheckButton" parent="CanvasLayer"]
-offset_left = 35.0
-offset_top = 717.0
-offset_right = 139.0
-offset_bottom = 748.0
-text = "Fix LED"
-
-[node name="BGLED_Toggle" type="CheckButton" parent="CanvasLayer"]
-offset_left = 135.0
-offset_top = 717.0
-offset_right = 239.0
-offset_bottom = 748.0
-text = "BG LED"
-
-[node name="REVLED_Toggle" type="CheckButton" parent="CanvasLayer"]
-offset_left = 234.0
-offset_top = 717.0
-offset_right = 344.0
-offset_bottom = 748.0
-text = "Rev LED"
-
-[node name="LoadProfileButton" parent="CanvasLayer" instance=ExtResource("4_pgseb")]
-offset_left = 107.0
-offset_top = 756.0
-offset_right = 187.0
-offset_bottom = 787.0
-text = "Load"
-
-[node name="SaveProfileButton" parent="CanvasLayer" instance=ExtResource("4_pgseb")]
-offset_left = 195.0
-offset_top = 756.0
-offset_right = 275.0
-offset_bottom = 787.0
-text = "Save"
 
 [node name="LoadProfileFileDialog" type="FileDialog" parent="CanvasLayer"]
 title = "Open a File"
@@ -483,36 +98,36 @@ shader = ExtResource("15_nsxvj")
 script = ExtResource("18_yi44b")
 bg_material = ExtResource("19_pymkk")
 
-[connection signal="toggled" from="CanvasLayer/ToggleKeyboard" to="." method="_on_toggle_keyboard_toggled"]
-[connection signal="toggled" from="CanvasLayer/ToggleParticles" to="." method="_on_toggle_particles_toggled"]
-[connection signal="toggled" from="CanvasLayer/ToggleMIDI" to="." method="_on_toggle_midi_toggled"]
-[connection signal="toggled" from="CanvasLayer/ToggleBG" to="." method="_on_toggle_bg_toggled"]
-[connection signal="color_changed" from="CanvasLayer/ColorPicker" to="PianoController" method="_on_color_picker_color_changed"]
-[connection signal="pressed" from="CanvasLayer/ChangeBGImage_Button" to="MIDI_BG" method="_on_change_bg_image_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/ClearBGImage_Button" to="MIDI_BG" method="_on_clear_bg_image_button_pressed"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_K_B_Container/Virtual_Keyboard_Toggle" to="." method="_on_virtual_keyboard_toggle_toggled"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_K_B_Container/BG_Toggle" to="." method="_on_bg_toggle_toggled"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_N_P_Container/MIDI_Notes_Toggle" to="." method="_on_midi_notes_toggle_toggled"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_N_P_Container/Particles_Toggle" to="." method="_on_particles_toggle_toggled"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container/Change_BG_Image_Button" to="MIDI_BG" method="_on_change_bg_image_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container/Clear_BG_Image_Button" to="MIDI_BG" method="_on_clear_bg_image_button_pressed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_T_Container/BGTransparency_Slider" to="MIDI_BG" method="_on_bg_transparency_slider_value_changed"]
+[connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/ColorPicker" to="PianoController" method="_on_color_picker_color_changed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container/Scale_Slider" to="." method="_on_scale_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Pos_Z_Container/Pos_Z_Slider" to="." method="_on_pos_z_slider_value_changed"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container/OpenClose" to="PianoController" method="_on_open_close_toggled"]
+[connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Serial_Port_Container/SerialList" to="PianoController" method="_on_serial_list_item_selected"]
+[connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_L_Mode_Container/ModesList" to="PianoController" method="_on_modes_list_item_selected"]
+[connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Animation_Container/AnimationsList" to="PianoController" method="_on_animations_list_item_selected"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Fade_Container/Fade_Slider" to="PianoController" method="_on_fade_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_S_L_Container/Splash_Length_Slider" to="PianoController" method="_on_splash_length_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_Brightness_Container/BG_Brightness_Slider" to="PianoController" method="_on_bg_brightness_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Transposition_Container8/Transposition_Slider" to="PianoController" method="_on_transposition_slider_value_changed"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Transposition_Container8/T_Octave_Button" to="PianoController" method="_on_t_octave_button_toggled"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container/Dec_P_Size_Button" to="PianoController" method="_on_dec_p_size_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container/Inc_P_Size_Button" to="PianoController" method="_on_inc_p_size_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container/Update_BG_Button" to="PianoController" method="_on_update_bg_button_pressed"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_LED_Strip_Toggles_Container/FixLED_Toggle" to="PianoController" method="_on_fix_led_toggle_toggled"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_LED_Strip_Toggles_Container/BGLED_Toggle" to="PianoController" method="_on_bgled_toggle_toggled"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_LED_Strip_Toggles_Container/REVLED_Toggle" to="PianoController" method="_on_revled_toggle_toggled"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Profile_Container/LoadProfileButton" to="PianoController" method="_on_load_profile_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Profile_Container/SaveProfileButton" to="PianoController" method="_on_save_profile_button_pressed"]
 [connection signal="file_selected" from="CanvasLayer/BGImage_FileDialog" to="MIDI_BG" method="_on_bg_image_file_dialog_file_selected"]
-[connection signal="value_changed" from="CanvasLayer/BGTransparency_Slider" to="MIDI_BG" method="_on_bg_transparency_slider_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/ScaleSlider" to="." method="_on_scale_slider_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/PositionZSlider" to="." method="_on_position_z_slider_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/Brightness_Slider" to="PianoController" method="_on_brightness_slider_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/Transposition_Slider" to="PianoController" method="_on_transposition_slider_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/BGBrightness_Slider" to="PianoController" method="_on_bg_brightness_slider_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/FadeRate_Slider" to="PianoController" method="_on_fade_rate_slider_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/SplashLength_Slider" to="PianoController" method="_on_splash_length_slider_value_changed"]
-[connection signal="item_selected" from="CanvasLayer/SerialList" to="PianoController" method="_on_serial_list_item_selected"]
-[connection signal="item_selected" from="CanvasLayer/ModesList" to="PianoController" method="_on_modes_list_item_selected"]
-[connection signal="item_selected" from="CanvasLayer/AnimationsList" to="PianoController" method="_on_animations_list_item_selected"]
-[connection signal="toggled" from="CanvasLayer/OpenClose" to="PianoController" method="_on_open_close_toggled"]
-[connection signal="toggled" from="CanvasLayer/TranspositionOctaveShift_Toggle" to="PianoController" method="_on_transposition_octave_shift_toggle_toggled"]
-[connection signal="pressed" from="CanvasLayer/PianoSizeDecrease_Button" to="PianoController" method="_on_piano_size_decrease_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/PianoSizeIncrease_Button" to="PianoController" method="_on_piano_size_increase_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/SetBG_Button" to="PianoController" method="_on_set_bg_button_pressed"]
-[connection signal="toggled" from="CanvasLayer/FixLED_Toggle" to="PianoController" method="_on_fix_led_toggle_toggled"]
-[connection signal="toggled" from="CanvasLayer/BGLED_Toggle" to="PianoController" method="_on_bgled_toggle_toggled"]
-[connection signal="toggled" from="CanvasLayer/REVLED_Toggle" to="PianoController" method="_on_revled_toggle_toggled"]
-[connection signal="pressed" from="CanvasLayer/LoadProfileButton" to="PianoController" method="_on_load_profile_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/SaveProfileButton" to="PianoController" method="_on_save_profile_button_pressed"]
 [connection signal="file_selected" from="CanvasLayer/LoadProfileFileDialog" to="PianoController" method="_on_load_profile_file_dialog_file_selected"]
 [connection signal="file_selected" from="CanvasLayer/SaveProfileFileDialog" to="PianoController" method="_on_save_profile_file_dialog_file_selected"]
 
+[editable path="CanvasLayer/Menu"]
 [editable path="MIDI_Keyboard"]

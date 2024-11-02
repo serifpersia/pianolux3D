@@ -26,34 +26,43 @@ corner_radius_bottom_left = 25
 
 [sub_resource type="SystemFont" id="SystemFont_bt2da"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_tu4sd"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_32ltq"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_e8udk"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_m2ghb"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_xb6du"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_x535y"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_qlnln"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_nrmm2"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
 [node name="Menu" type="MarginContainer"]
-offset_right = 536.0
-offset_bottom = 296.0
+offset_right = 491.0
+offset_bottom = 1060.0
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
@@ -169,8 +178,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 tooltip_text = "Change transparency value for background image"
+min_value = 0.1
 max_value = 1.0
 step = 0.05
+value = 1.0
 
 [node name="Appearance_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
@@ -221,8 +232,10 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 tooltip_text = "Change scale
 "
+min_value = 0.1
 max_value = 1.0
 step = 0.05
+value = 1.0
 
 [node name="HBox_Pos_Z_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
@@ -242,7 +255,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 tooltip_text = "Change up and down position"
-max_value = 1.0
+min_value = -15.0
+max_value = 15.0
 step = 0.05
 
 [node name="Connections_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
@@ -321,7 +335,7 @@ tooltip_text = "Select LED strip mode"
 layout_mode = 2
 alignment = 1
 
-[node name="Scale_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Animation_Container"]
+[node name="Animation_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Animation_Container"]
 layout_mode = 2
 size_flags_horizontal = 6
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
@@ -348,8 +362,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 tooltip_text = "Change LED strip overall brightness"
-max_value = 1.0
-step = 0.05
+min_value = 1.0
+max_value = 255.0
+value = 255.0
 
 [node name="HBox_Fade_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
@@ -367,8 +382,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 tooltip_text = "Change LED strip fade value
 "
-max_value = 1.0
-step = 0.05
+max_value = 255.0
+value = 255.0
 
 [node name="HBox_S_L_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
@@ -385,8 +400,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 tooltip_text = "Change Splash length value"
-max_value = 1.0
-step = 0.05
+min_value = 4.0
+max_value = 16.0
+value = 8.0
 
 [node name="HBox_BG_Brightness_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
@@ -404,8 +420,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 tooltip_text = "Change background light brightness *Use BG button to update the value
 "
-max_value = 1.0
-step = 0.05
+min_value = 10.0
+value = 100.0
 
 [node name="HBox_Transposition_Container8" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
@@ -423,8 +439,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 tooltip_text = "Change transposition value
 "
-max_value = 1.0
-step = 0.05
+min_value = -6.0
+max_value = 6.0
 
 [node name="T_Octave_Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Transposition_Container8" instance=ExtResource("10_lyjqr")]
 layout_mode = 2
@@ -443,21 +459,21 @@ theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
 text = "Piano 88 Keys: "
 
-[node name="Inc_P_Size_Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container" instance=ExtResource("10_lyjqr")]
+[node name="Dec_P_Size_Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container" instance=ExtResource("10_lyjqr")]
 layout_mode = 2
 tooltip_text = "Change piano key size <"
 theme_override_fonts/font = SubResource("SystemFont_m2ghb")
 theme_override_font_sizes/font_size = 25
 text = "<"
 
-[node name="Dec_P_Size_Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container" instance=ExtResource("10_lyjqr")]
+[node name="Inc_P_Size_Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container" instance=ExtResource("10_lyjqr")]
 layout_mode = 2
 tooltip_text = "Change piano key size >"
 theme_override_fonts/font = SubResource("SystemFont_m2ghb")
 theme_override_font_sizes/font_size = 25
 text = ">"
 
-[node name="Update_BG_Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container" instance=ExtResource("10_lyjqr")]
+[node name="Update_BG_Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container" instance=ExtResource("10_lyjqr")]
 layout_mode = 2
 tooltip_text = "Update background light brightness & color"
 theme_override_fonts/font = SubResource("SystemFont_m2ghb")

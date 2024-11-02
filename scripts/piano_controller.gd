@@ -1,15 +1,22 @@
 extends Node
 
-@onready var serial_list = $"../CanvasLayer/SerialList"
-@onready var open_close = $"../CanvasLayer/OpenClose"
-@onready var modes_list = $"../CanvasLayer/ModesList"
-@onready var animations_list = $"../CanvasLayer/AnimationsList"
-@onready var brightness_slider = $"../CanvasLayer/Brightness_Slider"
-@onready var fade_rate_slider = $"../CanvasLayer/FadeRate_Slider"
-@onready var splash_length_slider = $"../CanvasLayer/SplashLength_Slider"
-@onready var piano_size_label = $"../CanvasLayer/PianoSize_Label"
-@onready var bg_brightness_slider = $"../CanvasLayer/BGBrightness_Slider"
-@onready var web_socket_toggle = $"../CanvasLayer/WebSocket_Toggle"
+@onready var serial_list: OptionButton = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Serial_Port_Container/SerialList"
+@onready var open_close: Button = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container/OpenClose"
+
+@onready var modes_list: OptionButton = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_L_Mode_Container/ModesList"
+@onready var animations_list: OptionButton = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Animation_Container/AnimationsList"
+
+
+
+
+@onready var brightness_slider: HSlider = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Brightness_Container/Brightness_Slider"
+@onready var fade_rate_slider: HSlider = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Fade_Container/Fade_Slider"
+@onready var splash_length_slider: HSlider = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_S_L_Container/Splash_Length_Slider"
+@onready var bg_brightness_slider: HSlider = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_Brightness_Container/BG_Brightness_Slider"
+
+@onready var piano_size_label: Label = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container/PianoSize_Label"
+@onready var web_socket_toggle: CheckButton = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container/WebSocket_Toggle"
+
 @onready var load_profile_file_dialog: FileDialog = $"../CanvasLayer/LoadProfileFileDialog"
 @onready var save_profile_file_dialog: FileDialog = $"../CanvasLayer/SaveProfileFileDialog"
 
@@ -545,7 +552,7 @@ func _on_brightness_slider_value_changed(value):
 	else:
 		send_command_set_brightness(int(value))
 
-func _on_fade_rate_slider_value_changed(value):
+func _on_fade_slider_value_changed(value: float) -> void:
 	if useESP32:
 		send_json_command("Fade", value)
 	else:
@@ -650,14 +657,14 @@ func update_piano_size_settings():
 			firstNoteSelected = 36
 			lastNoteSelected = 84
 
-func _on_piano_size_decrease_button_pressed():
+func _on_dec_p_size_button_pressed() -> void:
 	if counter > 0:
 		counter -= 1
 
 		update_piano_size_settings()
 		update_piano_size_label()
 
-func _on_piano_size_increase_button_pressed():
+func _on_inc_p_size_button_pressed() -> void:
 	if counter < 4:
 		counter += 1
 
@@ -682,7 +689,7 @@ func _on_revled_toggle_toggled(toggled_on):
 		else:
 			send_command_strip_direction(0, stripLedNum)
 
-func _on_set_bg_button_pressed():
+func _on_update_bg_button_pressed() -> void:
 	if useESP32:
 		if bgLED_Toggle:
 			send_json_command("BGAction", 1)
@@ -695,7 +702,7 @@ func _on_transposition_slider_value_changed(value):
 	else:
 		transposition = -value
 
-func _on_transposition_octave_shift_toggle_toggled(toggled_on):
+func _on_t_octave_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		octaveShift_Toggle = true
 	else:

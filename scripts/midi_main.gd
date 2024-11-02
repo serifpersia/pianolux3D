@@ -8,7 +8,7 @@ extends Node3D
 @onready var midi_particles = $MIDI_Particles
 
 @export var player : CharacterBody3D
-@onready var position_z_slider: HSlider = $CanvasLayer/PositionZSlider
+@onready var position_z_slider: HSlider = $CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Pos_Z_Container/Pos_Z_Slider
 
 var max_z_offset: float
 var base_z_position: float
@@ -26,16 +26,16 @@ func _input(_event: InputEvent) -> void:
 
 		player.handle_pause(pause_menu)
 
-func _on_toggle_keyboard_toggled(toggled_on: bool) -> void:
+func _on_virtual_keyboard_toggle_toggled(toggled_on: bool) -> void:
 	midi_keyboard.visible = toggled_on
 
-func _on_toggle_midi_toggled(toggled_on):
+func _on_midi_notes_toggle_toggled(toggled_on: bool) -> void:
 	midi_notes.visible = toggled_on
 
-func _on_toggle_bg_toggled(toggled_on):
+func _on_bg_toggle_toggled(toggled_on: bool) -> void:
 	midi_bg.visible = toggled_on
 
-func _on_toggle_particles_toggled(toggled_on):
+func _on_particles_toggle_toggled(toggled_on: bool) -> void:
 	Global.particles_state = toggled_on
 
 func calculate_max_z_offset() -> float:
@@ -52,5 +52,5 @@ func _on_scale_slider_value_changed(value: float) -> void:
 	base_z_position = z_offset
 	position.z = base_z_position
 
-func _on_position_z_slider_value_changed(value: float) -> void:
+func _on_pos_z_slider_value_changed(value: float) -> void:
 	position.z = base_z_position + value

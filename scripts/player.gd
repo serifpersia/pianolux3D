@@ -48,7 +48,7 @@ func _input(_event: InputEvent) -> void:
 			rotation_x = 0.0
 		else:
 			midi_scene.scale = Vector3(1, 1, 1)
-			midi_scene.get_child(0).get_child(16).value = 0
+			midi_scene.get_child(0).get_child(1).get_child(0).get_child(0).get_child(0).get_child(9).get_child(1).value = 0
 			midi_scene.position.z = 0
 
 func _unhandled_input(event):
