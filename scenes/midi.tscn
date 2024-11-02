@@ -1,9 +1,10 @@
-[gd_scene load_steps=21 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=22 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/MIDI_Notes.gd" id="1_3ll4w"]
 [ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_jo87c"]
 [ext_resource type="Shader" path="res://shaders/pause_menu_blur.gdshader" id="2_vs6fs"]
 [ext_resource type="PackedScene" uid="uid://lt73xdtfgyuo" path="res://scenes/pause_menu.tscn" id="3_vf2tp"]
+[ext_resource type="PackedScene" uid="uid://dk6exixm516jr" path="res://scenes/controls_menu.tscn" id="4_d1bqq"]
 [ext_resource type="PackedScene" uid="uid://dtacf6kg6rwxg" path="res://scenes/spiral_particles.tscn" id="10_e3ntp"]
 [ext_resource type="Material" uid="uid://b5qeey5ruelw1" path="res://materials/particles_mat.tres" id="10_mr4d0"]
 [ext_resource type="Material" uid="uid://cj3ujrwh48kgc" path="res://materials/white_keys_mat.tres" id="10_wj7rp"]
@@ -39,6 +40,13 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Menu" parent="CanvasLayer" instance=ExtResource("3_vf2tp")]
+
+[node name="Controls_Menu" parent="CanvasLayer" instance=ExtResource("4_d1bqq")]
+visible = false
+offset_left = 540.0
+offset_top = 15.0
+offset_right = 1024.0
+offset_bottom = 551.0
 
 [node name="BGImage_FileDialog" type="FileDialog" parent="CanvasLayer"]
 title = "Open a File"
@@ -104,6 +112,7 @@ bg_material = ExtResource("19_pymkk")
 [connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_N_P_Container/Particles_Toggle" to="." method="_on_particles_toggle_toggled"]
 [connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container/Change_BG_Image_Button" to="MIDI_BG" method="_on_change_bg_image_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container/Clear_BG_Image_Button" to="MIDI_BG" method="_on_clear_bg_image_button_pressed"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container/Controls_Button" to="." method="_on_controls_button_toggled"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_T_Container/BGTransparency_Slider" to="MIDI_BG" method="_on_bg_transparency_slider_value_changed"]
 [connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/ColorPicker" to="PianoController" method="_on_color_picker_color_changed"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container/Scale_Slider" to="." method="_on_scale_slider_value_changed"]

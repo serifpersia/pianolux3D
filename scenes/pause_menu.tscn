@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://lt73xdtfgyuo"]
+[gd_scene load_steps=21 format=3 uid="uid://lt73xdtfgyuo"]
 
 [ext_resource type="Texture2D" uid="uid://bj7i2r34yhx0" path="res://img/v_keyboard_checked.png" id="1_2riw0"]
 [ext_resource type="Texture2D" uid="uid://dokri0567k1nv" path="res://img/v_keyboard_unchecked.png" id="2_chgxr"]
@@ -8,10 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://b35s061d0rs6w" path="res://img/midi_note_unchecked.png" id="6_qi3dm"]
 [ext_resource type="Texture2D" uid="uid://ch6a5mue8kcsh" path="res://img/midi_particles_checked.png" id="7_8ix5g"]
 [ext_resource type="Texture2D" uid="uid://bwt2tc877grqu" path="res://img/midi_particles_unchecked.png" id="8_1vg8t"]
-[ext_resource type="PackedScene" uid="uid://bjgxxihfcew33" path="res://scenes/serial_list.tscn" id="9_8ymiu"]
 [ext_resource type="Texture2D" uid="uid://dnhik2uwb0347" path="res://img/esp32_checked.png" id="9_j1u87"]
 [ext_resource type="Texture2D" uid="uid://c0ux06y17lt2a" path="res://img/esp32_unchecked.png" id="10_fn72u"]
-[ext_resource type="PackedScene" uid="uid://b8sjcwx28odsw" path="res://scenes/open_close.tscn" id="10_lyjqr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gviss"]
 bg_color = Color(0.129412, 0.145098, 0.196078, 1)
@@ -40,23 +38,20 @@ subpixel_positioning = 0
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
-[sub_resource type="SystemFont" id="SystemFont_m2ghb"]
-font_names = PackedStringArray("Impact")
-subpixel_positioning = 0
-
 [sub_resource type="SystemFont" id="SystemFont_xb6du"]
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
-[sub_resource type="SystemFont" id="SystemFont_x535y"]
+[sub_resource type="SystemFont" id="SystemFont_wne3p"]
 font_names = PackedStringArray("Impact")
-subpixel_positioning = 0
+
+[sub_resource type="SystemFont" id="SystemFont_vhtrd"]
+font_names = PackedStringArray("Impact")
+
+[sub_resource type="SystemFont" id="SystemFont_r5ntv"]
+font_names = PackedStringArray("Impact")
 
 [sub_resource type="SystemFont" id="SystemFont_qlnln"]
-font_names = PackedStringArray("Impact")
-subpixel_positioning = 0
-
-[sub_resource type="SystemFont" id="SystemFont_nrmm2"]
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
@@ -143,11 +138,10 @@ text = "Particles: "
 
 [node name="HBox_BG_C_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
-theme_override_constants/separation = 30
-alignment = 1
 
 [node name="Change_BG_Image_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container"]
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Change background image"
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
@@ -156,10 +150,21 @@ text = "Change BG Image
 
 [node name="Clear_BG_Image_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container"]
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Clear  background image"
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
 text = "Clear BG Image
+"
+
+[node name="Controls_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Clear  background image"
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+toggle_mode = true
+text = "Controls
 "
 
 [node name="HBox_BG_T_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
@@ -277,11 +282,14 @@ theme_override_font_sizes/font_size = 25
 text = "Connection type: "
 vertical_alignment = 1
 
-[node name="OpenClose" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container" instance=ExtResource("10_lyjqr")]
+[node name="OpenClose" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container"]
 layout_mode = 2
-tooltip_text = "Open connection to the selected device"
-theme_override_fonts/font = SubResource("SystemFont_m2ghb")
+tooltip_text = "Change background image"
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
+toggle_mode = true
+text = "Open
+"
 
 [node name="WebSocket_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container"]
 layout_mode = 2
@@ -297,16 +305,21 @@ alignment = 1
 
 [node name="Serial_Port_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Serial_Port_Container"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_fonts/font = SubResource("SystemFont_e8udk")
 theme_override_font_sizes/font_size = 25
 text = "Serial Port: "
+horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SerialList" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Serial_Port_Container" instance=ExtResource("9_8ymiu")]
+[node name="SerialList" type="OptionButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Serial_Port_Container"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-tooltip_text = "USB Serial Device"
-theme_override_fonts/font = SubResource("SystemFont_x535y")
-theme_override_font_sizes/font_size = 25
+size_flags_horizontal = 3
+theme_override_fonts/font = SubResource("SystemFont_wne3p")
+theme_override_font_sizes/font_size = 20
+text_overrun_behavior = 3
+clip_text = true
 
 [node name="LED_Strip_Props_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
@@ -326,10 +339,14 @@ theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
 text = "LED Mode: "
 
-[node name="ModesList" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_L_Mode_Container" instance=ExtResource("9_8ymiu")]
+[node name="ModesList" type="OptionButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_L_Mode_Container"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Select LED strip mode"
+theme_override_fonts/font = SubResource("SystemFont_vhtrd")
+theme_override_font_sizes/font_size = 20
+text_overrun_behavior = 3
+clip_text = true
 
 [node name="HBox_Animation_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
@@ -342,10 +359,14 @@ theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
 text = "Animation: "
 
-[node name="AnimationsList" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Animation_Container" instance=ExtResource("9_8ymiu")]
+[node name="AnimationsList" type="OptionButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Animation_Container"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Select LED strip animation effect"
+theme_override_fonts/font = SubResource("SystemFont_r5ntv")
+theme_override_font_sizes/font_size = 20
+text_overrun_behavior = 3
+clip_text = true
 
 [node name="HBox_Brightness_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
@@ -442,12 +463,14 @@ tooltip_text = "Change transposition value
 min_value = -6.0
 max_value = 6.0
 
-[node name="T_Octave_Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Transposition_Container8" instance=ExtResource("10_lyjqr")]
+[node name="T_Octave_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Transposition_Container8"]
 layout_mode = 2
-tooltip_text = "Change to switch slider to octave offsets"
-theme_override_fonts/font = SubResource("SystemFont_m2ghb")
+tooltip_text = "Change background image"
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "Octave"
+toggle_mode = true
+text = "Open
+"
 
 [node name="HBox_P_Size_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
@@ -459,27 +482,34 @@ theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
 text = "Piano 88 Keys: "
 
-[node name="Dec_P_Size_Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container" instance=ExtResource("10_lyjqr")]
+[node name="Dec_P_Size_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container"]
 layout_mode = 2
-tooltip_text = "Change piano key size <"
-theme_override_fonts/font = SubResource("SystemFont_m2ghb")
+size_flags_horizontal = 3
+tooltip_text = "Change background image"
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "<"
-
-[node name="Inc_P_Size_Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container" instance=ExtResource("10_lyjqr")]
-layout_mode = 2
-tooltip_text = "Change piano key size >"
-theme_override_fonts/font = SubResource("SystemFont_m2ghb")
-theme_override_font_sizes/font_size = 25
-text = ">"
-
-[node name="Update_BG_Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container" instance=ExtResource("10_lyjqr")]
-layout_mode = 2
-tooltip_text = "Update background light brightness & color"
-theme_override_fonts/font = SubResource("SystemFont_m2ghb")
-theme_override_font_sizes/font_size = 25
-text = "BG
+toggle_mode = true
+text = "<
 "
+
+[node name="Inc_P_Size_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Change background image"
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+toggle_mode = true
+text = ">
+"
+
+[node name="Update_BG_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Change background image"
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+toggle_mode = true
+text = "BG"
 
 [node name="HBox_LED_Strip_Toggles_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
@@ -510,17 +540,22 @@ text = "Rev LED: "
 
 [node name="HBox_Profile_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
+alignment = 1
 
-[node name="LoadProfileButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Profile_Container" instance=ExtResource("10_lyjqr")]
+[node name="LoadProfileButton" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Profile_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_fonts/font = SubResource("SystemFont_nrmm2")
+tooltip_text = "Change background image"
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
+toggle_mode = true
 text = "Load"
 
-[node name="SaveProfileButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Profile_Container" instance=ExtResource("10_lyjqr")]
+[node name="SaveProfileButton" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Profile_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_fonts/font = SubResource("SystemFont_nrmm2")
+tooltip_text = "Change background image"
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
+toggle_mode = true
 text = "Save"

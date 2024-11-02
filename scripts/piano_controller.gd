@@ -2,13 +2,8 @@ extends Node
 
 @onready var serial_list: OptionButton = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Serial_Port_Container/SerialList"
 @onready var open_close: Button = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container/OpenClose"
-
 @onready var modes_list: OptionButton = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_L_Mode_Container/ModesList"
 @onready var animations_list: OptionButton = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Animation_Container/AnimationsList"
-
-
-
-
 @onready var brightness_slider: HSlider = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Brightness_Container/Brightness_Slider"
 @onready var fade_rate_slider: HSlider = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Fade_Container/Fade_Slider"
 @onready var splash_length_slider: HSlider = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_S_L_Container/Splash_Length_Slider"
@@ -703,6 +698,7 @@ func _on_transposition_slider_value_changed(value):
 		transposition = -value
 
 func _on_t_octave_button_toggled(toggled_on: bool) -> void:
+	print('tasetase')
 	if toggled_on:
 		octaveShift_Toggle = true
 	else:

@@ -10,6 +10,10 @@ extends Node3D
 @export var player : CharacterBody3D
 @onready var position_z_slider: HSlider = $CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Pos_Z_Container/Pos_Z_Slider
 
+@onready var controls_menu: MarginContainer = $CanvasLayer/Controls_Menu
+
+@onready var controls_button: Button = $CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container/Controls_Button
+
 var max_z_offset: float
 var base_z_position: float
 
@@ -23,6 +27,8 @@ func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_pause_menu"):
 		pause_menu = !pause_menu
 		canvas_layer.visible = pause_menu
+		controls_button.button_pressed = false
+		controls_menu.visible = false
 
 		player.handle_pause(pause_menu)
 
@@ -54,3 +60,7 @@ func _on_scale_slider_value_changed(value: float) -> void:
 
 func _on_pos_z_slider_value_changed(value: float) -> void:
 	position.z = base_z_position + value
+
+
+func _on_controls_button_toggled(toggled_on: bool) -> void:
+	controls_menu.visible = toggled_on
