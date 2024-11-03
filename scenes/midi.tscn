@@ -121,6 +121,7 @@ bg_material = ExtResource("19_pymkk")
 [connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Serial_Port_Container/SerialList" to="PianoController" method="_on_serial_list_item_selected"]
 [connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_L_Mode_Container/ModesList" to="PianoController" method="_on_modes_list_item_selected"]
 [connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Animation_Container/AnimationsList" to="PianoController" method="_on_animations_list_item_selected"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Brightness_Container/Brightness_Slider" to="PianoController" method="_on_brightness_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Fade_Container/Fade_Slider" to="PianoController" method="_on_fade_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_S_L_Container/Splash_Length_Slider" to="PianoController" method="_on_splash_length_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_Brightness_Container/BG_Brightness_Slider" to="PianoController" method="_on_bg_brightness_slider_value_changed"]
