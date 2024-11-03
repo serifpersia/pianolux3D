@@ -11,17 +11,21 @@
 
 PianoLux3D is Godot Game Engine port of PianoLux Java and ESP32 versions of the application. Midi visualization and WS2812B led strip controller application.
 
-## Join Our Community
+![image](https://github.com/user-attachments/assets/6a532e6a-6f25-4389-82c1-04f52caa7a41)
 
-Be part of the PianoLux Discord Server Community where you can connect with fellow users, ask questions, and share your experiences:
-
-[![Discord Server](https://discordapp.com/api/guilds/1077195120950120458/widget.png?style=banner2)](https://discord.gg/MAypyD7k86)
 ## Demo
 <div align="center">
   
 https://github.com/user-attachments/assets/9e596e92-1543-4f85-b95d-3ffbcf5fbea2
 
 </div>
+
+## Join Our Community
+
+Be part of the PianoLux Discord Server Community where you can connect with fellow users, ask questions, and share your experiences:
+
+[![Discord Server](https://discordapp.com/api/guilds/1077195120950120458/widget.png?style=banner2)](https://discord.gg/MAypyD7k86)
+
 ## LED Strip Compatibility
 
 PianoLux is compatible with officially supported strips by FastLED library default are NeoPixels/WS2812B. Density must be 144 which is supported on all modes of the app and 72 density for few basic modes. You can find list of FastLED supported leds below:
