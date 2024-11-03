@@ -11,9 +11,9 @@
 
 PianoLux3D is Godot Game Engine port of PianoLux Java and ESP32 versions of the application. Midi visualization and WS2812B led strip controller application.
 
-Supports Windows, Linux and MacOS x64 bit
+Supports Windows, Linux and macOS x64 bit
 
-*MacOS LED Strip control only via network(esp32) devices, since serial library used by the project doesnt have MacOS version, serial connection isn't supported on MacOS.
+*Only network-connected (ESP32) devices can be used on macOS, as the serial library does not support macOS.
 
 ![image](https://github.com/user-attachments/assets/6a532e6a-6f25-4389-82c1-04f52caa7a41)
 
