@@ -44,12 +44,15 @@ subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_wne3p"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_vhtrd"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_r5ntv"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_qlnln"]
 font_names = PackedStringArray("Impact")
@@ -197,11 +200,10 @@ horizontal_alignment = 1
 
 [node name="HBox_Color_Picker_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
-alignment = 1
 
 [node name="Color_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 10
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
 text = "Color: 
@@ -213,6 +215,22 @@ tooltip_text = "Change color"
 text = "       "
 color = Color(1, 0, 0, 1)
 metadata/_edit_use_anchors_ = true
+
+[node name="MIDI_Speed_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+text = "MIDI Speed"
+
+[node name="MIDI_Speed_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Change speed  value for midi notes"
+min_value = 8.0
+max_value = 36.0
+value = 18.0
 
 [node name="Transforms_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2

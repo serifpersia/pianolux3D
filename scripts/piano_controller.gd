@@ -842,3 +842,6 @@ func _on_load_profile_file_dialog_file_selected(path: String) -> void:
 			print("Error parsing JSON from file. Error: ", json_parser.error_message())
 	else:
 		print("Error opening file for reading.")
+
+func _on_midi_speed_slider_value_changed(value: float) -> void:
+	midi_notes.speed = value

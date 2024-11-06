@@ -96,7 +96,7 @@ func on_note_off(pitch: int) -> void:
 				(note_data as NoteData).released = true
 
 func move_notes(delta: float) -> void:
-	var move_amount := delta * 18.0
+	var move_amount := delta * speed
 	var speed_delta := speed * delta
 
 	var black_key_speed_multiplier: float = 2.0
