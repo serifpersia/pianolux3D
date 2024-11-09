@@ -1630,7 +1630,7 @@ font-weight: 600;
 // Function to fetch the latest release tag from the GitHub repository
 function fetchLatestReleaseTag() {
   const githubRepoUrl =
-    "https://api.github.com/repos/serifpersia/pianolux-esp32/releases/latest";
+    "https://api.github.com/repos/serifpersia/pianolux3D/releases/latest";
 
   return fetch(githubRepoUrl)
     .then(response => response.json())
@@ -1641,7 +1641,7 @@ function fetchLatestReleaseTag() {
 }
 
 function fetchAssetsList(board, fileType) {
-  const githubApiUrl = `https://api.github.com/repos/serifpersia/pianolux-esp32/releases/latest`;
+  const githubApiUrl = `https://api.github.com/repos/serifpersia/pianolux3D/releases/latest`;
 
   fetch(githubApiUrl)
     .then(response => response.json())
