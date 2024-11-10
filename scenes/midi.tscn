@@ -141,4 +141,3 @@ bg_material = ExtResource("19_pymkk")
 [connection signal="file_selected" from="CanvasLayer/SaveProfileFileDialog" to="PianoController" method="_on_save_profile_file_dialog_file_selected"]
 
 [editable path="CanvasLayer/Menu"]
-[editable path="MIDI_Keyboard"]
