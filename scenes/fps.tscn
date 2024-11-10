@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bgfampmcitsjy"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_4648u"]
-[ext_resource type="Texture2D" uid="uid://k5ad3que3lv1" path="res://img/sphere_particle.png" id="2_affeg"]
+[ext_resource type="Texture2D" uid="uid://cqlryxqvb4suh" path="res://img/sphere_particle.png" id="2_affeg"]
 [ext_resource type="Script" path="res://scripts/camera_3d.gd" id="2_h84py"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_schgr"]
