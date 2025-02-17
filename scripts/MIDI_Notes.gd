@@ -67,7 +67,7 @@ func on_note_on(pitch: int) -> void:
 	var is_black = midi_keyboard.is_black_key(pitch)
 	
 	if is_black:
-		var scale_factor := Vector3(1.35 / 2.3, 1.35 / 2.3, 0.5)
+		var scale_factor := Vector3(0.6, 0.6, 0.5)
 		new_mesh_instance.scale = scale_factor
 
 	if not active_notes.has(pitch):
@@ -75,11 +75,12 @@ func on_note_on(pitch: int) -> void:
 
 	var note_mesh := midi_keyboard.get_node(str(pitch))
 	var note_mesh_z = note_mesh.position.z - 0.635 if is_black else note_mesh.position.z - 1.215
+	var note_mesh_y = note_mesh.position.y - 1.70 if is_black else note_mesh.position.y
 
 	var note_shader_material := create_shader_material()
 	
 	new_mesh_instance.material_override = note_shader_material
-	new_mesh_instance.position = Vector3(note_mesh.position.x, note_mesh.position.y, note_mesh_z)
+	new_mesh_instance.position = Vector3(note_mesh.position.x, note_mesh_y, note_mesh_z)
 
 	note_shader_material.set_shader_parameter("is_black_key", is_black)
 

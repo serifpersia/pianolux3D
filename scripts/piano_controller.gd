@@ -16,6 +16,7 @@ extends Node
 @onready var save_profile_file_dialog: FileDialog = $"../CanvasLayer/SaveProfileFileDialog"
 
 @onready var midi: Node3D = $".."
+@onready var midi_bg: Node3D = $"../MIDI_BG"
 
 @onready var midi_keyboard: Node3D = $"../MIDI_Keyboard"
 @onready var midi_notes: Node3D = $"../MIDI_Notes"
@@ -853,5 +854,16 @@ func _on_world_color_picker_color_changed(color: Color) -> void:
 	world_environment.environment.background_color = color
 
 func _on_note_rot_x_slider_value_changed(value: float) -> void:
+	midi_bg.rotation_degrees.x = value
 	midi_notes.rotation_degrees.x = value
 	midi_particles.rotation_degrees.x = value
+	
+	var offset = Vector3(0, -1.25, 0)
+	var rotated_offset = offset.rotated(Vector3(1, 0, 0), deg_to_rad(value))
+	
+	midi_notes.position = rotated_offset
+	midi_particles.position = rotated_offset
+	
+	var y_adjustment = 3.1
+	midi_notes.position.y += y_adjustment
+	midi_particles.position.y += y_adjustment
