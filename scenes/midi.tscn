@@ -13,11 +13,11 @@
 [ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="12_nnbsg"]
 [ext_resource type="Script" path="res://scripts/piano_controller.gd" id="13_0vjy6"]
 [ext_resource type="Script" path="res://scripts/MIDI_Particles.gd" id="13_7uhe6"]
-[ext_resource type="PackedScene" uid="uid://bk55t56akhyi2" path="res://models/beta_keys.blend" id="13_8radr"]
+[ext_resource type="PackedScene" uid="uid://cwyjlcgepmn1p" path="res://models/beta_keys.blend" id="13_8radr"]
 [ext_resource type="Material" uid="uid://dgmbakuidedwe" path="res://materials/black_notes_on.tres" id="13_bekje"]
-[ext_resource type="PackedScene" uid="uid://bcp6wimjoubbk" path="res://models/white_note_cube_mesh.blend" id="14_44per"]
+[ext_resource type="PackedScene" uid="uid://i0bkeper6ame" path="res://models/white_note_cube_mesh.blend" id="14_44per"]
 [ext_resource type="Shader" path="res://shaders/rounded_note_mesh.gdshader" id="15_nsxvj"]
-[ext_resource type="PackedScene" uid="uid://3g1gljhkpdbu" path="res://models/piano_bg.blend" id="17_nwwxk"]
+[ext_resource type="PackedScene" uid="uid://bt0cj4hcw40hu" path="res://models/piano_bg.blend" id="17_nwwxk"]
 [ext_resource type="Script" path="res://scripts/bg.gd" id="18_yi44b"]
 [ext_resource type="Material" uid="uid://c87r7xa3yubcp" path="res://materials/bg_mat.tres" id="19_pymkk"]
 
@@ -40,6 +40,9 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Menu" parent="CanvasLayer" instance=ExtResource("3_vf2tp")]
+
+[node name="MIDI_Speed_Slider" parent="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container" index="5"]
+value = 20.0
 
 [node name="Controls_Menu" parent="CanvasLayer" instance=ExtResource("4_d1bqq")]
 visible = false
@@ -114,10 +117,12 @@ bg_material = ExtResource("19_pymkk")
 [connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container/Clear_BG_Image_Button" to="MIDI_BG" method="_on_clear_bg_image_button_pressed"]
 [connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container/Controls_Button" to="." method="_on_controls_button_toggled"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_T_Container/BGTransparency_Slider" to="MIDI_BG" method="_on_bg_transparency_slider_value_changed"]
+[connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/World_ColorPicker" to="PianoController" method="_on_world_color_picker_color_changed"]
 [connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/ColorPicker" to="PianoController" method="_on_color_picker_color_changed"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/MIDI_Speed_Slider" to="PianoController" method="_on_midi_speed_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container/Scale_Slider" to="." method="_on_scale_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Pos_Z_Container/Pos_Z_Slider" to="." method="_on_pos_z_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Note_Rot_X_Container/Note_Rot_X_Slider" to="PianoController" method="_on_note_rot_x_slider_value_changed"]
 [connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container/OpenClose" to="PianoController" method="_on_open_close_toggled"]
 [connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Serial_Port_Container/SerialList" to="PianoController" method="_on_serial_list_item_selected"]
 [connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_L_Mode_Container/ModesList" to="PianoController" method="_on_modes_list_item_selected"]

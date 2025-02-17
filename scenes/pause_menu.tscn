@@ -1,15 +1,15 @@
 [gd_scene load_steps=21 format=3 uid="uid://lt73xdtfgyuo"]
 
-[ext_resource type="Texture2D" uid="uid://dnvasv7hoegkh" path="res://img/v_keyboard_checked.png" id="1_2riw0"]
-[ext_resource type="Texture2D" uid="uid://16mhlx6iwnf2" path="res://img/v_keyboard_unchecked.png" id="2_chgxr"]
-[ext_resource type="Texture2D" uid="uid://v63o55pllrbq" path="res://img/bg_checked.png" id="3_3jdt5"]
-[ext_resource type="Texture2D" uid="uid://q7krhcar6ra" path="res://img/bg_unchecked.png" id="4_5dubv"]
-[ext_resource type="Texture2D" uid="uid://i3dmh46d75u4" path="res://img/midi_note_checked.png" id="5_gjj04"]
-[ext_resource type="Texture2D" uid="uid://deqm3or1cvn8o" path="res://img/midi_note_unchecked.png" id="6_qi3dm"]
-[ext_resource type="Texture2D" uid="uid://c0ahn0ai6ijju" path="res://img/midi_particles_checked.png" id="7_8ix5g"]
-[ext_resource type="Texture2D" uid="uid://drvr44dlknw57" path="res://img/midi_particles_unchecked.png" id="8_1vg8t"]
-[ext_resource type="Texture2D" uid="uid://dkqhi56pdojsc" path="res://img/esp32_checked.png" id="9_j1u87"]
-[ext_resource type="Texture2D" uid="uid://blfapbolld0ca" path="res://img/esp32_unchecked.png" id="10_fn72u"]
+[ext_resource type="Texture2D" uid="uid://b6e4vnn2p8755" path="res://img/v_keyboard_checked.png" id="1_2riw0"]
+[ext_resource type="Texture2D" uid="uid://swpkpjasuolh" path="res://img/v_keyboard_unchecked.png" id="2_chgxr"]
+[ext_resource type="Texture2D" uid="uid://bqwxagc0iocdd" path="res://img/bg_checked.png" id="3_3jdt5"]
+[ext_resource type="Texture2D" uid="uid://nhwm6bg6hkl3" path="res://img/bg_unchecked.png" id="4_5dubv"]
+[ext_resource type="Texture2D" uid="uid://b416nr04xs2sc" path="res://img/midi_note_checked.png" id="5_gjj04"]
+[ext_resource type="Texture2D" uid="uid://blryofivv5d6x" path="res://img/midi_note_unchecked.png" id="6_qi3dm"]
+[ext_resource type="Texture2D" uid="uid://dosolsrapxkox" path="res://img/midi_particles_checked.png" id="7_8ix5g"]
+[ext_resource type="Texture2D" uid="uid://cacesk8jexmve" path="res://img/midi_particles_unchecked.png" id="8_1vg8t"]
+[ext_resource type="Texture2D" uid="uid://bnp3anh3vi8ui" path="res://img/esp32_checked.png" id="9_j1u87"]
+[ext_resource type="Texture2D" uid="uid://dw6lxrub8lr1o" path="res://img/esp32_unchecked.png" id="10_fn72u"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gviss"]
 bg_color = Color(0.129412, 0.145098, 0.196078, 1)
@@ -59,8 +59,8 @@ font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
 [node name="Menu" type="MarginContainer"]
-offset_right = 491.0
-offset_bottom = 1060.0
+offset_right = 532.0
+offset_bottom = 1096.0
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
@@ -201,6 +201,19 @@ horizontal_alignment = 1
 [node name="HBox_Color_Picker_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
 
+[node name="World_Color_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+text = "World Color:"
+
+[node name="World_ColorPicker" type="ColorPickerButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
+layout_mode = 2
+tooltip_text = "Change color"
+text = "       "
+metadata/_edit_use_anchors_ = true
+
 [node name="Color_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
 layout_mode = 2
 size_flags_horizontal = 10
@@ -221,7 +234,7 @@ layout_mode = 2
 size_flags_horizontal = 10
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "MIDI Speed"
+text = "Speed: "
 
 [node name="MIDI_Speed_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
 layout_mode = 2
@@ -230,6 +243,7 @@ size_flags_vertical = 4
 tooltip_text = "Change speed  value for midi notes"
 min_value = 8.0
 max_value = 36.0
+step = 4.0
 value = 18.0
 
 [node name="Transforms_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
@@ -281,6 +295,27 @@ tooltip_text = "Change up and down position"
 min_value = -15.0
 max_value = 15.0
 step = 0.05
+
+[node name="HBox_Note_Rot_X_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
+size_flags_vertical = 6
+alignment = 1
+
+[node name="Note_Rot_X_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Note_Rot_X_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+text = "Note Rotation X:  
+"
+
+[node name="Note_Rot_X_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Note_Rot_X_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Change up and down position"
+max_value = 90.0
+step = 15.0
 
 [node name="Connections_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2

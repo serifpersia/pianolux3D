@@ -21,6 +21,9 @@ extends Node
 @onready var midi_notes: Node3D = $"../MIDI_Notes"
 @onready var midi_particles: Node3D = $"../MIDI_Particles"
 
+@onready var world_environment: WorldEnvironment = $"../../WorldEnvironment"
+
+
 var serial_thread : Thread = Thread.new()
 var serial_queue : Array = []
 var serial_lock : Mutex = Mutex.new()
@@ -845,3 +848,10 @@ func _on_load_profile_file_dialog_file_selected(path: String) -> void:
 
 func _on_midi_speed_slider_value_changed(value: float) -> void:
 	midi_notes.speed = value
+
+func _on_world_color_picker_color_changed(color: Color) -> void:
+	world_environment.environment.background_color = color
+
+func _on_note_rot_x_slider_value_changed(value: float) -> void:
+	midi_notes.rotation_degrees.x = value
+	midi_particles.rotation_degrees.x = value
