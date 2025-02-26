@@ -4,11 +4,12 @@ extends CharacterBody3D
 @export var mouse_sensitivity := 0.1
 @onready var texture_rect: TextureRect = $CanvasLayer/TextureRect
 
-@export var midi_scene: Node3D
+const SPEED = 35.0
+@export var precise_move_speed: float = 6.0
+@export var precise_rotation_speed: float = 1.0
+@export var precise_roll_speed: float = 1.0
 
-const SPEED = 25.0
 var rotation_x := 0.0
-
 var mouse_lock: bool
 var fps_mode: bool
 var is_paused: bool
@@ -19,64 +20,73 @@ var last_camera_rotation_degrees
 
 var initial_position
 var initial_rotation
-var initial_rotation_degrees
+var initial_camera_rotation_degrees
+
+var using_fps_script: bool = true
 
 func _ready() -> void:
 	initial_position = position
 	initial_rotation = rotation
-	initial_rotation_degrees = camera_3d.rotation_degrees
+	initial_camera_rotation_degrees = camera_3d.rotation_degrees
 
 	last_position = initial_position
 	last_rotation = initial_rotation
-	last_camera_rotation_degrees = initial_rotation_degrees
+	last_camera_rotation_degrees = initial_camera_rotation_degrees
 
 	setup_camera()
 
-func _input(_event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_mouse_lock") and fps_mode:
 		mouse_lock = !mouse_lock
 		set_mouse_lock_and_texture_visibility()
-
 	elif Input.is_action_just_pressed("ui_fps_mode"):
 		toggle_fps_mode()
-
 	elif Input.is_action_just_pressed("ui_reset_fps_view"):
 		if fps_mode:
 			position = initial_position
 			rotation = initial_rotation
-			camera_3d.rotation_degrees = initial_rotation_degrees
+			camera_3d.rotation_degrees = initial_camera_rotation_degrees
 			rotation_x = 0.0
-		else:
-			midi_scene.scale = Vector3(1, 1, 1)
-			midi_scene.get_child(0).get_child(1).get_child(0).get_child(0).get_child(0).get_child(9).get_child(1).value = 0
-			midi_scene.position.z = 0
+			camera_3d.rotation_degrees.z = 0.0
+	elif Input.is_action_just_pressed("ui_precise") and fps_mode:
+		toggle_camera_mode()
+
+	if not using_fps_script and fps_mode and not mouse_lock:
+		if event is InputEventMouseButton:
+			if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
+				camera_3d.rotation_degrees.z -= precise_roll_speed
+			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
+				camera_3d.rotation_degrees.z += precise_roll_speed
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion and fps_mode and not mouse_lock:
 		rotate_camera(event.relative)
 
-func _physics_process(_delta: float) -> void:
-	if not fps_mode:
+func _physics_process(delta: float) -> void:
+	if not fps_mode or is_paused:
 		return
+
+	var current_speed = SPEED if using_fps_script else precise_move_speed
+	var current_rotation_speed = mouse_sensitivity if using_fps_script else precise_rotation_speed * delta
 
 	var input_dir := Input.get_vector("ui_a", "ui_d", "ui_w", "ui_s")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		velocity.x = direction.x * current_speed
+		velocity.z = direction.z * current_speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
-		
+		velocity.x = move_toward(velocity.x, 0, current_speed)
+		velocity.z = move_toward(velocity.z, 0, current_speed)
+
 	if Input.is_action_pressed("ui_go_up"):
-		velocity.y = SPEED
+		velocity.y = current_speed
 	elif Input.is_action_pressed("ui_go_down"):
-		velocity.y = -SPEED
+		velocity.y = -current_speed
 	else:
 		velocity.y = 0
 
-	if not mouse_lock and not is_paused:
+	if not mouse_lock:
 		last_position = position
 		last_rotation = rotation
 		last_camera_rotation_degrees = camera_3d.rotation_degrees
@@ -117,18 +127,18 @@ func toggle_fps_mode() -> void:
 	setup_camera()
 	set_mouse_lock_and_texture_visibility()
 
-
 func handle_pause(pause_state: bool) -> void:
 	is_paused = pause_state
 	mouse_lock = pause_state
 	if fps_mode:
 		set_mouse_lock_and_texture_visibility()
 
-func switch_camera_mode():
-	setup_camera()
-	set_mouse_lock_and_texture_visibility()
-
 func rotate_camera(mouse_delta: Vector2):
-	rotation_x = clamp(rotation_x - mouse_delta.y * mouse_sensitivity, -90, 90)
+	var rotation_speed = mouse_sensitivity if using_fps_script else precise_rotation_speed * get_process_delta_time()
+	rotation_x = clamp(rotation_x - mouse_delta.y * rotation_speed, -90, 90)
 	camera_3d.rotation_degrees.x = rotation_x
-	rotate_y(-mouse_delta.x * mouse_sensitivity * PI / 180.0)
+	rotate_y(-mouse_delta.x * rotation_speed * PI / 180.0)
+
+func toggle_camera_mode() -> void:
+	using_fps_script = !using_fps_script
+	print("Switched to ", "FPS" if using_fps_script else "Precise", " mode")
