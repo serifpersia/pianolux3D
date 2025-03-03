@@ -1,17 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://dk6exixm516jr"]
+[gd_scene load_steps=7 format=3 uid="uid://dk6exixm516jr"]
 
-[ext_resource type="Texture2D" uid="uid://6ni3tgi708g3" path="res://img/keyboard_f.png" id="1_bnuds"]
-[ext_resource type="Texture2D" uid="uid://dlxdvn1m4u3x8" path="res://img/keyboard_r.png" id="1_d5r6c"]
-[ext_resource type="Texture2D" uid="uid://do8nckkahqmcr" path="res://img/mouse_left.png" id="2_8vf5u"]
-[ext_resource type="Texture2D" uid="uid://4ejs2kjj6k0s" path="res://img/mouse_right.png" id="3_88swx"]
-[ext_resource type="Texture2D" uid="uid://cef74h1ahrctt" path="res://img/keyboard_w.png" id="5_8qttr"]
-[ext_resource type="Texture2D" uid="uid://pe4v1cx2q36i" path="res://img/keyboard_shift.png" id="6_ciwve"]
-[ext_resource type="Texture2D" uid="uid://dgvabacb3vp75" path="res://img/keyboard_a.png" id="6_ja481"]
-[ext_resource type="Texture2D" uid="uid://b5e0f7mdyqxug" path="res://img/keyboard_space.png" id="7_031h0"]
-[ext_resource type="Texture2D" uid="uid://b16ii6533ueua" path="res://img/keyboard_s.png" id="7_v63g8"]
-[ext_resource type="Texture2D" uid="uid://xvckka75bjbq" path="res://img/keyboard_d.png" id="8_6d27y"]
-[ext_resource type="Texture2D" uid="uid://eo7bvaba24qj" path="res://img/mouse_move.png" id="8_p8k47"]
-[ext_resource type="Texture2D" uid="uid://d4adrfb76twa3" path="res://img/keyboard_t.png" id="9_13wn1"]
+[ext_resource type="Texture2D" uid="uid://c8klcvkykauox" path="res://img/keyboard_f.png" id="1_bnuds"]
+[ext_resource type="Texture2D" uid="uid://ct1nppv0fyfef" path="res://img/mouse_left.png" id="2_8vf5u"]
+[ext_resource type="Texture2D" uid="uid://ljgs5vilhpi8" path="res://img/mouse_right.png" id="3_88swx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dkv47"]
 bg_color = Color(0.129412, 0.145098, 0.196078, 1)
@@ -27,6 +18,9 @@ corner_radius_bottom_left = 25
 [sub_resource type="SystemFont" id="SystemFont_gucrh"]
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_pd70c"]
+load_path = "res://.godot/imported/keyboard_r.png-7d9b2b4bdca2a8042295e5eb04d7e3ce.ctex"
 
 [node name="Controls_Menu" type="MarginContainer"]
 offset_right = 509.0
@@ -71,7 +65,7 @@ layout_mode = 2
 
 [node name="R" type="TextureRect" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Reset_Container/HBox_Inner_Reset_Container"]
 layout_mode = 2
-texture = ExtResource("1_d5r6c")
+texture = SubResource("CompressedTexture2D_pd70c")
 expand_mode = 3
 
 [node name="HBox_Piano_K_Click_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
@@ -139,103 +133,4 @@ layout_mode = 2
 [node name="F" type="TextureRect" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_Toggle_Container/HBox_Inner_FPS_Toggle_Container"]
 layout_mode = 2
 texture = ExtResource("1_bnuds")
-expand_mode = 3
-
-[node name="HBox_FPS_M_Lock_Toggle_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-theme_override_constants/separation = 63
-alignment = 1
-
-[node name="Mouse_Lock_Toggle_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_M_Lock_Toggle_Container"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_fonts/font = SubResource("SystemFont_gucrh")
-theme_override_font_sizes/font_size = 30
-text = "Mouse Lock Toggle: "
-horizontal_alignment = 1
-
-[node name="HBox_Inner_FPS_M_Lock_Toggle_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_M_Lock_Toggle_Container"]
-layout_mode = 2
-
-[node name="T" type="TextureRect" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_M_Lock_Toggle_Container/HBox_Inner_FPS_M_Lock_Toggle_Container"]
-layout_mode = 2
-texture = ExtResource("9_13wn1")
-expand_mode = 3
-
-[node name="HBox_FPS_Movement_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-
-[node name="FPS_P_Movement_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_Movement_Container"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = SubResource("SystemFont_gucrh")
-theme_override_font_sizes/font_size = 30
-text = "Positional Movement: "
-horizontal_alignment = 1
-
-[node name="HBox_Inner_FPS_Movement_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_Movement_Container"]
-layout_mode = 2
-
-[node name="W" type="TextureRect" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_Movement_Container/HBox_Inner_FPS_Movement_Container"]
-layout_mode = 2
-texture = ExtResource("5_8qttr")
-expand_mode = 3
-
-[node name="A" type="TextureRect" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_Movement_Container/HBox_Inner_FPS_Movement_Container"]
-layout_mode = 2
-texture = ExtResource("6_ja481")
-expand_mode = 3
-
-[node name="S" type="TextureRect" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_Movement_Container/HBox_Inner_FPS_Movement_Container"]
-layout_mode = 2
-texture = ExtResource("7_v63g8")
-expand_mode = 3
-
-[node name="D" type="TextureRect" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_Movement_Container/HBox_Inner_FPS_Movement_Container"]
-layout_mode = 2
-texture = ExtResource("8_6d27y")
-expand_mode = 3
-
-[node name="HBox_FPS_Vertical_Movement_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-alignment = 1
-
-[node name="U_D_Movement_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_Vertical_Movement_Container"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_fonts/font = SubResource("SystemFont_gucrh")
-theme_override_font_sizes/font_size = 30
-text = "Up and Down Movement: "
-horizontal_alignment = 1
-
-[node name="HBox_Inner_FPS_Vertical_Movement_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_Vertical_Movement_Container"]
-layout_mode = 2
-
-[node name="Shift" type="TextureRect" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_Vertical_Movement_Container/HBox_Inner_FPS_Vertical_Movement_Container"]
-layout_mode = 2
-texture = ExtResource("6_ciwve")
-
-[node name="Space" type="TextureRect" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_Vertical_Movement_Container/HBox_Inner_FPS_Vertical_Movement_Container"]
-layout_mode = 2
-texture = ExtResource("7_031h0")
-
-[node name="HBox_FPS_Camera_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-theme_override_constants/separation = 66
-alignment = 1
-
-[node name="Camer_Movement_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_Camera_Container"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_fonts/font = SubResource("SystemFont_gucrh")
-theme_override_font_sizes/font_size = 30
-text = "Camera Movement: "
-horizontal_alignment = 1
-
-[node name="HBox_Inner_FPS_Camera_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_Camera_Container"]
-layout_mode = 2
-
-[node name="M_Move" type="TextureRect" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_FPS_Camera_Container/HBox_Inner_FPS_Camera_Container"]
-layout_mode = 2
-texture = ExtResource("8_p8k47")
 expand_mode = 3

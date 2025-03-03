@@ -22,9 +22,6 @@ extends Node
 @onready var midi_notes: Node3D = $"../MIDI_Notes"
 @onready var midi_particles: Node3D = $"../MIDI_Particles"
 
-@onready var world_environment: WorldEnvironment = $"../../WorldEnvironment"
-
-
 var serial_thread : Thread = Thread.new()
 var serial_queue : Array = []
 var serial_lock : Mutex = Mutex.new()
@@ -60,6 +57,9 @@ const COMMAND_NOTE_ON_RANDOM_SERIAL = 16
 
 var MODE = 0
 var currentColor = Color(0.622,1.25,0)
+
+var OVERRIDE_CFG_PATH: String = "res://override.cfg"
+var is_transparency_enabled: bool = false
 
 var led_mode_list = ["Default", "Splash", "Random", "Velocity", "Animation"]
 var led_animations_list = [
@@ -249,6 +249,27 @@ func fixed_map_midi_note_to_led(midi_note: int, lowest_note: int, highest_note: 
 	return int(mapped_led) + out_min
 
 func _ready():
+	if OS.has_feature("editor"):
+		OVERRIDE_CFG_PATH = "res://override.cfg"
+	else:
+		OVERRIDE_CFG_PATH = OS.get_executable_path().get_base_dir() + "/override.cfg"
+
+	if not FileAccess.file_exists(OVERRIDE_CFG_PATH):
+		create_default_override_cfg()
+	else:
+		var file = FileAccess.open(OVERRIDE_CFG_PATH, FileAccess.READ)
+		if file:
+			var cfg_content = file.get_as_text().strip_edges()
+			file.close()
+			var lines = cfg_content.split("\n")
+			for line in lines:
+				line = line.strip_edges()
+				if line.begins_with("window/size/transparent"):
+					is_transparency_enabled = line.split("=")[1].strip_edges().to_lower() == "true"
+					break
+		else:
+			print("Error reading existing override.cfg; assuming default false.")
+		
 	var ports_info = SerialPort.list_ports()
 	for info in ports_info:
 		serial_list.add_item(info)
@@ -793,23 +814,23 @@ func _on_save_profile_button_pressed() -> void:
 func _on_save_profile_file_dialog_file_selected(path: String) -> void:
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	if file:
-		
-		var position_z = midi.position.z
+		var position = midi.position
+		var rotation = midi.rotation_degrees
 		var scale = midi.scale
 
 		var offsets = {}
 		for pitch in Global.offset_map.keys():
 			offsets[str(pitch)] = Global.offset_map[pitch]
 
+		# Convert Vector3 to a dictionary for JSON
 		var data = {
-			"position": {"z": position_z},
+			"position": {"x": position.x, "y": position.y, "z": position.z},
+			"rotation": {"x": rotation.x, "y": rotation.y, "z": rotation.z},
 			"scale": {"x": scale.x, "y": scale.y, "z": scale.z},
 			"offsets": offsets
 		}
 
-		var json_data = JSON.stringify(data)
-
-		file.store_string(json_data)
+		file.store_string(JSON.stringify(data))
 		file.close()
 
 		print("Profile saved successfully to:", path)
@@ -831,27 +852,28 @@ func _on_load_profile_file_dialog_file_selected(path: String) -> void:
 		if error_code == OK:
 			var data = json_parser.get_data()
 
-			var position_z = data["position"]["z"]
+			# Convert dictionary back to Vector3
+			var position = Vector3(data["position"]["x"], data["position"]["y"], data["position"]["z"])
+			var rotation = Vector3(data["rotation"]["x"], data["rotation"]["y"], data["rotation"]["z"])
 			var scale = Vector3(data["scale"]["x"], data["scale"]["y"], data["scale"]["z"])
+
+			midi.position = position
+			midi.rotation_degrees = rotation
 			midi.scale = scale
-			midi.position.z = position_z
 
 			Global.offset_map.clear()
 			for pitch in data["offsets"].keys():
-				var offset = int(data["offsets"][pitch])
-				Global.offset_map[int(pitch)] = offset
+				Global.offset_map[int(pitch)] = int(data["offsets"][pitch])
 
 			print("Profile loaded successfully from:", path)
 		else:
-			print("Error parsing JSON from file. Error: ", json_parser.error_message())
+			print("Error parsing JSON from file. Error:", json_parser.error_message())
 	else:
 		print("Error opening file for reading.")
 
+
 func _on_midi_speed_slider_value_changed(value: float) -> void:
 	midi_notes.speed = value
-
-func _on_world_color_picker_color_changed(color: Color) -> void:
-	world_environment.environment.background_color = color
 
 func _on_note_rot_x_slider_value_changed(value: float) -> void:
 	midi_bg.rotation_degrees.x = value
@@ -867,3 +889,36 @@ func _on_note_rot_x_slider_value_changed(value: float) -> void:
 	var y_adjustment = 3.1
 	midi_notes.position.y += y_adjustment
 	midi_particles.position.y += y_adjustment
+
+func create_default_override_cfg() -> void:
+	var file = FileAccess.open(OVERRIDE_CFG_PATH, FileAccess.WRITE)
+	if file:
+		var cfg_content = """
+[display]
+window/size/transparent = false
+window/per_pixel_transparency/allowed = false
+"""
+		file.store_string(cfg_content.strip_edges())
+		file.close()
+		print("Created default override.cfg at:", OVERRIDE_CFG_PATH)
+	else:
+		print("Error creating override.cfg at:", OVERRIDE_CFG_PATH)
+
+func update_override_cfg() -> void:
+	var file = FileAccess.open(OVERRIDE_CFG_PATH, FileAccess.WRITE)
+	if file:
+		var cfg_content = """
+[display]
+window/size/transparent = %s
+window/per_pixel_transparency/allowed = %s
+""" % [is_transparency_enabled, is_transparency_enabled]
+		file.store_string(cfg_content.strip_edges())
+		file.close()
+		print("Updated override.cfg at:", OVERRIDE_CFG_PATH, " - Transparency:", is_transparency_enabled)
+	else:
+		print("Error updating override.cfg at:", OVERRIDE_CFG_PATH)
+
+
+func _on_transparency_button_pressed() -> void:
+	is_transparency_enabled = not is_transparency_enabled
+	update_override_cfg()
