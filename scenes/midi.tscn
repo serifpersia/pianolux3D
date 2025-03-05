@@ -1,8 +1,8 @@
 [gd_scene load_steps=23 format=3 uid="uid://demetbmmfc3sm"]
 
-[ext_resource type="Script" path="res://scripts/MIDI_Notes.gd" id="1_3ll4w"]
-[ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_jo87c"]
-[ext_resource type="Shader" path="res://shaders/pause_menu_blur.gdshader" id="2_vs6fs"]
+[ext_resource type="Script" uid="uid://b6h76nsi7jpnw" path="res://scripts/MIDI_Notes.gd" id="1_3ll4w"]
+[ext_resource type="Script" uid="uid://c187s4m8nyre2" path="res://scripts/midi_main.gd" id="1_jo87c"]
+[ext_resource type="Shader" uid="uid://crtnjnr6l0ote" path="res://shaders/pause_menu_blur.gdshader" id="2_vs6fs"]
 [ext_resource type="PackedScene" uid="uid://lt73xdtfgyuo" path="res://scenes/pause_menu.tscn" id="3_vf2tp"]
 [ext_resource type="PackedScene" uid="uid://dk6exixm516jr" path="res://scenes/controls_menu.tscn" id="4_d1bqq"]
 [ext_resource type="PackedScene" uid="uid://vd82x8sxutb" path="res://scenes/transforms_menu.tscn" id="4_x22wt"]
@@ -11,15 +11,15 @@
 [ext_resource type="Material" uid="uid://cj3ujrwh48kgc" path="res://materials/white_keys_mat.tres" id="10_wj7rp"]
 [ext_resource type="Material" uid="uid://cj7e5yhxqclf5" path="res://materials/black_keys_mat.tres" id="11_0tc8c"]
 [ext_resource type="Material" uid="uid://cu3axujswfcr1" path="res://materials/white_notes_on.tres" id="12_kiwm3"]
-[ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="12_nnbsg"]
-[ext_resource type="Script" path="res://scripts/piano_controller.gd" id="13_0vjy6"]
-[ext_resource type="Script" path="res://scripts/MIDI_Particles.gd" id="13_7uhe6"]
+[ext_resource type="Script" uid="uid://dqlx1rh5lpt25" path="res://scripts/Virtual_Keyboard.gd" id="12_nnbsg"]
+[ext_resource type="Script" uid="uid://24kkcygt6rlp" path="res://scripts/piano_controller.gd" id="13_0vjy6"]
+[ext_resource type="Script" uid="uid://cu6wutoqns61s" path="res://scripts/MIDI_Particles.gd" id="13_7uhe6"]
 [ext_resource type="PackedScene" uid="uid://cwyjlcgepmn1p" path="res://models/beta_keys.blend" id="13_8radr"]
 [ext_resource type="Material" uid="uid://dgmbakuidedwe" path="res://materials/black_notes_on.tres" id="13_bekje"]
 [ext_resource type="PackedScene" uid="uid://i0bkeper6ame" path="res://models/white_note_cube_mesh.blend" id="14_44per"]
-[ext_resource type="Shader" path="res://shaders/rounded_note_mesh.gdshader" id="15_nsxvj"]
+[ext_resource type="Shader" uid="uid://x4oxex1fcgnl" path="res://shaders/rounded_note_mesh.gdshader" id="15_nsxvj"]
 [ext_resource type="PackedScene" uid="uid://bt0cj4hcw40hu" path="res://models/piano_bg.blend" id="17_nwwxk"]
-[ext_resource type="Script" path="res://scripts/bg.gd" id="18_yi44b"]
+[ext_resource type="Script" uid="uid://b850a33378dxd" path="res://scripts/bg.gd" id="18_yi44b"]
 [ext_resource type="Material" uid="uid://c87r7xa3yubcp" path="res://materials/bg_mat.tres" id="19_pymkk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ep5ho"]
@@ -79,7 +79,6 @@ use_native_dialog = true
 auto_translate_mode = 1
 initial_position = 2
 size = Vector2i(352, 180)
-ok_button_text = "Save"
 access = 2
 use_native_dialog = true
 

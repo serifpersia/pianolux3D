@@ -164,7 +164,7 @@ You can auto install esp32 firmware by going to auto install [page](https://seri
 
 To get started with the project, follow these steps:
 
-1. **Requirements**: Ensure you have Godot 4.2 installed. You will also need the following addons:
+1. **Requirements**: Ensure you have Godot 4.4 installed. You will also need the following addons:
    - [Serial](https://github.com/matrixant/serial_port/releases/tag/v0.1.0)
    - [Discord-RCP](https://github.com/vaporvee/discord-rpc-godot/releases)
 

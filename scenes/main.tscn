@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://demetbmmfc3sm" path="res://scenes/midi.tscn" id="1_gd7mg"]
 [ext_resource type="PackedScene" uid="uid://dqk2cq5exa12w" path="res://scenes/world_environment.tscn" id="1_o1vt1"]
-[ext_resource type="Script" path="res://scripts/discord-rpc.gd" id="2_l1ve6"]
+[ext_resource type="Script" uid="uid://c1ndvt128j2kg" path="res://scripts/discord-rpc.gd" id="2_l1ve6"]
 [ext_resource type="PackedScene" uid="uid://bgfampmcitsjy" path="res://scenes/fps.tscn" id="4_jleid"]
 
 [node name="main" type="Node3D"]
