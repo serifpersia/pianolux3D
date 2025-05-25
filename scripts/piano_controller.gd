@@ -767,7 +767,7 @@ func _on_color_picker_color_changed(color: Color) -> void:
 		var light_holder = midi_keyboard.light_nodes[key_name]
 		var is_black = midi_keyboard.is_black_key(int(key_name))
 
-		var light: SpotLight3D = light_holder.get_child(0)
+		var light: OmniLight3D = light_holder.get_child(0)
 		if light:
 			light.light_color = midi_keyboard.black_note_mesh_color if is_black else midi_keyboard.white_note_mesh_color
 
@@ -857,13 +857,3 @@ func _on_note_rot_x_slider_value_changed(value: float) -> void:
 	midi_bg.rotation_degrees.x = value
 	midi_notes.rotation_degrees.x = value
 	midi_particles.rotation_degrees.x = value
-	
-	var offset = Vector3(0, -1.25, 0)
-	var rotated_offset = offset.rotated(Vector3(1, 0, 0), deg_to_rad(value))
-	
-	midi_notes.position = rotated_offset
-	midi_particles.position = rotated_offset
-	
-	var y_adjustment = 3.1
-	midi_notes.position.y += y_adjustment
-	midi_particles.position.y += y_adjustment

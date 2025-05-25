@@ -20,7 +20,6 @@ var base_z_position: float
 var pause_menu: bool = false
 
 func _ready() -> void:
-	max_z_offset = -calculate_max_z_offset() / 4
 	base_z_position = position.z
 
 func _input(_event: InputEvent) -> void:
@@ -44,11 +43,7 @@ func _on_bg_toggle_toggled(toggled_on: bool) -> void:
 func _on_particles_toggle_toggled(toggled_on: bool) -> void:
 	Global.particles_state = toggled_on
 
-func calculate_max_z_offset() -> float:
-	var camera3d = player.get_child(2)
-	
-	var distance_to_camera = camera3d.global_transform.origin.distance_to(global_transform.origin)
-	return distance_to_camera
+
 
 func _on_scale_slider_value_changed(value: float) -> void:
 	scale = Vector3(value, value, value)

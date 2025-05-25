@@ -16,4 +16,4 @@ script = ExtResource("2_l1ve6")
 player = NodePath("../FPS")
 
 [node name="FPS" parent="." instance=ExtResource("4_jleid")]
-transform = Transform3D(0.511293, 0.448455, -0.733122, 0, 0.853056, 0.52182, 0.859407, -0.266803, 0.436161, -77.5542, 29.4369, 22.7174)
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0.753972, 1.59018)
