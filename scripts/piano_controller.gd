@@ -854,6 +854,26 @@ func _on_world_color_picker_color_changed(color: Color) -> void:
 	world_environment.environment.background_color = color
 
 func _on_note_rot_x_slider_value_changed(value: float) -> void:
-	midi_bg.rotation_degrees.x = value
+	
+	midi_bg.get_child(0).rotation_degrees.x = value
 	midi_notes.rotation_degrees.x = value
 	midi_particles.rotation_degrees.x = value
+
+	var slider_min: float = 0.0
+	var slider_max: float = 90.0
+	
+	var t: float = inverse_lerp(slider_min, slider_max, value)
+
+	var target_y_offset: float = -0.16
+	var target_z_offset: float = -0.144
+
+	# Interpolate y and z positions
+	var y_offset: float = lerp(0.0, target_y_offset, t)
+	var z_offset: float = lerp(0.0, target_z_offset, t)
+
+	midi_notes.position = Vector3(0, y_offset, z_offset)
+	midi_particles.position = Vector3(0, y_offset, z_offset)
+
+
+func _on_load_fspy_pressed() -> void:
+	Global.player.handle_fspy()

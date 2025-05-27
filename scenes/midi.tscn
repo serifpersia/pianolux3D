@@ -12,13 +12,13 @@
 [ext_resource type="Script" path="res://scripts/piano_controller.gd" id="13_0vjy6"]
 [ext_resource type="Script" path="res://scripts/MIDI_Particles.gd" id="13_7uhe6"]
 [ext_resource type="Material" uid="uid://dgmbakuidedwe" path="res://materials/black_notes_on.tres" id="13_bekje"]
-[ext_resource type="PackedScene" uid="uid://dww1mfybjabd4" path="res://models/white_note_cube_mesh.blend" id="14_44per"]
+[ext_resource type="PackedScene" uid="uid://d37ndahl7hm8g" path="res://models/white_note_cube_mesh.blend" id="14_44per"]
+[ext_resource type="PackedScene" uid="uid://cc4kfg8o58vw3" path="res://models/piano_bed2.blend" id="14_oselt"]
 [ext_resource type="Shader" path="res://shaders/rounded_note_mesh.gdshader" id="15_nsxvj"]
 [ext_resource type="Material" uid="uid://cj3ujrwh48kgc" path="res://materials/white_keys_mat.tres" id="16_0hsau"]
-[ext_resource type="PackedScene" uid="uid://cghjkpu8u3q2y" path="res://models/piano_bg.blend" id="16_t544d"]
+[ext_resource type="PackedScene" uid="uid://hd5kkgj1fc5j" path="res://models/piano_bg.blend" id="16_t544d"]
 [ext_resource type="Material" uid="uid://cj7e5yhxqclf5" path="res://materials/black_keys_mat.tres" id="17_7crw1"]
 [ext_resource type="Script" path="res://scripts/bg.gd" id="17_8chow"]
-[ext_resource type="PackedScene" uid="uid://dqedp4rq0uwqs" path="res://models/piano_keybed.blend" id="17_84h0y"]
 [ext_resource type="Material" uid="uid://c87r7xa3yubcp" path="res://materials/bg_mat.tres" id="18_slsuw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ep5ho"]
@@ -40,9 +40,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Menu" parent="CanvasLayer" instance=ExtResource("3_vf2tp")]
-
-[node name="MIDI_Speed_Slider" parent="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container" index="5"]
-value = 20.0
 
 [node name="Controls_Menu" parent="CanvasLayer" instance=ExtResource("4_d1bqq")]
 visible = false
@@ -93,7 +90,7 @@ black_notes_on_mat = ExtResource("13_bekje")
 white_note_mesh_scene = ExtResource("14_44per")
 shader = ExtResource("15_nsxvj")
 
-[node name="MIDI_Keyboard" parent="." instance=ExtResource("17_84h0y")]
+[node name="MIDI_Keyboard" parent="." instance=ExtResource("14_oselt")]
 script = ExtResource("12_nnbsg")
 white_keys_off_mat = ExtResource("16_0hsau")
 black_keys_off_mat = ExtResource("17_7crw1")
@@ -107,6 +104,7 @@ script = ExtResource("17_8chow")
 bg_material = ExtResource("18_slsuw")
 
 [node name="Plane" parent="MIDI_BG" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6365, -0.0254916, -0.158347)
 material_override = ExtResource("18_slsuw")
 
 [connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_K_B_Container/Virtual_Keyboard_Toggle" to="." method="_on_virtual_keyboard_toggle_toggled"]
@@ -121,6 +119,7 @@ material_override = ExtResource("18_slsuw")
 [connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/ColorPicker" to="PianoController" method="_on_color_picker_color_changed"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/MIDI_Speed_Slider" to="PianoController" method="_on_midi_speed_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container/Scale_Slider" to="." method="_on_scale_slider_value_changed"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container/LoadFspy" to="PianoController" method="_on_load_fspy_pressed"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Pos_Z_Container/Pos_Z_Slider" to="." method="_on_pos_z_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Note_Rot_X_Container/Note_Rot_X_Slider" to="PianoController" method="_on_note_rot_x_slider_value_changed"]
 [connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container/OpenClose" to="PianoController" method="_on_open_close_toggled"]

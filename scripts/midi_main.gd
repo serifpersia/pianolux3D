@@ -7,7 +7,6 @@ extends Node3D
 @onready var midi_bg: Node3D = $MIDI_BG
 @onready var midi_particles = $MIDI_Particles
 
-@export var player : CharacterBody3D
 @onready var position_z_slider: HSlider = $CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Pos_Z_Container/Pos_Z_Slider
 
 @onready var controls_menu: MarginContainer = $CanvasLayer/Controls_Menu
@@ -28,8 +27,6 @@ func _input(_event: InputEvent) -> void:
 		canvas_layer.visible = pause_menu
 		controls_button.button_pressed = false
 		controls_menu.visible = false
-
-		player.handle_pause(pause_menu)
 
 func _on_virtual_keyboard_toggle_toggled(toggled_on: bool) -> void:
 	midi_keyboard.visible = toggled_on

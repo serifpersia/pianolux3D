@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=4 uid="uid://dxbnw15ad6baa"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l5l8p"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_8ey21"]
+resource_name = "Plane"
+_surfaces = [{
+"aabb": AABB(-0.006365, 0, 0, 0.01273, 0.0071606, 1e-05),
+"attribute_data": PackedByteArray("AACAPwAAAAAAAIA/AACAPwAAAAAAAIA/AAAAAAAAAAA="),
+"format": 34359742487,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAgADAAAA"),
+"material": SubResource("StandardMaterial3D_l5l8p"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("fZHQO3ij6jsAAAAAfZHQOwAAAAAAAAAAfZHQuwAAAAAAAAAAfZHQu3ij6jsAAAAA/3//f////7//f/9/////v/9//3////+//3//f////78=")
+}]
+blend_shape_mode = 0
+
+[node name="Plane" type="MeshInstance3D"]
+transform = Transform3D(100, 0, 0, 0, -4.37114e-06, 100, 0, -100, -4.37114e-06, 0.6365, 0, -0.158347)
+mesh = SubResource("ArrayMesh_8ey21")
+skeleton = NodePath("")

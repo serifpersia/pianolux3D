@@ -8,7 +8,7 @@ extends Node3D
 @export var white_note_mesh_scene: PackedScene
 
 @export var shader: Shader
-@export var speed: float = 0.5
+@export var speed: float = 0.35
 
 
 class NoteData:
@@ -74,13 +74,12 @@ func on_note_on(pitch: int) -> void:
 		active_notes[pitch] = []
 
 	var note_mesh := midi_keyboard.get_node(str(pitch))
-	var note_mesh_z = note_mesh.position.z
-	var note_mesh_y = note_mesh.position.y
+	var note_mesh_z = note_mesh.position.z - 0.01175 * 0.7 if is_black  else note_mesh.position.z - 0.01175
 
 	var note_shader_material := create_shader_material()
 	
 	new_mesh_instance.material_override = note_shader_material
-	new_mesh_instance.position = Vector3(note_mesh.position.x, note_mesh_y, note_mesh_z)
+	new_mesh_instance.position = Vector3(note_mesh.position.x, note_mesh.position.y, note_mesh_z)
 
 	note_shader_material.set_shader_parameter("is_black_key", is_black)
 

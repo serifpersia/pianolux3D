@@ -3,7 +3,5 @@
 [ext_resource type="Texture2D" uid="uid://dd7osanx45abl" path="res://img/bg-sameple-image.png" id="1_a2ht2"]
 
 [resource]
-transparency = 1
-blend_mode = 1
 shading_mode = 0
 albedo_texture = ExtResource("1_a2ht2")
