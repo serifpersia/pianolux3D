@@ -13,6 +13,6 @@ script = ExtResource("2_l1ve6")
 [node name="MIDI" parent="." instance=ExtResource("1_gd7mg")]
 
 [node name="FPS" parent="." instance=ExtResource("4_jleid")]
-transform = Transform3D(0.845728, -0.231827, 0.480626, 0, 0.900698, 0.434446, -0.533615, -0.367423, 0.761745, 1.34411, 0.237281, 0.12704)
+transform = Transform3D(-0.480988, 0.536748, -0.693219, 0, 0.790689, 0.612218, 0.876728, 0.294469, -0.380312, -0.12931, 0.282386, -0.567205)
 
 [node name="WorldEnvironment" parent="." instance=ExtResource("1_o1vt1")]

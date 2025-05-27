@@ -19,6 +19,5 @@ void vertex() {
 void fragment() {
     vec4 selected_color = is_black_key ? black_key_color : white_key_color;
     ALBEDO = selected_color.rgb;
-    ALPHA = selected_color.a;
     EMISSION = selected_color.rgb * 2.0;
 }
