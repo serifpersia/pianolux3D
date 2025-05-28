@@ -54,7 +54,7 @@ func create_note_data(instance: MeshInstance3D, parent: Node3D, shader_material:
 
 func on_note_on(pitch: int) -> void:
 	if midi_keyboard.is_black_key(pitch):
-		return  # Skip black keys
+		return
 	var key_mesh_instance: Node3D = white_note_mesh_scene.instantiate()
 	var new_mesh_instance: MeshInstance3D = key_mesh_instance.get_child(0)
 
@@ -62,11 +62,16 @@ func on_note_on(pitch: int) -> void:
 		active_notes[pitch] = []
 
 	var note_mesh := midi_keyboard.get_node(str(pitch))
-	var note_mesh_z = note_mesh.position.z - 0.01175
+	var note_mesh_position_z_offset = new_mesh_instance.get_aabb().size.x / 2
+	var note_mesh_position_y_offset = new_mesh_instance.get_aabb().size.y / 2
 
 	var note_shader_material := create_shader_material()
 	new_mesh_instance.material_override = note_shader_material
-	new_mesh_instance.position = Vector3(note_mesh.position.x, note_mesh.position.y, note_mesh_z)
+	new_mesh_instance.position = Vector3(
+		note_mesh.position.x, 
+		note_mesh.position.y + note_mesh_position_y_offset,
+		note_mesh.position.z -note_mesh_position_z_offset)
+		
 	note_shader_material.set_shader_parameter("is_black_key", false)
 
 	var note_array: Array = active_notes[pitch]

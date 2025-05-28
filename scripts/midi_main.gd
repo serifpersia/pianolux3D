@@ -6,7 +6,6 @@ extends Node3D
 @onready var midi_white_notes: Node3D = $MIDI_White_Notes
 @onready var midi_black_notes: Node3D = $MIDI_Black_Notes
 @onready var midi_bg: Node3D = $MIDI_BG
-@onready var midi_particles = $MIDI_Particles
 
 @onready var position_z_slider: HSlider = $CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Pos_Z_Container/Pos_Z_Slider
 
@@ -41,8 +40,6 @@ func _on_bg_toggle_toggled(toggled_on: bool) -> void:
 
 func _on_particles_toggle_toggled(toggled_on: bool) -> void:
 	Global.particles_state = toggled_on
-
-
 
 func _on_scale_slider_value_changed(value: float) -> void:
 	scale = Vector3(value, value, value)

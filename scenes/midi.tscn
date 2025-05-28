@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=25 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_abfrr"]
 [ext_resource type="Shader" path="res://shaders/pause_menu_blur.gdshader" id="2_vs6fs"]
@@ -8,10 +8,11 @@
 [ext_resource type="Script" path="res://scripts/black_note.gd" id="7_vkw6h"]
 [ext_resource type="PackedScene" uid="uid://dtacf6kg6rwxg" path="res://scenes/spiral_particles.tscn" id="10_e3ntp"]
 [ext_resource type="Material" uid="uid://b5qeey5ruelw1" path="res://materials/particles_mat.tres" id="10_mr4d0"]
+[ext_resource type="Script" path="res://scripts/white_note_particle.gd" id="12_fm631"]
 [ext_resource type="Material" uid="uid://cu3axujswfcr1" path="res://materials/white_notes_on.tres" id="12_kiwm3"]
 [ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="12_nnbsg"]
 [ext_resource type="Script" path="res://scripts/piano_controller.gd" id="13_0vjy6"]
-[ext_resource type="Script" path="res://scripts/MIDI_Particles.gd" id="13_7uhe6"]
+[ext_resource type="Script" path="res://scripts/black_note_particle.gd" id="13_02uts"]
 [ext_resource type="Material" uid="uid://dgmbakuidedwe" path="res://materials/black_notes_on.tres" id="13_bekje"]
 [ext_resource type="PackedScene" uid="uid://d37ndahl7hm8g" path="res://models/white_note_cube_mesh.blend" id="14_44per"]
 [ext_resource type="PackedScene" uid="uid://cc4kfg8o58vw3" path="res://models/piano_bed2.blend" id="14_oselt"]
@@ -25,6 +26,13 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ep5ho"]
 shader = ExtResource("2_vs6fs")
 shader_parameter/amount = 3.0
+
+[sub_resource type="GDScript" id="GDScript_3vme2"]
+script/source = "extends Node3D
+
+func _ready() -> void:
+	pass
+"
 
 [node name="MIDI" type="Node3D"]
 script = ExtResource("1_abfrr")
@@ -91,9 +99,14 @@ black_notes_on_mat = ExtResource("13_bekje")
 white_note_mesh_scene = ExtResource("14_44per")
 shader = ExtResource("15_nsxvj")
 
-[node name="MIDI_Particles" type="Node3D" parent="."]
-script = ExtResource("13_7uhe6")
+[node name="MIDI_WhiteNoteParticles" type="Node3D" parent="."]
+script = ExtResource("12_fm631")
 note_on_white_key_particles_material = ExtResource("10_mr4d0")
+particle_scene = ExtResource("10_e3ntp")
+
+[node name="MIDI_BlackNoteParticles" type="Node3D" parent="."]
+script = ExtResource("13_02uts")
+note_on_black_key_particles_material = ExtResource("10_mr4d0")
 particle_scene = ExtResource("10_e3ntp")
 
 [node name="MIDI_Keyboard" parent="." instance=ExtResource("14_oselt")]
@@ -112,6 +125,10 @@ bg_material = ExtResource("18_slsuw")
 [node name="Plane" parent="MIDI_BG" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6365, -0.0254916, -0.158347)
 material_override = ExtResource("18_slsuw")
+
+[node name="tesspawn" type="Node3D" parent="."]
+visible = false
+script = SubResource("GDScript_3vme2")
 
 [connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_K_B_Container/Virtual_Keyboard_Toggle" to="." method="_on_virtual_keyboard_toggle_toggled"]
 [connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_K_B_Container/BG_Toggle" to="." method="_on_bg_toggle_toggled"]

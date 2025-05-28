@@ -21,11 +21,10 @@ extends Node
 @onready var midi_keyboard: Node3D = $"../MIDI_Keyboard"
 @onready var midi_white_notes: Node3D = $"../MIDI_White_Notes"
 @onready var midi_black_notes: Node3D = $"../MIDI_Black_Notes"
-@onready var midi_particles: Node3D = $"../MIDI_Particles"
-
+@onready var midi_white_note_particles: Node3D = $"../MIDI_WhiteNoteParticles"
+@onready var midi_black_note_particles: Node3D = $"../MIDI_BlackNoteParticles"
 
 @onready var world_environment: WorldEnvironment = $"../../WorldEnvironment"
-
 
 var serial_thread : Thread = Thread.new()
 var serial_queue : Array = []
@@ -298,7 +297,8 @@ func _input(event):
 			midi_black_notes.on_note_on(event.pitch)
 
 			midi_keyboard.update_key_material(event.pitch, true)
-			midi_particles.spawn_particle(event.pitch)
+			midi_white_note_particles.spawn_particle(event.pitch)
+			midi_black_note_particles.spawn_particle(event.pitch)
 			
 
 			var notePushed
@@ -324,8 +324,9 @@ func _input(event):
 			midi_black_notes.on_note_off(event.pitch)
 			
 			midi_keyboard.update_key_material(event.pitch, false)
-			midi_particles.stop_particle(event.pitch)
-
+			midi_white_note_particles.stop_particle(event.pitch)
+			midi_black_note_particles.stop_particle(event.pitch)
+			
 			var notePushed
 
 			if fixLED_Toggle:
@@ -799,18 +800,25 @@ func stop_all_notes_and_particles() -> void:
 	all_active_note_pitches.append_array(midi_black_notes.active_notes.keys())
 	
 	var unique_pitches = {}
-	for p in midi_particles.active_particles.keys(): 
+	
+	for p in midi_white_note_particles.active_particles.keys(): 
 		unique_pitches[p] = true
+
+	for p in midi_black_note_particles.active_particles.keys(): 
+		unique_pitches[p] = true
+
 	for p in all_active_note_pitches: 
 		unique_pitches[p] = true
 
 	for pitch_val in unique_pitches.keys():
-		midi_particles.stop_particle(pitch_val)
+		midi_white_note_particles.stop_particle(pitch_val)
+		midi_black_note_particles.stop_particle(pitch_val)
+		
 		if midi_keyboard.is_black_key(pitch_val):
 			midi_black_notes.on_note_off(pitch_val)
 		else:
 			midi_white_notes.on_note_off(pitch_val)
-		midi_keyboard.update_key_material(pitch_val, false)
+			midi_keyboard.update_key_material(pitch_val, false)
 		
 func _on_save_profile_button_pressed() -> void:
 	save_profile_file_dialog.visible = true
@@ -875,32 +883,44 @@ func _on_load_profile_file_dialog_file_selected(path: String) -> void:
 func _on_note_rot_x_slider_value_changed(value: float) -> void:
 	if midi_bg and midi_bg.get_child_count() > 0 and midi_bg.get_child(0):
 		midi_bg.get_child(0).rotation_degrees.x = value
+		
 	midi_white_notes.rotation_degrees.x = value
 	midi_black_notes.rotation_degrees.x = value
-	midi_particles.rotation_degrees.x = value
+	midi_white_note_particles.rotation_degrees.x = value
+	midi_black_note_particles.rotation_degrees.x = value
 
 	var slider_min: float = 0.0
 	var slider_max: float = 90.0
 	
 	var t: float = inverse_lerp(slider_min, slider_max, value)
 
-	# White notes offsets
-	var white_target_y_offset: float = -0.16
-	var white_target_z_offset: float = -0.144
+	var white_target_y_offset: float = -0.155
+	var white_target_z_offset: float = -0.15835
+	
 	var white_y_offset: float = lerp(0.0, white_target_y_offset, t)
 	var white_z_offset: float = lerp(0.0, white_target_z_offset, t)
 
-	# Black notes offsets
-	var black_target_y_offset: float = -0.145  # Adjusted for black notes
-	var black_target_z_offset: float = -0.15735   # Adjusted for black notes
+	var black_target_y_offset: float = -0.16
+	var black_target_z_offset: float = -0.1695
+	
 	var black_y_offset: float = lerp(0.0, black_target_y_offset, t)
 	var black_z_offset: float = lerp(0.0, black_target_z_offset, t)
 
-	# Particle offset (using white notes offset or define separately if needed)
-	var particle_y_offset: float = white_y_offset
-	var particle_z_offset: float = white_z_offset
+	var white_particle_y_offset: float = white_y_offset
+	var white_particle_z_offset: float = white_z_offset
+	
+	var black_particle_y_offset: float = black_y_offset
+	var black_particle_z_offset: float = black_z_offset
 
-	# Apply positions
 	midi_white_notes.position = Vector3(0, white_y_offset, white_z_offset)
 	midi_black_notes.position = Vector3(0, black_y_offset, black_z_offset)
-	midi_particles.position = Vector3(0, particle_y_offset, particle_z_offset)
+	
+	midi_white_note_particles.position = Vector3(0, white_particle_y_offset, white_particle_z_offset)
+	midi_black_note_particles.position = Vector3(0, black_particle_y_offset, black_particle_z_offset)
+
+func _on_world_color_picker_color_changed(color: Color) -> void:
+	world_environment.environment.background_color = color
+
+func _on_midi_speed_slider_value_changed(value: float) -> void:
+	midi_white_notes.speed = value
+	midi_black_notes.speed = value

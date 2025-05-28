@@ -3,7 +3,8 @@ extends Camera3D
 @onready var midi_keyboard: Node3D = $"../../MIDI/MIDI_Keyboard"
 @onready var midi_white_notes: Node3D = $"../../MIDI/MIDI_White_Notes"
 @onready var midi_black_notes: Node3D = $"../../MIDI/MIDI_Black_Notes"
-@onready var midi_particles: Node3D = $"../../MIDI/MIDI_Particles"
+@onready var midi_white_note_particles: Node3D = $"../../MIDI/MIDI_WhiteNoteParticles"
+@onready var midi_black_note_particles: Node3D = $"../../MIDI/MIDI_BlackNoteParticles"
 
 const LEFT_OFFSET_DIALOG = preload("res://scenes/left_offset_dialog.tscn")
 
@@ -53,14 +54,17 @@ func handle_key_action(pitch):
 	current_pressed_keys.append(pitch)
 	midi_white_notes.on_note_on(pitch)
 	midi_black_notes.on_note_on(pitch)
-	midi_particles.spawn_particle(pitch)
+	midi_black_notes.on_note_on(pitch)
+	midi_white_note_particles.spawn_particle(pitch)
+	midi_black_note_particles.spawn_particle(pitch)
 
 func stop_note_on_release():
 	for pitch in current_pressed_keys:
 		midi_keyboard.update_key_material(pitch, false)
 		midi_white_notes.on_note_off(pitch)
 		midi_black_notes.on_note_off(pitch)
-		midi_particles.stop_particle(pitch)
+		midi_white_note_particles.stop_particle(pitch)
+		midi_black_note_particles.stop_particle(pitch)
 
 func show_offset_dialog():
 	var raycast_result = shoot_ray()
