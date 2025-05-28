@@ -1,10 +1,11 @@
-[gd_scene load_steps=22 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=23 format=3 uid="uid://demetbmmfc3sm"]
 
-[ext_resource type="Script" path="res://scripts/MIDI_Notes.gd" id="1_3ll4w"]
 [ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_abfrr"]
 [ext_resource type="Shader" path="res://shaders/pause_menu_blur.gdshader" id="2_vs6fs"]
 [ext_resource type="PackedScene" uid="uid://lt73xdtfgyuo" path="res://scenes/pause_menu.tscn" id="3_vf2tp"]
 [ext_resource type="PackedScene" uid="uid://dk6exixm516jr" path="res://scenes/controls_menu.tscn" id="4_d1bqq"]
+[ext_resource type="Script" path="res://scripts/white_note.gd" id="6_a7al4"]
+[ext_resource type="Script" path="res://scripts/black_note.gd" id="7_vkw6h"]
 [ext_resource type="PackedScene" uid="uid://dtacf6kg6rwxg" path="res://scenes/spiral_particles.tscn" id="10_e3ntp"]
 [ext_resource type="Material" uid="uid://b5qeey5ruelw1" path="res://materials/particles_mat.tres" id="10_mr4d0"]
 [ext_resource type="Material" uid="uid://cu3axujswfcr1" path="res://materials/white_notes_on.tres" id="12_kiwm3"]
@@ -78,17 +79,22 @@ use_native_dialog = true
 [node name="PianoController" type="Node" parent="."]
 script = ExtResource("13_0vjy6")
 
+[node name="MIDI_White_Notes" type="Node3D" parent="."]
+script = ExtResource("6_a7al4")
+white_notes_on_mat = ExtResource("12_kiwm3")
+white_note_mesh_scene = ExtResource("14_44per")
+shader = ExtResource("15_nsxvj")
+
+[node name="MIDI_Black_Notes" type="Node3D" parent="."]
+script = ExtResource("7_vkw6h")
+black_notes_on_mat = ExtResource("13_bekje")
+white_note_mesh_scene = ExtResource("14_44per")
+shader = ExtResource("15_nsxvj")
+
 [node name="MIDI_Particles" type="Node3D" parent="."]
 script = ExtResource("13_7uhe6")
 note_on_white_key_particles_material = ExtResource("10_mr4d0")
 particle_scene = ExtResource("10_e3ntp")
-
-[node name="MIDI_Notes" type="Node3D" parent="."]
-script = ExtResource("1_3ll4w")
-white_notes_on_mat = ExtResource("12_kiwm3")
-black_notes_on_mat = ExtResource("13_bekje")
-white_note_mesh_scene = ExtResource("14_44per")
-shader = ExtResource("15_nsxvj")
 
 [node name="MIDI_Keyboard" parent="." instance=ExtResource("14_oselt")]
 script = ExtResource("12_nnbsg")

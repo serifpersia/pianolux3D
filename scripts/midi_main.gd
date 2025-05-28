@@ -3,7 +3,8 @@ extends Node3D
 @onready var canvas_layer: CanvasLayer = $CanvasLayer
 
 @onready var midi_keyboard = $MIDI_Keyboard
-@onready var midi_notes = $MIDI_Notes
+@onready var midi_white_notes: Node3D = $MIDI_White_Notes
+@onready var midi_black_notes: Node3D = $MIDI_Black_Notes
 @onready var midi_bg: Node3D = $MIDI_BG
 @onready var midi_particles = $MIDI_Particles
 
@@ -32,7 +33,8 @@ func _on_virtual_keyboard_toggle_toggled(toggled_on: bool) -> void:
 	midi_keyboard.visible = toggled_on
 
 func _on_midi_notes_toggle_toggled(toggled_on: bool) -> void:
-	midi_notes.visible = toggled_on
+	midi_white_notes.visible = toggled_on
+	midi_black_notes.visible = toggled_on
 
 func _on_bg_toggle_toggled(toggled_on: bool) -> void:
 	midi_bg.visible = toggled_on

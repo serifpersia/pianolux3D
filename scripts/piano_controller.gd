@@ -19,8 +19,10 @@ extends Node
 @onready var midi_bg: Node3D = $"../MIDI_BG"
 
 @onready var midi_keyboard: Node3D = $"../MIDI_Keyboard"
-@onready var midi_notes: Node3D = $"../MIDI_Notes"
+@onready var midi_white_notes: Node3D = $"../MIDI_White_Notes"
+@onready var midi_black_notes: Node3D = $"../MIDI_Black_Notes"
 @onready var midi_particles: Node3D = $"../MIDI_Particles"
+
 
 @onready var world_environment: WorldEnvironment = $"../../WorldEnvironment"
 
@@ -292,7 +294,9 @@ func _exit_tree():
 func _input(event):
 	if event is InputEventMIDI:
 		if event.message == MIDI_MESSAGE_NOTE_ON:
-			midi_notes.on_note_on(event.pitch)
+			midi_white_notes.on_note_on(event.pitch)
+			midi_black_notes.on_note_on(event.pitch)
+
 			midi_keyboard.update_key_material(event.pitch, true)
 			midi_particles.spawn_particle(event.pitch)
 			
@@ -316,7 +320,9 @@ func _input(event):
 			serial_lock.unlock()
 
 		elif event.message == MIDI_MESSAGE_NOTE_OFF:
-			midi_notes.on_note_off(event.pitch)
+			midi_white_notes.on_note_off(event.pitch)
+			midi_black_notes.on_note_off(event.pitch)
+			
 			midi_keyboard.update_key_material(event.pitch, false)
 			midi_particles.stop_particle(event.pitch)
 
@@ -771,8 +777,14 @@ func _on_color_picker_color_changed(color: Color) -> void:
 		if light:
 			light.light_color = midi_keyboard.black_note_mesh_color if is_black else midi_keyboard.white_note_mesh_color
 
-	for note_array in midi_notes.active_notes.values():
-		for note_data in note_array:
+	for note_array_w in midi_white_notes.active_notes.values():
+		for note_data in note_array_w:
+			var shader_material = note_data.shader_material
+			if shader_material:
+				shader_material.set_shader_parameter("white_key_color", midi_keyboard.white_note_mesh_color)
+				shader_material.set_shader_parameter("black_key_color", midi_keyboard.black_note_mesh_color)
+	for note_array_b in midi_black_notes.active_notes.values():
+		for note_data in note_array_b:
 			var shader_material = note_data.shader_material
 			if shader_material:
 				shader_material.set_shader_parameter("white_key_color", midi_keyboard.white_note_mesh_color)
@@ -782,11 +794,24 @@ func _on_color_picker_color_changed(color: Color) -> void:
 	send_command_update_color(color)
 
 func stop_all_notes_and_particles() -> void:
-	for pitch in midi_particles.active_particles.keys() + midi_notes.active_notes.keys():
-		midi_particles.stop_particle(pitch)
-		midi_notes.on_note_off(pitch)
-		midi_keyboard.update_key_material(pitch, false)
+	var all_active_note_pitches = []
+	all_active_note_pitches.append_array(midi_white_notes.active_notes.keys())
+	all_active_note_pitches.append_array(midi_black_notes.active_notes.keys())
+	
+	var unique_pitches = {}
+	for p in midi_particles.active_particles.keys(): 
+		unique_pitches[p] = true
+	for p in all_active_note_pitches: 
+		unique_pitches[p] = true
 
+	for pitch_val in unique_pitches.keys():
+		midi_particles.stop_particle(pitch_val)
+		if midi_keyboard.is_black_key(pitch_val):
+			midi_black_notes.on_note_off(pitch_val)
+		else:
+			midi_white_notes.on_note_off(pitch_val)
+		midi_keyboard.update_key_material(pitch_val, false)
+		
 func _on_save_profile_button_pressed() -> void:
 	save_profile_file_dialog.visible = true
 
@@ -847,16 +872,11 @@ func _on_load_profile_file_dialog_file_selected(path: String) -> void:
 	else:
 		print("Error opening file for reading.")
 
-func _on_midi_speed_slider_value_changed(value: float) -> void:
-	midi_notes.speed = value
-
-func _on_world_color_picker_color_changed(color: Color) -> void:
-	world_environment.environment.background_color = color
-
 func _on_note_rot_x_slider_value_changed(value: float) -> void:
-	
-	midi_bg.get_child(0).rotation_degrees.x = value
-	midi_notes.rotation_degrees.x = value
+	if midi_bg and midi_bg.get_child_count() > 0 and midi_bg.get_child(0):
+		midi_bg.get_child(0).rotation_degrees.x = value
+	midi_white_notes.rotation_degrees.x = value
+	midi_black_notes.rotation_degrees.x = value
 	midi_particles.rotation_degrees.x = value
 
 	var slider_min: float = 0.0
@@ -864,16 +884,23 @@ func _on_note_rot_x_slider_value_changed(value: float) -> void:
 	
 	var t: float = inverse_lerp(slider_min, slider_max, value)
 
-	var target_y_offset: float = -0.16
-	var target_z_offset: float = -0.144
+	# White notes offsets
+	var white_target_y_offset: float = -0.16
+	var white_target_z_offset: float = -0.144
+	var white_y_offset: float = lerp(0.0, white_target_y_offset, t)
+	var white_z_offset: float = lerp(0.0, white_target_z_offset, t)
 
-	# Interpolate y and z positions
-	var y_offset: float = lerp(0.0, target_y_offset, t)
-	var z_offset: float = lerp(0.0, target_z_offset, t)
+	# Black notes offsets
+	var black_target_y_offset: float = -0.145  # Adjusted for black notes
+	var black_target_z_offset: float = -0.15735   # Adjusted for black notes
+	var black_y_offset: float = lerp(0.0, black_target_y_offset, t)
+	var black_z_offset: float = lerp(0.0, black_target_z_offset, t)
 
-	midi_notes.position = Vector3(0, y_offset, z_offset)
-	midi_particles.position = Vector3(0, y_offset, z_offset)
+	# Particle offset (using white notes offset or define separately if needed)
+	var particle_y_offset: float = white_y_offset
+	var particle_z_offset: float = white_z_offset
 
-
-func _on_load_fspy_pressed() -> void:
-	Global.player.handle_fspy()
+	# Apply positions
+	midi_white_notes.position = Vector3(0, white_y_offset, white_z_offset)
+	midi_black_notes.position = Vector3(0, black_y_offset, black_z_offset)
+	midi_particles.position = Vector3(0, particle_y_offset, particle_z_offset)
