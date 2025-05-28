@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=24 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_abfrr"]
 [ext_resource type="Shader" path="res://shaders/pause_menu_blur.gdshader" id="2_vs6fs"]
@@ -26,13 +26,6 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ep5ho"]
 shader = ExtResource("2_vs6fs")
 shader_parameter/amount = 3.0
-
-[sub_resource type="GDScript" id="GDScript_3vme2"]
-script/source = "extends Node3D
-
-func _ready() -> void:
-	pass
-"
 
 [node name="MIDI" type="Node3D"]
 script = ExtResource("1_abfrr")
@@ -123,12 +116,8 @@ script = ExtResource("17_8chow")
 bg_material = ExtResource("18_slsuw")
 
 [node name="Plane" parent="MIDI_BG" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6365, -0.0254916, -0.158347)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.637, -0.025, 0)
 material_override = ExtResource("18_slsuw")
-
-[node name="tesspawn" type="Node3D" parent="."]
-visible = false
-script = SubResource("GDScript_3vme2")
 
 [connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_K_B_Container/Virtual_Keyboard_Toggle" to="." method="_on_virtual_keyboard_toggle_toggled"]
 [connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_K_B_Container/BG_Toggle" to="." method="_on_bg_toggle_toggled"]

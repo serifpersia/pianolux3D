@@ -881,43 +881,13 @@ func _on_load_profile_file_dialog_file_selected(path: String) -> void:
 		print("Error opening file for reading.")
 
 func _on_note_rot_x_slider_value_changed(value: float) -> void:
-	if midi_bg and midi_bg.get_child_count() > 0 and midi_bg.get_child(0):
-		midi_bg.get_child(0).rotation_degrees.x = value
+	midi_bg.rotation_degrees.x = value
 		
 	midi_white_notes.rotation_degrees.x = value
 	midi_black_notes.rotation_degrees.x = value
 	midi_white_note_particles.rotation_degrees.x = value
 	midi_black_note_particles.rotation_degrees.x = value
-
-	var slider_min: float = 0.0
-	var slider_max: float = 90.0
 	
-	var t: float = inverse_lerp(slider_min, slider_max, value)
-
-	var white_target_y_offset: float = -0.155
-	var white_target_z_offset: float = -0.15835
-	
-	var white_y_offset: float = lerp(0.0, white_target_y_offset, t)
-	var white_z_offset: float = lerp(0.0, white_target_z_offset, t)
-
-	var black_target_y_offset: float = -0.16
-	var black_target_z_offset: float = -0.1695
-	
-	var black_y_offset: float = lerp(0.0, black_target_y_offset, t)
-	var black_z_offset: float = lerp(0.0, black_target_z_offset, t)
-
-	var white_particle_y_offset: float = white_y_offset
-	var white_particle_z_offset: float = white_z_offset
-	
-	var black_particle_y_offset: float = black_y_offset
-	var black_particle_z_offset: float = black_z_offset
-
-	midi_white_notes.position = Vector3(0, white_y_offset, white_z_offset)
-	midi_black_notes.position = Vector3(0, black_y_offset, black_z_offset)
-	
-	midi_white_note_particles.position = Vector3(0, white_particle_y_offset, white_particle_z_offset)
-	midi_black_note_particles.position = Vector3(0, black_particle_y_offset, black_particle_z_offset)
-
 func _on_world_color_picker_color_changed(color: Color) -> void:
 	world_environment.environment.background_color = color
 
