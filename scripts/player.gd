@@ -16,6 +16,7 @@ var initial_camera_rotation_degrees: Vector3
 
 var fspy_position: Vector3
 var fspy_rotation: Vector3
+var fspy_camera_rotation: Vector3
 var fspy_fov: float = 75.0
 var fspy_projection: int = Camera3D.PROJECTION_PERSPECTIVE
 
@@ -43,16 +44,19 @@ func setup_camera() -> void:
 		if fspy_loaded:
 			position = fspy_position
 			rotation = fspy_rotation
+			camera_3d.rotation = fspy_camera_rotation
 			camera_3d.fov = fspy_fov
 			camera_3d.projection = fspy_projection as Camera3D.ProjectionType
+			camera_3d.h_offset = 0
+			camera_3d.position = Vector3.ZERO
 		else:
 			position = last_position
 			rotation = last_rotation
+			camera_3d.rotation_degrees = last_camera_rotation_degrees
 			camera_3d.h_offset = 0
 			camera_3d.fov = 75.0
 			camera_3d.projection = Camera3D.PROJECTION_PERSPECTIVE
 			camera_3d.position = Vector3.ZERO
-			camera_3d.rotation = Vector3.ZERO
 	else:
 		last_position = position
 		last_rotation = rotation
@@ -136,6 +140,7 @@ func _import_fspy_file(path: String) -> void:
 		-camera_transform[1][3]
 	)
 	fspy_rotation = _basis.get_euler()
+	fspy_camera_rotation = Vector3.ZERO
 	fspy_projection = Camera3D.PROJECTION_PERSPECTIVE
 	fspy_loaded = true
 	
@@ -145,5 +150,6 @@ func _import_fspy_file(path: String) -> void:
 	print("fSpy file imported successfully.")
 	print("fSpy Position:", fspy_position)
 	print("fSpy Rotation (Euler):", fspy_rotation)
+	print("fSpy Camera Rotation:", fspy_camera_rotation)
 	print("fSpy FOV:", fspy_fov)
 	print("fSpy Projection:", fspy_projection)
