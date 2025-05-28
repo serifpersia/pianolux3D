@@ -894,3 +894,6 @@ func _on_world_color_picker_color_changed(color: Color) -> void:
 func _on_midi_speed_slider_value_changed(value: float) -> void:
 	midi_white_notes.speed = value
 	midi_black_notes.speed = value
+
+func _on_load_fspy_pressed() -> void:
+	Global.player.handle_fspy()
