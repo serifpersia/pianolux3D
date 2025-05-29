@@ -65,7 +65,7 @@ func setup_camera() -> void:
 		camera_3d.rotation_degrees = Vector3(-90, 0, 0)
 		camera_3d.size = 0.716
 		camera_3d.h_offset = 0.636
-		position = Vector3(0, 0.1, -0.1985)
+		position = Vector3(0, 0.1, -0.358)
 		rotation = Vector3(0, 0, 0)
 
 func toggle_fps_mode() -> void:
