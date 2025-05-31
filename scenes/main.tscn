@@ -10,9 +10,10 @@
 [node name="discord-rpc" type="Node" parent="."]
 script = ExtResource("2_l1ve6")
 
-[node name="MIDI" parent="." instance=ExtResource("1_gd7mg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.158)
+[node name="WorldEnvironment" parent="." instance=ExtResource("1_o1vt1")]
+
+[node name="MIDI" parent="." node_paths=PackedStringArray("player") instance=ExtResource("1_gd7mg")]
+player = NodePath("../FPS")
 
 [node name="FPS" parent="." instance=ExtResource("4_jleid")]
-transform = Transform3D(0.95882, 0.160681, -0.234192, 0, 0.824577, 0.56575, 0.284015, -0.542453, 0.790621, 0.352353, 0.331148, 0.425241)
-[node name="WorldEnvironment" parent="." instance=ExtResource("1_o1vt1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4562)

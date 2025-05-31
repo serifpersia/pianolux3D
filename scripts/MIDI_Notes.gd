@@ -8,7 +8,7 @@ extends Node3D
 @export var white_note_mesh_scene: PackedScene
 
 @export var shader: Shader
-@export var speed: float = 0.35
+@export var speed: float = 18.0
 
 
 class NoteData:
@@ -67,19 +67,20 @@ func on_note_on(pitch: int) -> void:
 	var is_black = midi_keyboard.is_black_key(pitch)
 	
 	if is_black:
-		var scale_factor := Vector3(0.7, 0.7, 0.7)
+		var scale_factor := Vector3(0.6, 0.6, 0.5)
 		new_mesh_instance.scale = scale_factor
 
 	if not active_notes.has(pitch):
 		active_notes[pitch] = []
 
 	var note_mesh := midi_keyboard.get_node(str(pitch))
-	var note_mesh_z = note_mesh.position.z - 0.01175 * 0.7 if is_black  else note_mesh.position.z - 0.01175
+	var note_mesh_z = note_mesh.position.z - 0.635 if is_black else note_mesh.position.z - 1.215
+	var note_mesh_y = note_mesh.position.y - 1.70 if is_black else note_mesh.position.y
 
 	var note_shader_material := create_shader_material()
 	
 	new_mesh_instance.material_override = note_shader_material
-	new_mesh_instance.position = Vector3(note_mesh.position.x, note_mesh.position.y, note_mesh_z)
+	new_mesh_instance.position = Vector3(note_mesh.position.x, note_mesh_y, note_mesh_z)
 
 	note_shader_material.set_shader_parameter("is_black_key", is_black)
 
@@ -99,7 +100,7 @@ func move_notes(delta: float) -> void:
 	var move_amount := delta * speed
 	var speed_delta := speed * delta
 
-	var black_key_speed_multiplier: float = 1.425
+	var black_key_speed_multiplier: float = 2.0
 
 	for note_array in active_notes.values():
 		for note_data in note_array:
@@ -125,7 +126,7 @@ func despawn_notes() -> void:
 		for i in range(note_array.size() - 1, -1, -1):
 			var note_data := note_array[i] as NoteData
 			var note_instance: Node3D = note_data.instance
-			if note_instance and note_instance.position.z < -1.35:
+			if note_instance and note_instance.position.z < -64:
 
 				if note_data.parent_node and is_instance_valid(note_data.parent_node):
 					note_data.parent_node.queue_free()

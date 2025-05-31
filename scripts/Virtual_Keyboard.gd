@@ -5,9 +5,13 @@ extends Node3D
 @export var white_notes_on_mat: StandardMaterial3D
 @export var black_notes_on_mat: StandardMaterial3D
 
-@export var light_offset: = Vector3(0,0.1,0)
-@export var light_range: float = 0.1
-@export var light_attenuation: float = 1
+@export var white_light_offset: Vector3 = Vector3(0, 0.2, 0)
+@export var black_light_offset: Vector3 = Vector3(0, 0.4, 0)
+@export var light_range: float = 16.0
+@export var light_attenuation: float = -1.25
+@export var  light_angle_attenuation: float = 7.0
+
+@export var white_note_mesh_scene: PackedScene
 
 var light_nodes: Dictionary = {}
 
@@ -50,17 +54,19 @@ func setup_key_light(key: Node3D) -> void:
 	var is_black = is_black_key(key_id)
 
 	key.add_child(light_holder)
-	light_holder.position += light_offset
+
+	light_holder.position += black_light_offset if is_black else white_light_offset
+
+	var spot_light = SpotLight3D.new()
+	spot_light.rotation.x = -90
 	
-	# Add OmniLight3D
-	var omni_light = OmniLight3D.new()
-	omni_light.name = "KeyLight"
-	omni_light.light_color = black_note_mesh_color if is_black else white_note_mesh_color
-	omni_light.omni_range = light_range
-	omni_light.omni_attenuation = light_attenuation
-	omni_light.light_size = 0.005
-	#omni_light.shadow_enabled = true
+	spot_light.name = "KeyLight"
+	spot_light.light_color = black_note_mesh_color if is_black else white_note_mesh_color
+	spot_light.spot_range = light_range
+	spot_light.spot_attenuation = light_attenuation
+	spot_light.spot_angle_attenuation = light_angle_attenuation
+	spot_light.shadow_enabled = true
 	
-	light_holder.add_child(omni_light)
+	light_holder.add_child(spot_light)
 	light_holder.visible = false
 	light_nodes[key.name] = light_holder
