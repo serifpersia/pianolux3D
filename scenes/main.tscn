@@ -14,6 +14,6 @@ script = ExtResource("2_l1ve6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.158)
 
 [node name="FPS" parent="." instance=ExtResource("4_jleid")]
-transform = Transform3D(0.95882, 0.164927, -0.23122, 0, 0.814117, 0.580701, 0.284014, -0.556788, 0.780592, 0.429474, 0.487633, 0.359923)
+transform = Transform3D(0.95882, 0.160681, -0.234192, 0, 0.824577, 0.56575, 0.284015, -0.542453, 0.790621, 0.352353, 0.331148, 0.425241)
 
 [node name="WorldEnvironment" parent="." instance=ExtResource("1_o1vt1")]
