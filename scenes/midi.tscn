@@ -1,33 +1,34 @@
-[gd_scene load_steps=23 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=24 format=3 uid="uid://demetbmmfc3sm"]
 
-[ext_resource type="Script" uid="uid://b6h76nsi7jpnw" path="res://scripts/MIDI_Notes.gd" id="1_3ll4w"]
-[ext_resource type="Script" uid="uid://c187s4m8nyre2" path="res://scripts/midi_main.gd" id="1_jo87c"]
-[ext_resource type="Shader" uid="uid://crtnjnr6l0ote" path="res://shaders/pause_menu_blur.gdshader" id="2_vs6fs"]
+[ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_abfrr"]
+[ext_resource type="Shader" path="res://shaders/pause_menu_blur.gdshader" id="2_vs6fs"]
 [ext_resource type="PackedScene" uid="uid://lt73xdtfgyuo" path="res://scenes/pause_menu.tscn" id="3_vf2tp"]
 [ext_resource type="PackedScene" uid="uid://dk6exixm516jr" path="res://scenes/controls_menu.tscn" id="4_d1bqq"]
-[ext_resource type="PackedScene" uid="uid://vd82x8sxutb" path="res://scenes/transforms_menu.tscn" id="4_x22wt"]
+[ext_resource type="Script" path="res://scripts/white_note.gd" id="6_a7al4"]
+[ext_resource type="Script" path="res://scripts/black_note.gd" id="7_vkw6h"]
 [ext_resource type="PackedScene" uid="uid://dtacf6kg6rwxg" path="res://scenes/spiral_particles.tscn" id="10_e3ntp"]
 [ext_resource type="Material" uid="uid://b5qeey5ruelw1" path="res://materials/particles_mat.tres" id="10_mr4d0"]
-[ext_resource type="Material" uid="uid://cj3ujrwh48kgc" path="res://materials/white_keys_mat.tres" id="10_wj7rp"]
-[ext_resource type="Material" uid="uid://cj7e5yhxqclf5" path="res://materials/black_keys_mat.tres" id="11_0tc8c"]
+[ext_resource type="Script" path="res://scripts/white_note_particle.gd" id="12_fm631"]
 [ext_resource type="Material" uid="uid://cu3axujswfcr1" path="res://materials/white_notes_on.tres" id="12_kiwm3"]
-[ext_resource type="Script" uid="uid://dqlx1rh5lpt25" path="res://scripts/Virtual_Keyboard.gd" id="12_nnbsg"]
-[ext_resource type="Script" uid="uid://24kkcygt6rlp" path="res://scripts/piano_controller.gd" id="13_0vjy6"]
-[ext_resource type="Script" uid="uid://cu6wutoqns61s" path="res://scripts/MIDI_Particles.gd" id="13_7uhe6"]
-[ext_resource type="PackedScene" uid="uid://cwyjlcgepmn1p" path="res://models/beta_keys.blend" id="13_8radr"]
+[ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="12_nnbsg"]
+[ext_resource type="Script" path="res://scripts/piano_controller.gd" id="13_0vjy6"]
+[ext_resource type="Script" path="res://scripts/black_note_particle.gd" id="13_02uts"]
 [ext_resource type="Material" uid="uid://dgmbakuidedwe" path="res://materials/black_notes_on.tres" id="13_bekje"]
-[ext_resource type="PackedScene" uid="uid://i0bkeper6ame" path="res://models/white_note_cube_mesh.blend" id="14_44per"]
-[ext_resource type="Shader" uid="uid://x4oxex1fcgnl" path="res://shaders/rounded_note_mesh.gdshader" id="15_nsxvj"]
-[ext_resource type="PackedScene" uid="uid://bt0cj4hcw40hu" path="res://models/piano_bg.blend" id="17_nwwxk"]
-[ext_resource type="Script" uid="uid://b850a33378dxd" path="res://scripts/bg.gd" id="18_yi44b"]
-[ext_resource type="Material" uid="uid://c87r7xa3yubcp" path="res://materials/bg_mat.tres" id="19_pymkk"]
+[ext_resource type="PackedScene" uid="uid://d37ndahl7hm8g" path="res://models/white_note_cube_mesh.blend" id="14_44per"]
+[ext_resource type="PackedScene" uid="uid://cc4kfg8o58vw3" path="res://models/piano_bed2.blend" id="14_oselt"]
+[ext_resource type="Shader" path="res://shaders/rounded_note_mesh.gdshader" id="15_nsxvj"]
+[ext_resource type="Material" uid="uid://cj3ujrwh48kgc" path="res://materials/white_keys_mat.tres" id="16_0hsau"]
+[ext_resource type="PackedScene" uid="uid://hd5kkgj1fc5j" path="res://models/piano_bg.blend" id="16_t544d"]
+[ext_resource type="Material" uid="uid://cj7e5yhxqclf5" path="res://materials/black_keys_mat.tres" id="17_7crw1"]
+[ext_resource type="Script" path="res://scripts/bg.gd" id="17_8chow"]
+[ext_resource type="Material" uid="uid://c87r7xa3yubcp" path="res://materials/bg_mat.tres" id="18_slsuw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ep5ho"]
 shader = ExtResource("2_vs6fs")
 shader_parameter/amount = 3.0
 
 [node name="MIDI" type="Node3D"]
-script = ExtResource("1_jo87c")
+script = ExtResource("1_abfrr")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 visible = false
@@ -85,33 +86,44 @@ use_native_dialog = true
 [node name="PianoController" type="Node" parent="."]
 script = ExtResource("13_0vjy6")
 
-[node name="MIDI_Particles" type="Node3D" parent="."]
-script = ExtResource("13_7uhe6")
-note_on_white_key_particles_material = ExtResource("10_mr4d0")
-particle_scene = ExtResource("10_e3ntp")
-
-[node name="MIDI_Keyboard" parent="." instance=ExtResource("13_8radr")]
-script = ExtResource("12_nnbsg")
-white_keys_off_mat = ExtResource("10_wj7rp")
-black_keys_off_mat = ExtResource("11_0tc8c")
+[node name="MIDI_White_Notes" type="Node3D" parent="."]
+script = ExtResource("6_a7al4")
 white_notes_on_mat = ExtResource("12_kiwm3")
-black_notes_on_mat = ExtResource("13_bekje")
-white_light_offset = Vector3(0, 12.84, 0)
-black_light_offset = Vector3(0, 10.557, 0)
-light_attenuation = -1.0
-light_angle_attenuation = 25.0
 white_note_mesh_scene = ExtResource("14_44per")
+shader = ExtResource("15_nsxvj")
 
-[node name="MIDI_Notes" type="Node3D" parent="."]
-script = ExtResource("1_3ll4w")
-white_notes_on_mat = ExtResource("12_kiwm3")
+[node name="MIDI_Black_Notes" type="Node3D" parent="."]
+script = ExtResource("7_vkw6h")
 black_notes_on_mat = ExtResource("13_bekje")
 white_note_mesh_scene = ExtResource("14_44per")
 shader = ExtResource("15_nsxvj")
 
-[node name="MIDI_BG" parent="." instance=ExtResource("17_nwwxk")]
-script = ExtResource("18_yi44b")
-bg_material = ExtResource("19_pymkk")
+[node name="MIDI_WhiteNoteParticles" type="Node3D" parent="."]
+script = ExtResource("12_fm631")
+note_on_white_key_particles_material = ExtResource("10_mr4d0")
+particle_scene = ExtResource("10_e3ntp")
+
+[node name="MIDI_BlackNoteParticles" type="Node3D" parent="."]
+script = ExtResource("13_02uts")
+note_on_black_key_particles_material = ExtResource("10_mr4d0")
+particle_scene = ExtResource("10_e3ntp")
+
+[node name="MIDI_Keyboard" parent="." instance=ExtResource("14_oselt")]
+script = ExtResource("12_nnbsg")
+white_keys_off_mat = ExtResource("16_0hsau")
+black_keys_off_mat = ExtResource("17_7crw1")
+white_notes_on_mat = ExtResource("12_kiwm3")
+black_notes_on_mat = ExtResource("13_bekje")
+light_offset = Vector3(0, 0.015, 0.015)
+light_attenuation = 0.25
+
+[node name="MIDI_BG" parent="." instance=ExtResource("16_t544d")]
+script = ExtResource("17_8chow")
+bg_material = ExtResource("18_slsuw")
+
+[node name="Plane" parent="MIDI_BG" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.637, -0.025, 0)
+material_override = ExtResource("18_slsuw")
 
 [connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_K_B_Container/Virtual_Keyboard_Toggle" to="." method="_on_virtual_keyboard_toggle_toggled"]
 [connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_K_B_Container/BG_Toggle" to="." method="_on_bg_toggle_toggled"]
@@ -125,7 +137,10 @@ bg_material = ExtResource("19_pymkk")
 [connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/Fspy" to="." method="_on_fspy_pressed"]
 [connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/ColorPicker" to="PianoController" method="_on_color_picker_color_changed"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/MIDI_Speed_Slider" to="PianoController" method="_on_midi_speed_slider_value_changed"]
-[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/Transforms_Button" to="." method="_on_transforms_button_toggled"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container/Scale_Slider" to="." method="_on_scale_slider_value_changed"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container/LoadFspy" to="PianoController" method="_on_load_fspy_pressed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Pos_Z_Container/Pos_Z_Slider" to="." method="_on_pos_z_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Note_Rot_X_Container/Note_Rot_X_Slider" to="PianoController" method="_on_note_rot_x_slider_value_changed"]
 [connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container/OpenClose" to="PianoController" method="_on_open_close_toggled"]
 [connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Serial_Port_Container/SerialList" to="PianoController" method="_on_serial_list_item_selected"]
 [connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_L_Mode_Container/ModesList" to="PianoController" method="_on_modes_list_item_selected"]
@@ -157,5 +172,5 @@ bg_material = ExtResource("19_pymkk")
 [connection signal="file_selected" from="CanvasLayer/SaveProfileFileDialog" to="PianoController" method="_on_save_profile_file_dialog_file_selected"]
 
 [editable path="CanvasLayer/Menu"]
-[editable path="CanvasLayer/Controls_Menu"]
-[editable path="CanvasLayer/Transforms_Menu"]
+[editable path="MIDI_Keyboard"]
+[editable path="MIDI_BG"]

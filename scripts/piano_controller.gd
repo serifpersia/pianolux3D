@@ -19,8 +19,13 @@ extends Node
 @onready var midi_bg: Node3D = $"../MIDI_BG"
 
 @onready var midi_keyboard: Node3D = $"../MIDI_Keyboard"
-@onready var midi_notes: Node3D = $"../MIDI_Notes"
-@onready var midi_particles: Node3D = $"../MIDI_Particles"
+@onready var midi_white_notes: Node3D = $"../MIDI_White_Notes"
+@onready var midi_black_notes: Node3D = $"../MIDI_Black_Notes"
+@onready var midi_white_note_particles: Node3D = $"../MIDI_WhiteNoteParticles"
+@onready var midi_black_note_particles: Node3D = $"../MIDI_BlackNoteParticles"
+
+
+@onready var world_environment: WorldEnvironment = $"../../WorldEnvironment"
 
 var serial_thread : Thread = Thread.new()
 var serial_queue : Array = []
@@ -134,7 +139,7 @@ func create_hsb_data(action: String, index: int, hsb: Dictionary) -> Dictionary:
 	}
 
 func send_command_update_color(c: Color):
-	var gamma = 2.8
+	var gamma = 2.2
 	
 	var r = gamma_correction(c.r, gamma)
 	var g = gamma_correction(c.g, gamma)
@@ -313,9 +318,12 @@ func _exit_tree():
 func _input(event):
 	if event is InputEventMIDI:
 		if event.message == MIDI_MESSAGE_NOTE_ON:
-			midi_notes.on_note_on(event.pitch)
+			midi_white_notes.on_note_on(event.pitch)
+			midi_black_notes.on_note_on(event.pitch)
+
 			midi_keyboard.update_key_material(event.pitch, true)
-			midi_particles.spawn_particle(event.pitch)
+			midi_white_note_particles.spawn_particle(event.pitch)
+			midi_black_note_particles.spawn_particle(event.pitch)
 			
 
 			var notePushed
@@ -337,10 +345,13 @@ func _input(event):
 			serial_lock.unlock()
 
 		elif event.message == MIDI_MESSAGE_NOTE_OFF:
-			midi_notes.on_note_off(event.pitch)
+			midi_white_notes.on_note_off(event.pitch)
+			midi_black_notes.on_note_off(event.pitch)
+			
 			midi_keyboard.update_key_material(event.pitch, false)
-			midi_particles.stop_particle(event.pitch)
-
+			midi_white_note_particles.stop_particle(event.pitch)
+			midi_black_note_particles.stop_particle(event.pitch)
+			
 			var notePushed
 
 			if fixLED_Toggle:
@@ -788,12 +799,18 @@ func _on_color_picker_color_changed(color: Color) -> void:
 		var light_holder = midi_keyboard.light_nodes[key_name]
 		var is_black = midi_keyboard.is_black_key(int(key_name))
 
-		var light: SpotLight3D = light_holder.get_child(0)
+		var light: OmniLight3D = light_holder.get_child(0)
 		if light:
 			light.light_color = midi_keyboard.black_note_mesh_color if is_black else midi_keyboard.white_note_mesh_color
 
-	for note_array in midi_notes.active_notes.values():
-		for note_data in note_array:
+	for note_array_w in midi_white_notes.active_notes.values():
+		for note_data in note_array_w:
+			var shader_material = note_data.shader_material
+			if shader_material:
+				shader_material.set_shader_parameter("white_key_color", midi_keyboard.white_note_mesh_color)
+				shader_material.set_shader_parameter("black_key_color", midi_keyboard.black_note_mesh_color)
+	for note_array_b in midi_black_notes.active_notes.values():
+		for note_data in note_array_b:
 			var shader_material = note_data.shader_material
 			if shader_material:
 				shader_material.set_shader_parameter("white_key_color", midi_keyboard.white_note_mesh_color)
@@ -803,11 +820,31 @@ func _on_color_picker_color_changed(color: Color) -> void:
 	send_command_update_color(color)
 
 func stop_all_notes_and_particles() -> void:
-	for pitch in midi_particles.active_particles.keys() + midi_notes.active_notes.keys():
-		midi_particles.stop_particle(pitch)
-		midi_notes.on_note_off(pitch)
-		midi_keyboard.update_key_material(pitch, false)
+	var all_active_note_pitches = []
+	all_active_note_pitches.append_array(midi_white_notes.active_notes.keys())
+	all_active_note_pitches.append_array(midi_black_notes.active_notes.keys())
+	
+	var unique_pitches = {}
+	
+	for p in midi_white_note_particles.active_particles.keys(): 
+		unique_pitches[p] = true
 
+	for p in midi_black_note_particles.active_particles.keys(): 
+		unique_pitches[p] = true
+
+	for p in all_active_note_pitches: 
+		unique_pitches[p] = true
+
+	for pitch_val in unique_pitches.keys():
+		midi_white_note_particles.stop_particle(pitch_val)
+		midi_black_note_particles.stop_particle(pitch_val)
+		
+		if midi_keyboard.is_black_key(pitch_val):
+			midi_black_notes.on_note_off(pitch_val)
+		else:
+			midi_white_notes.on_note_off(pitch_val)
+			midi_keyboard.update_key_material(pitch_val, false)
+		
 func _on_save_profile_button_pressed() -> void:
 	save_profile_file_dialog.visible = true
 
@@ -870,55 +907,21 @@ func _on_load_profile_file_dialog_file_selected(path: String) -> void:
 			print("Error parsing JSON from file. Error:", json_parser.error_message())
 	else:
 		print("Error opening file for reading.")
-
-
-func _on_midi_speed_slider_value_changed(value: float) -> void:
-	midi_notes.speed = value
-
+    
 func _on_note_rot_x_slider_value_changed(value: float) -> void:
 	midi_bg.rotation_degrees.x = value
-	midi_notes.rotation_degrees.x = value
-	midi_particles.rotation_degrees.x = value
+		
+	midi_white_notes.rotation_degrees.x = value
+	midi_black_notes.rotation_degrees.x = value
+	midi_white_note_particles.rotation_degrees.x = value
+	midi_black_note_particles.rotation_degrees.x = value
 	
-	var offset = Vector3(0, -1.25, 0)
-	var rotated_offset = offset.rotated(Vector3(1, 0, 0), deg_to_rad(value))
-	
-	midi_notes.position = rotated_offset
-	midi_particles.position = rotated_offset
-	
-	var y_adjustment = 3.1
-	midi_notes.position.y += y_adjustment
-	midi_particles.position.y += y_adjustment
+func _on_world_color_picker_color_changed(color: Color) -> void:
+	world_environment.environment.background_color = color
 
-func create_default_override_cfg() -> void:
-	var file = FileAccess.open(OVERRIDE_CFG_PATH, FileAccess.WRITE)
-	if file:
-		var cfg_content = """
-[display]
-window/size/transparent = false
-window/per_pixel_transparency/allowed = false
-"""
-		file.store_string(cfg_content.strip_edges())
-		file.close()
-		print("Created default override.cfg at:", OVERRIDE_CFG_PATH)
-	else:
-		print("Error creating override.cfg at:", OVERRIDE_CFG_PATH)
+func _on_midi_speed_slider_value_changed(value: float) -> void:
+	midi_white_notes.speed = value
+	midi_black_notes.speed = value
 
-func update_override_cfg() -> void:
-	var file = FileAccess.open(OVERRIDE_CFG_PATH, FileAccess.WRITE)
-	if file:
-		var cfg_content = """
-[display]
-window/size/transparent = %s
-window/per_pixel_transparency/allowed = %s
-""" % [is_transparency_enabled, is_transparency_enabled]
-		file.store_string(cfg_content.strip_edges())
-		file.close()
-		print("Updated override.cfg at:", OVERRIDE_CFG_PATH, " - Transparency:", is_transparency_enabled)
-	else:
-		print("Error updating override.cfg at:", OVERRIDE_CFG_PATH)
-
-
-func _on_transparency_button_pressed() -> void:
-	is_transparency_enabled = not is_transparency_enabled
-	update_override_cfg()
+func _on_load_fspy_pressed() -> void:
+	Global.player.handle_fspy()

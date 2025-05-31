@@ -1,7 +1,7 @@
 extends Node3D
 
-@export var note_on_white_key_particles_material : StandardMaterial3D
-@export var particle_scene : PackedScene
+@export var note_on_white_key_particles_material: StandardMaterial3D
+@export var particle_scene: PackedScene
 
 @onready var midi_keyboard: Node3D = $"../MIDI_Keyboard"
 
@@ -9,24 +9,20 @@ var active_particles = {}
 var child_particles = {}
 var active_timers = {}
 
-func spawn_particle(pitch):
+func spawn_particle(pitch: int) -> void:
 	if not particle_scene or not Global.particles_state:
 		return
-		
+	if midi_keyboard.is_black_key(pitch):
+		return
+
 	var particle_instance = particle_scene.instantiate()
-	var is_black = midi_keyboard.is_black_key(pitch)
 	var note_mesh := midi_keyboard.get_node(str(pitch))
 	
 	var key_scale = Vector3(0.035, 0.035, 0.035)
-	var scale_factor = key_scale * 0.7 if is_black else key_scale
-	
-	particle_instance.scale = scale_factor
+	particle_instance.scale = key_scale
 	particle_instance.position = Vector3(note_mesh.position.x, note_mesh.position.y, note_mesh.position.z)
 
-	note_on_white_key_particles_material.emission = (
-		midi_keyboard.black_note_mesh_color if is_black 
-		else midi_keyboard.white_note_mesh_color
-	)
+	note_on_white_key_particles_material.emission = midi_keyboard.white_note_mesh_color
 
 	add_child(particle_instance)
 	particle_instance.emitting = true
@@ -38,7 +34,7 @@ func spawn_particle(pitch):
 			child_particles[pitch] = []
 		child_particles[pitch].append(child)
 
-func stop_particle(pitch):
+func stop_particle(pitch: int) -> void:
 	if pitch in active_particles:
 		var particle_instance = active_particles[pitch]
 		particle_instance.emitting = false
@@ -68,7 +64,7 @@ func stop_particle(pitch):
 		active_particles.erase(pitch)
 		child_particles.erase(pitch)
 
-func _on_particle_timer_timeout(particle_instance, timer):
+func _on_particle_timer_timeout(particle_instance, timer) -> void:
 	if particle_instance and is_instance_valid(particle_instance) and particle_instance.get_parent():
 		particle_instance.queue_free()
 
