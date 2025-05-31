@@ -12,4 +12,5 @@ script = ExtResource("1_4648u")
 shape = SubResource("CapsuleShape3D_schgr")
 
 [node name="Camera3D" type="Camera3D" parent="."]
+current = true
 script = ExtResource("2_h84py")

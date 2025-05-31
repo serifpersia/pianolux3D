@@ -10,6 +10,7 @@ var last_position: Vector3
 var last_rotation: Vector3
 var last_camera_rotation_degrees: Vector3
 
+
 var initial_position: Vector3
 var initial_rotation: Vector3
 var initial_camera_rotation_degrees: Vector3
@@ -61,6 +62,7 @@ func setup_camera() -> void:
 		last_position = position
 		last_rotation = rotation
 		last_camera_rotation_degrees = camera_3d.rotation_degrees
+
 		camera_3d.projection = Camera3D.PROJECTION_ORTHOGONAL
 		camera_3d.rotation_degrees = Vector3(-90, 0, 0)
 		camera_3d.size = 0.716

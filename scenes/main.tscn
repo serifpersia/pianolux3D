@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://demetbmmfc3sm" path="res://scenes/midi.tscn" id="1_gd7mg"]
 [ext_resource type="PackedScene" uid="uid://dqk2cq5exa12w" path="res://scenes/world_environment.tscn" id="1_o1vt1"]
-[ext_resource type="Script" path="res://scripts/discord-rpc.gd" id="2_l1ve6"]
+[ext_resource type="Script" uid="uid://c1ndvt128j2kg" path="res://scripts/discord-rpc.gd" id="2_l1ve6"]
 [ext_resource type="PackedScene" uid="uid://bgfampmcitsjy" path="res://scenes/fps.tscn" id="4_jleid"]
 
 [node name="main" type="Node3D"]
@@ -15,5 +15,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.158)
 
 [node name="FPS" parent="." instance=ExtResource("4_jleid")]
 transform = Transform3D(0.95882, 0.160681, -0.234192, 0, 0.824577, 0.56575, 0.284015, -0.542453, 0.790621, 0.352353, 0.331148, 0.425241)
-
 [node name="WorldEnvironment" parent="." instance=ExtResource("1_o1vt1")]
