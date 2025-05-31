@@ -19,8 +19,12 @@ extends Node
 @onready var midi_bg: Node3D = $"../MIDI_BG"
 
 @onready var midi_keyboard: Node3D = $"../MIDI_Keyboard"
-@onready var midi_notes: Node3D = $"../MIDI_Notes"
-@onready var midi_particles: Node3D = $"../MIDI_Particles"
+@onready var midi_white_notes: Node3D = $"../MIDI_White_Notes"
+@onready var midi_black_notes: Node3D = $"../MIDI_Black_Notes"
+@onready var midi_white_note_particles: Node3D = $"../MIDI_WhiteNoteParticles"
+@onready var midi_black_note_particles: Node3D = $"../MIDI_BlackNoteParticles"
+
+@onready var world_environment: WorldEnvironment = $"../../WorldEnvironment"
 
 var serial_thread : Thread = Thread.new()
 var serial_queue : Array = []
@@ -57,9 +61,6 @@ const COMMAND_NOTE_ON_RANDOM_SERIAL = 16
 
 var MODE = 0
 var currentColor = Color(0.622,1.25,0)
-
-var OVERRIDE_CFG_PATH: String = "res://override.cfg"
-var is_transparency_enabled: bool = false
 
 var led_mode_list = ["Default", "Splash", "Random", "Velocity", "Animation"]
 var led_animations_list = [
@@ -134,7 +135,7 @@ func create_hsb_data(action: String, index: int, hsb: Dictionary) -> Dictionary:
 	}
 
 func send_command_update_color(c: Color):
-	var gamma = 2.8
+	var gamma = 2.2
 	
 	var r = gamma_correction(c.r, gamma)
 	var g = gamma_correction(c.g, gamma)
@@ -249,27 +250,6 @@ func fixed_map_midi_note_to_led(midi_note: int, lowest_note: int, highest_note: 
 	return int(mapped_led) + out_min
 
 func _ready():
-	if OS.has_feature("editor"):
-		OVERRIDE_CFG_PATH = "res://override.cfg"
-	else:
-		OVERRIDE_CFG_PATH = OS.get_executable_path().get_base_dir() + "/override.cfg"
-
-	if not FileAccess.file_exists(OVERRIDE_CFG_PATH):
-		create_default_override_cfg()
-	else:
-		var file = FileAccess.open(OVERRIDE_CFG_PATH, FileAccess.READ)
-		if file:
-			var cfg_content = file.get_as_text().strip_edges()
-			file.close()
-			var lines = cfg_content.split("\n")
-			for line in lines:
-				line = line.strip_edges()
-				if line.begins_with("window/size/transparent"):
-					is_transparency_enabled = line.split("=")[1].strip_edges().to_lower() == "true"
-					break
-		else:
-			print("Error reading existing override.cfg; assuming default false.")
-		
 	var ports_info = SerialPort.list_ports()
 	for info in ports_info:
 		serial_list.add_item(info)
@@ -313,9 +293,12 @@ func _exit_tree():
 func _input(event):
 	if event is InputEventMIDI:
 		if event.message == MIDI_MESSAGE_NOTE_ON:
-			midi_notes.on_note_on(event.pitch)
+			midi_white_notes.on_note_on(event.pitch)
+			midi_black_notes.on_note_on(event.pitch)
+
 			midi_keyboard.update_key_material(event.pitch, true)
-			midi_particles.spawn_particle(event.pitch)
+			midi_white_note_particles.spawn_particle(event.pitch)
+			midi_black_note_particles.spawn_particle(event.pitch)
 			
 
 			var notePushed
@@ -337,10 +320,13 @@ func _input(event):
 			serial_lock.unlock()
 
 		elif event.message == MIDI_MESSAGE_NOTE_OFF:
-			midi_notes.on_note_off(event.pitch)
+			midi_white_notes.on_note_off(event.pitch)
+			midi_black_notes.on_note_off(event.pitch)
+			
 			midi_keyboard.update_key_material(event.pitch, false)
-			midi_particles.stop_particle(event.pitch)
-
+			midi_white_note_particles.stop_particle(event.pitch)
+			midi_black_note_particles.stop_particle(event.pitch)
+			
 			var notePushed
 
 			if fixLED_Toggle:
@@ -788,12 +774,18 @@ func _on_color_picker_color_changed(color: Color) -> void:
 		var light_holder = midi_keyboard.light_nodes[key_name]
 		var is_black = midi_keyboard.is_black_key(int(key_name))
 
-		var light: SpotLight3D = light_holder.get_child(0)
+		var light: OmniLight3D = light_holder.get_child(0)
 		if light:
 			light.light_color = midi_keyboard.black_note_mesh_color if is_black else midi_keyboard.white_note_mesh_color
 
-	for note_array in midi_notes.active_notes.values():
-		for note_data in note_array:
+	for note_array_w in midi_white_notes.active_notes.values():
+		for note_data in note_array_w:
+			var shader_material = note_data.shader_material
+			if shader_material:
+				shader_material.set_shader_parameter("white_key_color", midi_keyboard.white_note_mesh_color)
+				shader_material.set_shader_parameter("black_key_color", midi_keyboard.black_note_mesh_color)
+	for note_array_b in midi_black_notes.active_notes.values():
+		for note_data in note_array_b:
 			var shader_material = note_data.shader_material
 			if shader_material:
 				shader_material.set_shader_parameter("white_key_color", midi_keyboard.white_note_mesh_color)
@@ -803,34 +795,54 @@ func _on_color_picker_color_changed(color: Color) -> void:
 	send_command_update_color(color)
 
 func stop_all_notes_and_particles() -> void:
-	for pitch in midi_particles.active_particles.keys() + midi_notes.active_notes.keys():
-		midi_particles.stop_particle(pitch)
-		midi_notes.on_note_off(pitch)
-		midi_keyboard.update_key_material(pitch, false)
+	var all_active_note_pitches = []
+	all_active_note_pitches.append_array(midi_white_notes.active_notes.keys())
+	all_active_note_pitches.append_array(midi_black_notes.active_notes.keys())
+	
+	var unique_pitches = {}
+	
+	for p in midi_white_note_particles.active_particles.keys(): 
+		unique_pitches[p] = true
 
+	for p in midi_black_note_particles.active_particles.keys(): 
+		unique_pitches[p] = true
+
+	for p in all_active_note_pitches: 
+		unique_pitches[p] = true
+
+	for pitch_val in unique_pitches.keys():
+		midi_white_note_particles.stop_particle(pitch_val)
+		midi_black_note_particles.stop_particle(pitch_val)
+		
+		if midi_keyboard.is_black_key(pitch_val):
+			midi_black_notes.on_note_off(pitch_val)
+		else:
+			midi_white_notes.on_note_off(pitch_val)
+			midi_keyboard.update_key_material(pitch_val, false)
+		
 func _on_save_profile_button_pressed() -> void:
 	save_profile_file_dialog.visible = true
 
 func _on_save_profile_file_dialog_file_selected(path: String) -> void:
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	if file:
-		var position = midi.position
-		var rotation = midi.rotation_degrees
+		
+		var position_z = midi.position.z
 		var scale = midi.scale
 
 		var offsets = {}
 		for pitch in Global.offset_map.keys():
 			offsets[str(pitch)] = Global.offset_map[pitch]
 
-		# Convert Vector3 to a dictionary for JSON
 		var data = {
-			"position": {"x": position.x, "y": position.y, "z": position.z},
-			"rotation": {"x": rotation.x, "y": rotation.y, "z": rotation.z},
+			"position": {"z": position_z},
 			"scale": {"x": scale.x, "y": scale.y, "z": scale.z},
 			"offsets": offsets
 		}
 
-		file.store_string(JSON.stringify(data))
+		var json_data = JSON.stringify(data)
+
+		file.store_string(json_data)
 		file.close()
 
 		print("Profile saved successfully to:", path)
@@ -852,73 +864,36 @@ func _on_load_profile_file_dialog_file_selected(path: String) -> void:
 		if error_code == OK:
 			var data = json_parser.get_data()
 
-			# Convert dictionary back to Vector3
-			var position = Vector3(data["position"]["x"], data["position"]["y"], data["position"]["z"])
-			var rotation = Vector3(data["rotation"]["x"], data["rotation"]["y"], data["rotation"]["z"])
+			var position_z = data["position"]["z"]
 			var scale = Vector3(data["scale"]["x"], data["scale"]["y"], data["scale"]["z"])
-
-			midi.position = position
-			midi.rotation_degrees = rotation
 			midi.scale = scale
+			midi.position.z = position_z
 
 			Global.offset_map.clear()
 			for pitch in data["offsets"].keys():
-				Global.offset_map[int(pitch)] = int(data["offsets"][pitch])
+				var offset = int(data["offsets"][pitch])
+				Global.offset_map[int(pitch)] = offset
 
 			print("Profile loaded successfully from:", path)
 		else:
-			print("Error parsing JSON from file. Error:", json_parser.error_message())
+			print("Error parsing JSON from file. Error: ", json_parser.error_message())
 	else:
 		print("Error opening file for reading.")
 
-
-func _on_midi_speed_slider_value_changed(value: float) -> void:
-	midi_notes.speed = value
-
 func _on_note_rot_x_slider_value_changed(value: float) -> void:
 	midi_bg.rotation_degrees.x = value
-	midi_notes.rotation_degrees.x = value
-	midi_particles.rotation_degrees.x = value
+		
+	midi_white_notes.rotation_degrees.x = value
+	midi_black_notes.rotation_degrees.x = value
+	midi_white_note_particles.rotation_degrees.x = value
+	midi_black_note_particles.rotation_degrees.x = value
 	
-	var offset = Vector3(0, -1.25, 0)
-	var rotated_offset = offset.rotated(Vector3(1, 0, 0), deg_to_rad(value))
-	
-	midi_notes.position = rotated_offset
-	midi_particles.position = rotated_offset
-	
-	var y_adjustment = 3.1
-	midi_notes.position.y += y_adjustment
-	midi_particles.position.y += y_adjustment
+func _on_world_color_picker_color_changed(color: Color) -> void:
+	world_environment.environment.background_color = color
 
-func create_default_override_cfg() -> void:
-	var file = FileAccess.open(OVERRIDE_CFG_PATH, FileAccess.WRITE)
-	if file:
-		var cfg_content = """
-[display]
-window/size/transparent = false
-window/per_pixel_transparency/allowed = false
-"""
-		file.store_string(cfg_content.strip_edges())
-		file.close()
-		print("Created default override.cfg at:", OVERRIDE_CFG_PATH)
-	else:
-		print("Error creating override.cfg at:", OVERRIDE_CFG_PATH)
+func _on_midi_speed_slider_value_changed(value: float) -> void:
+	midi_white_notes.speed = value
+	midi_black_notes.speed = value
 
-func update_override_cfg() -> void:
-	var file = FileAccess.open(OVERRIDE_CFG_PATH, FileAccess.WRITE)
-	if file:
-		var cfg_content = """
-[display]
-window/size/transparent = %s
-window/per_pixel_transparency/allowed = %s
-""" % [is_transparency_enabled, is_transparency_enabled]
-		file.store_string(cfg_content.strip_edges())
-		file.close()
-		print("Updated override.cfg at:", OVERRIDE_CFG_PATH, " - Transparency:", is_transparency_enabled)
-	else:
-		print("Error updating override.cfg at:", OVERRIDE_CFG_PATH)
-
-
-func _on_transparency_button_pressed() -> void:
-	is_transparency_enabled = not is_transparency_enabled
-	update_override_cfg()
+func _on_load_fspy_pressed() -> void:
+	Global.player.handle_fspy()

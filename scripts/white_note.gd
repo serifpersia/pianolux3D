@@ -3,13 +3,9 @@ extends Node3D
 @onready var midi_keyboard: Node3D = $"../MIDI_Keyboard"
 
 @export var white_notes_on_mat: StandardMaterial3D
-@export var black_notes_on_mat: StandardMaterial3D
-
 @export var white_note_mesh_scene: PackedScene
-
 @export var shader: Shader
 @export var speed: float = 0.35
-
 
 class NoteData:
 	var instance: MeshInstance3D
@@ -48,40 +44,35 @@ func create_shader_material() -> ShaderMaterial:
 
 func create_note_data(instance: MeshInstance3D, parent: Node3D, shader_material: ShaderMaterial) -> NoteData:
 	var data := NoteData.new()
-	
 	data.instance = instance
 	data.parent_node = parent
 	data.released = false
 	data.shader_material = shader_material
 	data.offset = 0.0
-
 	shader_material.set_shader_parameter("white_key_color", midi_keyboard.white_note_mesh_color)
-	shader_material.set_shader_parameter("black_key_color", midi_keyboard.black_note_mesh_color)
-
 	return data
 
 func on_note_on(pitch: int) -> void:
+	if midi_keyboard.is_black_key(pitch):
+		return
 	var key_mesh_instance: Node3D = white_note_mesh_scene.instantiate()
 	var new_mesh_instance: MeshInstance3D = key_mesh_instance.get_child(0)
-
-	var is_black = midi_keyboard.is_black_key(pitch)
-	
-	if is_black:
-		var scale_factor := Vector3(0.7, 0.7, 0.7)
-		new_mesh_instance.scale = scale_factor
 
 	if not active_notes.has(pitch):
 		active_notes[pitch] = []
 
 	var note_mesh := midi_keyboard.get_node(str(pitch))
-	var note_mesh_z = note_mesh.position.z - 0.01175 * 0.7 if is_black  else note_mesh.position.z - 0.01175
+	var note_mesh_position_z_offset = new_mesh_instance.get_aabb().size.x / 2
+	var note_mesh_position_y_offset = new_mesh_instance.get_aabb().size.y / 2
 
 	var note_shader_material := create_shader_material()
-	
 	new_mesh_instance.material_override = note_shader_material
-	new_mesh_instance.position = Vector3(note_mesh.position.x, note_mesh.position.y, note_mesh_z)
-
-	note_shader_material.set_shader_parameter("is_black_key", is_black)
+	new_mesh_instance.position = Vector3(
+		note_mesh.position.x, 
+		note_mesh.position.y + note_mesh_position_y_offset,
+		note_mesh.position.z -note_mesh_position_z_offset)
+		
+	note_shader_material.set_shader_parameter("is_black_key", false)
 
 	var note_array: Array = active_notes[pitch]
 	note_array.append(create_note_data(new_mesh_instance, key_mesh_instance, note_shader_material))
@@ -99,17 +90,13 @@ func move_notes(delta: float) -> void:
 	var move_amount := delta * speed
 	var speed_delta := speed * delta
 
-	var black_key_speed_multiplier: float = 1.425
-
 	for note_array in active_notes.values():
 		for note_data in note_array:
 			var typed_data := note_data as NoteData
 			var note_instance: MeshInstance3D = typed_data.instance
 			if note_instance and note_instance.is_inside_tree():
 				if not typed_data.released:
-					var effective_speed_delta = speed_delta * (1.0 if not typed_data.shader_material.get_shader_parameter("is_black_key") else black_key_speed_multiplier)
-					
-					typed_data.offset -= effective_speed_delta
+					typed_data.offset -= speed_delta
 					typed_data.shader_material.set_shader_parameter("z_offset", typed_data.offset)
 					typed_data.shader_material.set_shader_parameter("parent_scale", midi_keyboard.scale)
 				else:
@@ -126,7 +113,6 @@ func despawn_notes() -> void:
 			var note_data := note_array[i] as NoteData
 			var note_instance: Node3D = note_data.instance
 			if note_instance and note_instance.position.z < -1.35:
-
 				if note_data.parent_node and is_instance_valid(note_data.parent_node):
 					note_data.parent_node.queue_free()
 				notes_to_remove.append(i)

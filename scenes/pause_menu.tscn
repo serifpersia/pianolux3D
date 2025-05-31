@@ -1,15 +1,15 @@
 [gd_scene load_steps=21 format=3 uid="uid://lt73xdtfgyuo"]
 
-[ext_resource type="Texture2D" uid="uid://b6e4vnn2p8755" path="res://img/v_keyboard_checked.png" id="1_2riw0"]
-[ext_resource type="Texture2D" uid="uid://swpkpjasuolh" path="res://img/v_keyboard_unchecked.png" id="2_chgxr"]
-[ext_resource type="Texture2D" uid="uid://bqwxagc0iocdd" path="res://img/bg_checked.png" id="3_3jdt5"]
-[ext_resource type="Texture2D" uid="uid://nhwm6bg6hkl3" path="res://img/bg_unchecked.png" id="4_5dubv"]
-[ext_resource type="Texture2D" uid="uid://b416nr04xs2sc" path="res://img/midi_note_checked.png" id="5_gjj04"]
-[ext_resource type="Texture2D" uid="uid://blryofivv5d6x" path="res://img/midi_note_unchecked.png" id="6_qi3dm"]
-[ext_resource type="Texture2D" uid="uid://dosolsrapxkox" path="res://img/midi_particles_checked.png" id="7_8ix5g"]
-[ext_resource type="Texture2D" uid="uid://cacesk8jexmve" path="res://img/midi_particles_unchecked.png" id="8_1vg8t"]
-[ext_resource type="Texture2D" uid="uid://bnp3anh3vi8ui" path="res://img/esp32_checked.png" id="9_j1u87"]
-[ext_resource type="Texture2D" uid="uid://dw6lxrub8lr1o" path="res://img/esp32_unchecked.png" id="10_fn72u"]
+[ext_resource type="Texture2D" uid="uid://dvkvev083q7qt" path="res://img/v_keyboard_checked.png" id="1_2riw0"]
+[ext_resource type="Texture2D" uid="uid://bsu3ol74f7ixr" path="res://img/v_keyboard_unchecked.png" id="2_chgxr"]
+[ext_resource type="Texture2D" uid="uid://c4klp75k0rlqg" path="res://img/bg_checked.png" id="3_3jdt5"]
+[ext_resource type="Texture2D" uid="uid://dsh3mxlbufiju" path="res://img/bg_unchecked.png" id="4_5dubv"]
+[ext_resource type="Texture2D" uid="uid://v6w5sppvfhwa" path="res://img/midi_note_checked.png" id="5_gjj04"]
+[ext_resource type="Texture2D" uid="uid://dockwnky0j771" path="res://img/midi_note_unchecked.png" id="6_qi3dm"]
+[ext_resource type="Texture2D" uid="uid://b2ebw55rwqeq0" path="res://img/midi_particles_checked.png" id="7_8ix5g"]
+[ext_resource type="Texture2D" uid="uid://bt82dqalb6en2" path="res://img/midi_particles_unchecked.png" id="8_1vg8t"]
+[ext_resource type="Texture2D" uid="uid://dquhecks205vo" path="res://img/esp32_checked.png" id="9_j1u87"]
+[ext_resource type="Texture2D" uid="uid://6rynodvhqltn" path="res://img/esp32_unchecked.png" id="10_fn72u"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gviss"]
 bg_color = Color(0.129412, 0.145098, 0.196078, 1)
@@ -100,7 +100,7 @@ theme_override_font_sizes/font_size = 25
 theme_override_icons/checked = ExtResource("1_2riw0")
 theme_override_icons/unchecked = ExtResource("2_chgxr")
 button_pressed = true
-text = "Virtual Keyboard"
+text = "Virtual Keyboard: "
 
 [node name="BG_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_K_B_Container"]
 layout_mode = 2
@@ -111,7 +111,7 @@ theme_override_font_sizes/font_size = 25
 theme_override_icons/checked = ExtResource("3_3jdt5")
 theme_override_icons/unchecked = ExtResource("4_5dubv")
 button_pressed = true
-text = "Background"
+text = "Background: "
 
 [node name="HBox_N_P_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
@@ -126,7 +126,7 @@ theme_override_font_sizes/font_size = 25
 theme_override_icons/checked = ExtResource("5_gjj04")
 theme_override_icons/unchecked = ExtResource("6_qi3dm")
 button_pressed = true
-text = "MIDI Notes"
+text = "MIDI Notes: "
 
 [node name="Particles_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_N_P_Container"]
 layout_mode = 2
@@ -137,7 +137,7 @@ theme_override_font_sizes/font_size = 25
 theme_override_icons/checked = ExtResource("7_8ix5g")
 theme_override_icons/unchecked = ExtResource("8_1vg8t")
 button_pressed = true
-text = "Particles"
+text = "Particles: "
 
 [node name="HBox_BG_C_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
@@ -178,7 +178,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "BG Image Transparency"
+text = "BG Image Transparency: 
+"
 
 [node name="BGTransparency_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_BG_T_Container"]
 layout_mode = 2
@@ -200,29 +201,25 @@ horizontal_alignment = 1
 [node name="HBox_Color_Picker_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
 
-[node name="Transparency_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
+[node name="World_Color_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
 layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "Clear  background image"
+size_flags_horizontal = 10
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "Transparency"
+text = "World Color:"
 
-[node name="Fspy" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
+[node name="World_ColorPicker" type="ColorPickerButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
 layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "Clear  background image"
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
-theme_override_font_sizes/font_size = 25
-text = "Fspy
-"
+tooltip_text = "Change color"
+text = "       "
+metadata/_edit_use_anchors_ = true
 
 [node name="Color_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "Color
+text = "Color: 
 "
 
 [node name="ColorPicker" type="ColorPickerButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
@@ -237,17 +234,17 @@ layout_mode = 2
 size_flags_horizontal = 10
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "Speed"
+text = "Speed: "
 
 [node name="MIDI_Speed_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 tooltip_text = "Change speed  value for midi notes"
-min_value = 8.0
-max_value = 36.0
-step = 4.0
-value = 20.0
+min_value = 0.01
+max_value = 0.85
+step = 0.025
+value = 0.16
 
 [node name="Transforms_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
@@ -256,18 +253,78 @@ theme_override_font_sizes/font_size = 35
 text = "Transforms"
 horizontal_alignment = 1
 
-[node name="Transforms_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root"]
+[node name="HBox_Scale_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
+
+[node name="Scale_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+text = "Scale: "
+
+[node name="Scale_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Clear  background image"
+size_flags_vertical = 4
+tooltip_text = "Change scale
+"
+min_value = 0.1
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="LoadFspy" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container"]
+layout_mode = 2
+tooltip_text = "Change background image"
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
 toggle_mode = true
-text = "Transforms
+text = "Fspy"
+
+[node name="HBox_Pos_Z_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
+size_flags_vertical = 6
+alignment = 1
+
+[node name="Pos_Z_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Pos_Z_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+text = "Position Z:  
 "
 
-[node name="HBox_Scale_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+[node name="Pos_Z_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Pos_Z_Container"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Change up and down position"
+min_value = -0.6
+max_value = 0.6
+step = 0.05
+value = 0.4
+
+[node name="HBox_Note_Rot_X_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+layout_mode = 2
+size_flags_vertical = 6
+alignment = 1
+
+[node name="Note_Rot_X_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Note_Rot_X_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+text = "Note Rotation X:  
+"
+
+[node name="Note_Rot_X_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Note_Rot_X_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Change up and down position"
+max_value = 90.0
+step = 10.0
 
 [node name="Connections_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
@@ -313,7 +370,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/font = SubResource("SystemFont_e8udk")
 theme_override_font_sizes/font_size = 25
-text = "Serial Port"
+text = "Serial Port: "
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -330,7 +387,7 @@ clip_text = true
 layout_mode = 2
 theme_override_fonts/font = SubResource("SystemFont_bt2da")
 theme_override_font_sizes/font_size = 35
-text = "LED Strip Effects"
+text = "LED Strip Effects: "
 horizontal_alignment = 1
 
 [node name="HBox_L_Mode_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
@@ -342,7 +399,7 @@ layout_mode = 2
 size_flags_horizontal = 6
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "LED Mode"
+text = "LED Mode: "
 
 [node name="ModesList" type="OptionButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_L_Mode_Container"]
 custom_minimum_size = Vector2(120, 0)
@@ -362,7 +419,7 @@ layout_mode = 2
 size_flags_horizontal = 6
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "Animation"
+text = "Animation: "
 
 [node name="AnimationsList" type="OptionButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Animation_Container"]
 custom_minimum_size = Vector2(120, 0)
@@ -381,7 +438,7 @@ layout_mode = 2
 size_flags_horizontal = 6
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "Brightness"
+text = "Brightness: "
 
 [node name="Brightness_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Brightness_Container"]
 layout_mode = 2
@@ -400,7 +457,7 @@ layout_mode = 2
 size_flags_horizontal = 6
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "Fade"
+text = "Fade: "
 
 [node name="Fade_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Fade_Container"]
 layout_mode = 2
@@ -419,7 +476,7 @@ layout_mode = 2
 size_flags_horizontal = 6
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "Splash Length"
+text = "Splash Length: "
 
 [node name="Splash_Length_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_S_L_Container"]
 layout_mode = 2
@@ -438,7 +495,7 @@ layout_mode = 2
 size_flags_horizontal = 6
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "BG Brightness"
+text = "BG Brightness: "
 
 [node name="BG_Brightness_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_BG_Brightness_Container"]
 layout_mode = 2
@@ -457,7 +514,7 @@ layout_mode = 2
 size_flags_horizontal = 6
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "Transposition"
+text = "Transposition: "
 
 [node name="Transposition_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Transposition_Container8"]
 layout_mode = 2
@@ -485,7 +542,7 @@ layout_mode = 2
 size_flags_horizontal = 6
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "Piano 88 Keys"
+text = "Piano 88 Keys: "
 
 [node name="Dec_P_Size_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container"]
 layout_mode = 2
@@ -525,7 +582,7 @@ size_flags_horizontal = 3
 tooltip_text = "Use custom offsets for LED strips with solder joints"
 theme_override_fonts/font = SubResource("SystemFont_qlnln")
 theme_override_font_sizes/font_size = 25
-text = "Fix LED"
+text = "Fix LED: "
 
 [node name="BGLED_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_LED_Strip_Toggles_Container"]
 layout_mode = 2
@@ -533,7 +590,7 @@ size_flags_horizontal = 3
 tooltip_text = "Turn background light on/off"
 theme_override_fonts/font = SubResource("SystemFont_qlnln")
 theme_override_font_sizes/font_size = 25
-text = "BG LED"
+text = "BG LED: "
 
 [node name="REVLED_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_LED_Strip_Toggles_Container"]
 layout_mode = 2
@@ -541,7 +598,7 @@ size_flags_horizontal = 3
 tooltip_text = "Invert led strip direction *Useful when positioning start of led strip on the right instead on the left"
 theme_override_fonts/font = SubResource("SystemFont_qlnln")
 theme_override_font_sizes/font_size = 25
-text = "Rev LED"
+text = "Rev LED: "
 
 [node name="HBox_Profile_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
 layout_mode = 2
