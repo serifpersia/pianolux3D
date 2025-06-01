@@ -20,17 +20,38 @@ func spawn_particle(pitch: int) -> void:
 	
 	particle_instance.position = Vector3(note_mesh.position.x, note_mesh.position.y + 0.015, note_mesh.position.z)
 
-	note_on_white_key_particles_material.albedo_color = midi_keyboard.white_note_mesh_color
-
+	if particle_instance is GPUParticles3D or particle_instance is CPUParticles3D or particle_instance is MeshInstance3D:
+		if note_on_white_key_particles_material:
+			var new_material = note_on_white_key_particles_material.duplicate(true) as StandardMaterial3D
+			if new_material:
+				new_material.albedo_color = midi_keyboard.white_note_mesh_color
+				if particle_instance is GPUParticles3D:
+					particle_instance.material_override = new_material
+				elif particle_instance is CPUParticles3D:
+					particle_instance.material = new_material
+				elif particle_instance is MeshInstance3D:
+					particle_instance.material_override = new_material
+	
 	add_child(particle_instance)
-	particle_instance.emitting = true
+	if "emitting" in particle_instance:
+		particle_instance.emitting = true
 	active_particles[pitch] = particle_instance
 	
-	for child in particle_instance.get_children():
-		child.emitting = true
+	for child_node in particle_instance.get_children():
+		if child_node is GPUParticles3D or child_node is CPUParticles3D or child_node is MeshInstance3D:
+			if note_on_white_key_particles_material:
+				var new_child_material = note_on_white_key_particles_material.duplicate(true) as StandardMaterial3D
+				if new_child_material:
+					new_child_material.albedo_color = midi_keyboard.white_note_mesh_color
+					if child_node is GPUParticles3D:
+						child_node.material_override = new_child_material
+		
+		if "emitting" in child_node:
+			child_node.emitting = true
+		
 		if not child_particles.has(pitch):
 			child_particles[pitch] = []
-		child_particles[pitch].append(child)
+		child_particles[pitch].append(child_node)
 
 func stop_particle(pitch: int) -> void:
 	if pitch in active_particles:
