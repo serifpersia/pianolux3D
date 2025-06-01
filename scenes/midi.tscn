@@ -1,29 +1,28 @@
-[gd_scene load_steps=26 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=25 format=3 uid="uid://demetbmmfc3sm"]
 
-[ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_abfrr"]
-[ext_resource type="Shader" path="res://shaders/pause_menu_blur.gdshader" id="2_vs6fs"]
-[ext_resource type="PackedScene" uid="uid://lt73xdtfgyuo" path="res://scenes/pause_menu.tscn" id="3_vf2tp"]
-[ext_resource type="PackedScene" uid="uid://dk6exixm516jr" path="res://scenes/controls_menu.tscn" id="4_d1bqq"]
-[ext_resource type="Script" path="res://scripts/white_note.gd" id="6_a7al4"]
-[ext_resource type="Script" path="res://scripts/black_note.gd" id="7_vkw6h"]
+[ext_resource type="Script" uid="uid://bb736jltg31gp" path="res://scripts/midi_main.gd" id="1_abfrr"]
+[ext_resource type="Shader" uid="uid://crtnjnr6l0ote" path="res://shaders/pause_menu_blur.gdshader" id="2_vs6fs"]
+[ext_resource type="PackedScene" uid="uid://bvpdalfa4v51x" path="res://scenes/pause_menu.tscn" id="3_dwiag"]
+[ext_resource type="Script" uid="uid://dikqprttd57tp" path="res://scripts/white_note.gd" id="6_a7al4"]
+[ext_resource type="Script" uid="uid://iviuwja5r6w6" path="res://scripts/black_note.gd" id="7_vkw6h"]
 [ext_resource type="PackedScene" uid="uid://c4uh5cgssrayp" path="res://models/black_note_cube_mesh.blend" id="12_75xkg"]
-[ext_resource type="Script" path="res://scripts/white_note_particle.gd" id="12_fm631"]
+[ext_resource type="Script" uid="uid://bp4exb1apygjp" path="res://scripts/white_note_particle.gd" id="12_fm631"]
 [ext_resource type="Material" uid="uid://cu3axujswfcr1" path="res://materials/white_notes_on.tres" id="12_kiwm3"]
-[ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="12_nnbsg"]
-[ext_resource type="Script" path="res://scripts/piano_controller.gd" id="13_0vjy6"]
-[ext_resource type="Script" path="res://scripts/black_note_particle.gd" id="13_02uts"]
+[ext_resource type="Script" uid="uid://dtuaafwkkl08q" path="res://scripts/Virtual_Keyboard.gd" id="12_nnbsg"]
+[ext_resource type="Script" uid="uid://dds146bw0gmpp" path="res://scripts/piano_controller.gd" id="13_0vjy6"]
+[ext_resource type="Script" uid="uid://yjxmg1tvd406" path="res://scripts/black_note_particle.gd" id="13_02uts"]
 [ext_resource type="Material" uid="uid://dgmbakuidedwe" path="res://materials/black_notes_on.tres" id="13_bekje"]
 [ext_resource type="PackedScene" uid="uid://d37ndahl7hm8g" path="res://models/white_note_cube_mesh.blend" id="14_44per"]
 [ext_resource type="Material" uid="uid://c3fdrglqiofdi" path="res://materials/turbulence_particle_material.tres" id="14_jorto"]
 [ext_resource type="PackedScene" uid="uid://cc4kfg8o58vw3" path="res://models/piano_bed.blend" id="14_oselt"]
-[ext_resource type="PackedScene" path="res://scenes/turbulence_particles.tscn" id="15_5cjbl"]
-[ext_resource type="Shader" path="res://shaders/rounded_note_mesh.gdshader" id="15_nsxvj"]
+[ext_resource type="PackedScene" uid="uid://c3tjgx3nnog3b" path="res://scenes/turbulence_particles.tscn" id="15_5cjbl"]
+[ext_resource type="Shader" uid="uid://b6ng10vn603s2" path="res://shaders/rounded_note_mesh.gdshader" id="15_nsxvj"]
 [ext_resource type="Material" uid="uid://cj3ujrwh48kgc" path="res://materials/white_keys_mat.tres" id="16_0hsau"]
 [ext_resource type="PackedScene" uid="uid://hd5kkgj1fc5j" path="res://models/piano_bg.blend" id="16_t544d"]
 [ext_resource type="Material" uid="uid://cj7e5yhxqclf5" path="res://materials/black_keys_mat.tres" id="17_7crw1"]
-[ext_resource type="Script" path="res://scripts/bg.gd" id="17_8chow"]
+[ext_resource type="Script" uid="uid://b850a33378dxd" path="res://scripts/bg.gd" id="17_8chow"]
 [ext_resource type="Material" uid="uid://c87r7xa3yubcp" path="res://materials/bg_mat.tres" id="18_slsuw"]
-[ext_resource type="Shader" path="res://shaders/material_swap.gdshader" id="21_2pg13"]
+[ext_resource type="Shader" uid="uid://wef64l7216jo" path="res://shaders/material_swap.gdshader" id="21_2pg13"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ep5ho"]
 shader = ExtResource("2_vs6fs")
@@ -43,14 +42,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Menu" parent="CanvasLayer" instance=ExtResource("3_vf2tp")]
-
-[node name="Controls_Menu" parent="CanvasLayer" instance=ExtResource("4_d1bqq")]
-visible = false
-offset_left = 540.0
-offset_top = 15.0
-offset_right = 1024.0
-offset_bottom = 551.0
+[node name="Menu" parent="CanvasLayer" instance=ExtResource("3_dwiag")]
 
 [node name="BGImage_FileDialog" type="FileDialog" parent="CanvasLayer"]
 title = "Open a File"
@@ -75,7 +67,6 @@ use_native_dialog = true
 auto_translate_mode = 1
 initial_position = 2
 size = Vector2i(352, 180)
-ok_button_text = "Save"
 access = 2
 use_native_dialog = true
 
@@ -120,40 +111,38 @@ bg_material = ExtResource("18_slsuw")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.637, -0.025, 0)
 material_override = ExtResource("18_slsuw")
 
-[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_K_B_Container/Virtual_Keyboard_Toggle" to="." method="_on_virtual_keyboard_toggle_toggled"]
-[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_K_B_Container/BG_Toggle" to="." method="_on_bg_toggle_toggled"]
-[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_N_P_Container/MIDI_Notes_Toggle" to="." method="_on_midi_notes_toggle_toggled"]
-[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_N_P_Container/Particles_Toggle" to="." method="_on_particles_toggle_toggled"]
-[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container/Change_BG_Image_Button" to="MIDI_BG" method="_on_change_bg_image_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container/Clear_BG_Image_Button" to="MIDI_BG" method="_on_clear_bg_image_button_pressed"]
-[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container/Controls_Button" to="." method="_on_controls_button_toggled"]
-[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_T_Container/BGTransparency_Slider" to="MIDI_BG" method="_on_bg_transparency_slider_value_changed"]
-[connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/World_ColorPicker" to="PianoController" method="_on_world_color_picker_color_changed"]
-[connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/Note_Surface_1_Color_Picker" to="PianoController" method="_on_note_surface_1_color_picker_color_changed"]
-[connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/Note_Surface_2_Color_Picker" to="PianoController" method="_on_note_surface_2_color_picker_color_changed"]
-[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/MIDI_Speed_Slider" to="PianoController" method="_on_midi_speed_slider_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container/Scale_Slider" to="." method="_on_scale_slider_value_changed"]
-[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container/LoadFspy" to="PianoController" method="_on_load_fspy_pressed"]
-[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Pos_Z_Container/Pos_Z_Slider" to="." method="_on_pos_z_slider_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Note_Rot_X_Container/Note_Rot_X_Slider" to="PianoController" method="_on_note_rot_x_slider_value_changed"]
-[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container/OpenClose" to="PianoController" method="_on_open_close_toggled"]
-[connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Serial_Port_Container/SerialList" to="PianoController" method="_on_serial_list_item_selected"]
-[connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_L_Mode_Container/ModesList" to="PianoController" method="_on_modes_list_item_selected"]
-[connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Animation_Container/AnimationsList" to="PianoController" method="_on_animations_list_item_selected"]
-[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Brightness_Container/Brightness_Slider" to="PianoController" method="_on_brightness_slider_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Fade_Container/Fade_Slider" to="PianoController" method="_on_fade_slider_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_S_L_Container/Splash_Length_Slider" to="PianoController" method="_on_splash_length_slider_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_Brightness_Container/BG_Brightness_Slider" to="PianoController" method="_on_bg_brightness_slider_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Transposition_Container8/Transposition_Slider" to="PianoController" method="_on_transposition_slider_value_changed"]
-[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Transposition_Container8/T_Octave_Button" to="PianoController" method="_on_t_octave_button_toggled"]
-[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container/Dec_P_Size_Button" to="PianoController" method="_on_dec_p_size_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container/Inc_P_Size_Button" to="PianoController" method="_on_inc_p_size_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container/Update_BG_Button" to="PianoController" method="_on_update_bg_button_pressed"]
-[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_LED_Strip_Toggles_Container/FixLED_Toggle" to="PianoController" method="_on_fix_led_toggle_toggled"]
-[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_LED_Strip_Toggles_Container/BGLED_Toggle" to="PianoController" method="_on_bgled_toggle_toggled"]
-[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_LED_Strip_Toggles_Container/REVLED_Toggle" to="PianoController" method="_on_revled_toggle_toggled"]
-[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Profile_Container/LoadProfileButton" to="PianoController" method="_on_load_profile_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Profile_Container/SaveProfileButton" to="PianoController" method="_on_save_profile_button_pressed"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Connections/VBox_Connections/VBox_Content/HBox_C_Type_Container/OpenClose" to="PianoController" method="_on_open_close_toggled"]
+[connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Connections/VBox_Connections/VBox_Content/HBox_Serial_Ports_Container/SerailPorts_List" to="PianoController" method="_on_serail_ports_list_item_selected"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO/VBox_Content/HBox_L_S_B_Container/LoadProfileButton" to="PianoController" method="_on_load_profile_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO/VBox_Content/HBox_L_S_B_Container/SaveProfileButton" to="PianoController" method="_on_save_profile_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO/VBox_Content/HBox_B_C_B_Container/Change_BG_Image_Button" to="MIDI_BG" method="_on_change_bg_image_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO/VBox_Content/HBox_B_C_B_Container/Clear_BG_Image_Button" to="MIDI_BG" method="_on_clear_bg_image_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO/VBox_Content/HBox_Fspy_Container/Load_Fspy_Button" to="PianoController" method="_on_load_fspy_button_pressed"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content/HBox_K_B_Container/Virtual_Keyboard_Toggle" to="." method="_on_virtual_keyboard_toggle_toggled"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content/HBox_K_B_Container/BG_Toggle" to="." method="_on_bg_toggle_toggled"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content/HBox_N_P_Container/MIDI_Notes_Toggle" to="." method="_on_midi_notes_toggle_toggled"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content/HBox_N_P_Container/Particles_Toggle" to="." method="_on_particles_toggle_toggled"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content/HBox_BG_T_Container/BG_Transparency_Slider" to="MIDI_BG" method="_on_bg_transparency_slider_value_changed"]
+[connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance/VBox_Appearance/VBox_Content/HBox_K_B_Container/HBoxContainer/World_Color_Picker" to="PianoController" method="_on_world_color_picker_color_changed"]
+[connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance/VBox_Appearance/VBox_Content/HBox_K_B_Container/HBoxContainer2/Surface1_Color_Picker" to="PianoController" method="_on_surface_1_color_picker_color_changed"]
+[connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance/VBox_Appearance/VBox_Content/HBox_K_B_Container/HBoxContainer3/Surface2_Color_Picker" to="PianoController" method="_on_surface_2_color_picker_color_changed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms/VBox_Content/HBox_Note_Speed_Container/MIDI_Speed_Slider" to="PianoController" method="_on_midi_speed_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms/VBox_Content/HBox_Note_Rot_X_Container/Canvas_Rot_X_Slider" to="PianoController" method="_on_canvas_rot_x_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms/VBox_Content/HBox_Pos_Z_Container/Pos_Z_Slider" to="." method="_on_pos_z_slider_value_changed"]
+[connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Mode_Container/ModesList" to="PianoController" method="_on_modes_list_item_selected"]
+[connection signal="item_selected" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Animations_Container/AnimationsList" to="PianoController" method="_on_animations_list_item_selected"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Brightness_Container/Brightness_Slider" to="PianoController" method="_on_brightness_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_Fade_Container/Fade_Slider" to="PianoController" method="_on_fade_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_Splash Length_Container/Splash_Length_Slider" to="PianoController" method="_on_splash_length_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_BG Brightness_Container/BG_Brightness_Slider" to="PianoController" method="_on_bg_brightness_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_Transposition_Container/Transposition_Slider" to="PianoController" method="_on_transposition_slider_value_changed"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_Octave_Container/Octave_Button" to="PianoController" method="_on_octave_button_toggled"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_P_Size_Container/Dec_P_Size_Button" to="PianoController" method="_on_dec_p_size_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_P_Size_Container/Inc_P_Size_Button" to="PianoController" method="_on_inc_p_size_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_P_Size_Container/Update_BG_Button" to="PianoController" method="_on_update_bg_button_pressed"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Strip_Toggles_Container/FixLED_Toggle" to="PianoController" method="_on_fix_led_toggle_toggled"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Strip_Toggles_Container/BGLED_Toggle" to="PianoController" method="_on_bgled_toggle_toggled"]
+[connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Strip_Toggles_Container/REVLED_Toggle" to="PianoController" method="_on_revled_toggle_toggled"]
 [connection signal="file_selected" from="CanvasLayer/BGImage_FileDialog" to="MIDI_BG" method="_on_bg_image_file_dialog_file_selected"]
 [connection signal="file_selected" from="CanvasLayer/LoadProfileFileDialog" to="PianoController" method="_on_load_profile_file_dialog_file_selected"]
 [connection signal="file_selected" from="CanvasLayer/SaveProfileFileDialog" to="PianoController" method="_on_save_profile_file_dialog_file_selected"]

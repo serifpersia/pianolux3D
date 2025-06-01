@@ -1,15 +1,19 @@
-[gd_scene load_steps=21 format=3 uid="uid://lt73xdtfgyuo"]
+[gd_scene load_steps=28 format=3 uid="uid://bvpdalfa4v51x"]
 
-[ext_resource type="Texture2D" uid="uid://dvkvev083q7qt" path="res://img/v_keyboard_checked.png" id="1_2riw0"]
-[ext_resource type="Texture2D" uid="uid://bsu3ol74f7ixr" path="res://img/v_keyboard_unchecked.png" id="2_chgxr"]
-[ext_resource type="Texture2D" uid="uid://c4klp75k0rlqg" path="res://img/bg_checked.png" id="3_3jdt5"]
-[ext_resource type="Texture2D" uid="uid://dsh3mxlbufiju" path="res://img/bg_unchecked.png" id="4_5dubv"]
-[ext_resource type="Texture2D" uid="uid://v6w5sppvfhwa" path="res://img/midi_note_checked.png" id="5_gjj04"]
-[ext_resource type="Texture2D" uid="uid://dockwnky0j771" path="res://img/midi_note_unchecked.png" id="6_qi3dm"]
-[ext_resource type="Texture2D" uid="uid://b2ebw55rwqeq0" path="res://img/midi_particles_checked.png" id="7_8ix5g"]
-[ext_resource type="Texture2D" uid="uid://bt82dqalb6en2" path="res://img/midi_particles_unchecked.png" id="8_1vg8t"]
-[ext_resource type="Texture2D" uid="uid://dquhecks205vo" path="res://img/esp32_checked.png" id="9_j1u87"]
-[ext_resource type="Texture2D" uid="uid://6rynodvhqltn" path="res://img/esp32_unchecked.png" id="10_fn72u"]
+[ext_resource type="Script" uid="uid://ofqlptrkuhag" path="res://scripts/ui_tab_colappse.gd" id="1_kapm8"]
+[ext_resource type="Texture2D" uid="uid://dvkvev083q7qt" path="res://img/v_keyboard_checked.png" id="1_vvilx"]
+[ext_resource type="Texture2D" uid="uid://bsu3ol74f7ixr" path="res://img/v_keyboard_unchecked.png" id="2_r11ad"]
+[ext_resource type="Texture2D" uid="uid://c4klp75k0rlqg" path="res://img/bg_checked.png" id="3_tdggg"]
+[ext_resource type="Texture2D" uid="uid://dsh3mxlbufiju" path="res://img/bg_unchecked.png" id="4_7xyj5"]
+[ext_resource type="Texture2D" uid="uid://v6w5sppvfhwa" path="res://img/midi_note_checked.png" id="5_c5rv2"]
+[ext_resource type="Texture2D" uid="uid://dockwnky0j771" path="res://img/midi_note_unchecked.png" id="6_uekmy"]
+[ext_resource type="Texture2D" uid="uid://b2ebw55rwqeq0" path="res://img/midi_particles_checked.png" id="7_0vdu2"]
+[ext_resource type="Texture2D" uid="uid://bt82dqalb6en2" path="res://img/midi_particles_unchecked.png" id="8_t0701"]
+[ext_resource type="Texture2D" uid="uid://dquhecks205vo" path="res://img/esp32_checked.png" id="9_l4aw8"]
+[ext_resource type="Texture2D" uid="uid://6rynodvhqltn" path="res://img/esp32_unchecked.png" id="10_otdo1"]
+[ext_resource type="Texture2D" uid="uid://ee2neefwwyyv" path="res://img/mouse_left.png" id="13_wfnh2"]
+[ext_resource type="Texture2D" uid="uid://bsa70n3vstess" path="res://img/mouse_right.png" id="14_fdae3"]
+[ext_resource type="Texture2D" uid="uid://b3xte8kh60ql1" path="res://img/keyboard_f.png" id="15_ivl3i"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gviss"]
 bg_color = Color(0.129412, 0.145098, 0.196078, 1)
@@ -22,45 +26,57 @@ corner_radius_top_right = 25
 corner_radius_bottom_right = 25
 corner_radius_bottom_left = 25
 
-[sub_resource type="SystemFont" id="SystemFont_bt2da"]
+[sub_resource type="SystemFont" id="SystemFont_c5rv2"]
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
-[sub_resource type="SystemFont" id="SystemFont_tu4sd"]
+[sub_resource type="SystemFont" id="SystemFont_0vdu2"]
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
-[sub_resource type="SystemFont" id="SystemFont_32ltq"]
+[sub_resource type="SystemFont" id="SystemFont_uekmy"]
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
-[sub_resource type="SystemFont" id="SystemFont_e8udk"]
+[sub_resource type="SystemFont" id="SystemFont_t0701"]
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
-[sub_resource type="SystemFont" id="SystemFont_xb6du"]
+[sub_resource type="SystemFont" id="SystemFont_7xyj5"]
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
-[sub_resource type="SystemFont" id="SystemFont_wne3p"]
+[sub_resource type="SystemFont" id="SystemFont_tdggg"]
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
-[sub_resource type="SystemFont" id="SystemFont_vhtrd"]
+[sub_resource type="SystemFont" id="SystemFont_vvilx"]
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
-[sub_resource type="SystemFont" id="SystemFont_r5ntv"]
+[sub_resource type="SystemFont" id="SystemFont_r11ad"]
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
-[sub_resource type="SystemFont" id="SystemFont_qlnln"]
+[sub_resource type="SystemFont" id="SystemFont_bt32o"]
+font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
+
+[sub_resource type="SystemFont" id="SystemFont_l4aw8"]
+font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
+
+[sub_resource type="SystemFont" id="SystemFont_otdo1"]
+font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
+
+[sub_resource type="SystemFont" id="SystemFont_b7a1a"]
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
 [node name="Menu" type="MarginContainer"]
-offset_right = 703.0
-offset_bottom = 1104.0
+offset_right = 567.0
+offset_bottom = 1080.0
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
@@ -77,385 +93,454 @@ theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 15
 
-[node name="VBox_Root" type="VBoxContainer" parent="Panel_Container/Margin_Sub"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel_Container/Margin_Sub"]
 layout_mode = 2
 
-[node name="VisibilityLabel" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer"]
 layout_mode = 2
-theme_override_fonts/font = SubResource("SystemFont_bt2da")
-theme_override_font_sizes/font_size = 35
-text = "Visibility"
-horizontal_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="HBox_K_B_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+[node name="MarginContainer_Connections" type="MarginContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+
+[node name="VBox_Connections" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Connections"]
+layout_mode = 2
+script = ExtResource("1_kapm8")
+header_title = "Connection:"
+
+[node name="HeaderButton" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Connections/VBox_Connections"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Connection:"
+
+[node name="VBox_Content" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Connections/VBox_Connections"]
+layout_mode = 2
+
+[node name="HBox_C_Type_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Connections/VBox_Connections/VBox_Content"]
 layout_mode = 2
 alignment = 1
 
-[node name="Virtual_Keyboard_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_K_B_Container"]
+[node name="C_Type_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Connections/VBox_Connections/VBox_Content/HBox_C_Type_Container"]
 layout_mode = 2
-size_flags_horizontal = 6
-tooltip_text = "Toggle visibility of virtual keyboard"
-theme_override_fonts/font = SubResource("SystemFont_tu4sd")
-theme_override_font_sizes/font_size = 25
-theme_override_icons/checked = ExtResource("1_2riw0")
-theme_override_icons/unchecked = ExtResource("2_chgxr")
-button_pressed = true
-text = "Virtual Keyboard: "
-
-[node name="BG_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_K_B_Container"]
-layout_mode = 2
-size_flags_horizontal = 6
-tooltip_text = "Toggle visibility of background image"
-theme_override_fonts/font = SubResource("SystemFont_tu4sd")
-theme_override_font_sizes/font_size = 25
-theme_override_icons/checked = ExtResource("3_3jdt5")
-theme_override_icons/unchecked = ExtResource("4_5dubv")
-button_pressed = true
-text = "Background: "
-
-[node name="HBox_N_P_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-alignment = 1
-
-[node name="MIDI_Notes_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_N_P_Container"]
-layout_mode = 2
-size_flags_horizontal = 6
-tooltip_text = "Toggle visibility of MIDI notes"
-theme_override_fonts/font = SubResource("SystemFont_tu4sd")
-theme_override_font_sizes/font_size = 25
-theme_override_icons/checked = ExtResource("5_gjj04")
-theme_override_icons/unchecked = ExtResource("6_qi3dm")
-button_pressed = true
-text = "MIDI Notes: "
-
-[node name="Particles_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_N_P_Container"]
-layout_mode = 2
-size_flags_horizontal = 6
-tooltip_text = "Toggle visibility of particles"
-theme_override_fonts/font = SubResource("SystemFont_tu4sd")
-theme_override_font_sizes/font_size = 25
-theme_override_icons/checked = ExtResource("7_8ix5g")
-theme_override_icons/unchecked = ExtResource("8_1vg8t")
-button_pressed = true
-text = "Particles: "
-
-[node name="HBox_BG_C_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-
-[node name="Change_BG_Image_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container"]
-layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "Change background image"
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
-theme_override_font_sizes/font_size = 25
-text = "Change BG Image
-"
-
-[node name="Clear_BG_Image_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container"]
-layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "Clear  background image"
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
-theme_override_font_sizes/font_size = 25
-text = "Clear BG Image
-"
-
-[node name="Controls_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container"]
-layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "Clear  background image"
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
-theme_override_font_sizes/font_size = 25
-toggle_mode = true
-text = "Controls
-"
-
-[node name="HBox_BG_T_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-
-[node name="BG Transparency_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_BG_T_Container"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
-theme_override_font_sizes/font_size = 25
-text = "BG Image Transparency: 
-"
-
-[node name="BGTransparency_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_BG_T_Container"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Change transparency value for background image"
-min_value = 0.1
-max_value = 1.0
-step = 0.05
-value = 1.0
-
-[node name="Appearance_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-theme_override_fonts/font = SubResource("SystemFont_bt2da")
-theme_override_font_sizes/font_size = 35
-text = "Appearance"
-horizontal_alignment = 1
-
-[node name="HBox_Color_Picker_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-
-[node name="World_Color_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
-layout_mode = 2
-size_flags_horizontal = 10
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
-theme_override_font_sizes/font_size = 25
-text = "World Color:"
-
-[node name="World_ColorPicker" type="ColorPickerButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
-layout_mode = 2
-tooltip_text = "Change color"
-text = "       "
-metadata/_edit_use_anchors_ = true
-
-[node name="Surface_1_Color_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
-layout_mode = 2
-size_flags_horizontal = 10
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
-theme_override_font_sizes/font_size = 25
-text = "Color 1: 
-"
-
-[node name="Note_Surface_1_Color_Picker" type="ColorPickerButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
-layout_mode = 2
-tooltip_text = "Change color"
-text = "       "
-color = Color(1, 0, 0, 1)
-metadata/_edit_use_anchors_ = true
-
-[node name="Surface_2_Color_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
-layout_mode = 2
-size_flags_horizontal = 10
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
-theme_override_font_sizes/font_size = 25
-text = "Color 2: 
-"
-
-[node name="Note_Surface_2_Color_Picker" type="ColorPickerButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
-layout_mode = 2
-tooltip_text = "Change color"
-text = "       "
-color = Color(1, 0, 0, 1)
-metadata/_edit_use_anchors_ = true
-
-[node name="MIDI_Speed_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
-layout_mode = 2
-size_flags_horizontal = 10
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
-theme_override_font_sizes/font_size = 25
-text = "Speed: "
-
-[node name="MIDI_Speed_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Change speed  value for midi notes"
-min_value = 0.01
-max_value = 0.85
-step = 0.025
-value = 0.16
-
-[node name="Transforms_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-theme_override_fonts/font = SubResource("SystemFont_bt2da")
-theme_override_font_sizes/font_size = 35
-text = "Transforms"
-horizontal_alignment = 1
-
-[node name="HBox_Scale_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-
-[node name="Scale_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container"]
-layout_mode = 2
-size_flags_horizontal = 6
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
-theme_override_font_sizes/font_size = 25
-text = "Scale: "
-
-[node name="Scale_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Change scale
-"
-min_value = 0.1
-max_value = 1.0
-step = 0.05
-value = 1.0
-
-[node name="LoadFspy" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container"]
-layout_mode = 2
-tooltip_text = "Change background image"
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
-theme_override_font_sizes/font_size = 25
-toggle_mode = true
-text = "Fspy"
-
-[node name="HBox_Pos_Z_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-size_flags_vertical = 6
-alignment = 1
-
-[node name="Pos_Z_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Pos_Z_Container"]
-layout_mode = 2
-size_flags_horizontal = 6
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
-theme_override_font_sizes/font_size = 25
-text = "Position Z:  
-"
-
-[node name="Pos_Z_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Pos_Z_Container"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Change up and down position"
-min_value = -0.6
-max_value = 0.6
-step = 0.05
-value = 0.4
-
-[node name="HBox_Note_Rot_X_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-size_flags_vertical = 6
-alignment = 1
-
-[node name="Note_Rot_X_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Note_Rot_X_Container"]
-layout_mode = 2
-size_flags_horizontal = 6
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
-theme_override_font_sizes/font_size = 25
-text = "Note Rotation X:  
-"
-
-[node name="Note_Rot_X_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Note_Rot_X_Container"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Change up and down position"
-max_value = 90.0
-step = 10.0
-
-[node name="Connections_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-theme_override_fonts/font = SubResource("SystemFont_bt2da")
-theme_override_font_sizes/font_size = 35
-text = "Connections"
-horizontal_alignment = 1
-
-[node name="HBox_C_Type_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-alignment = 1
-
-[node name="C_Type_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container"]
-layout_mode = 2
-theme_override_fonts/font = SubResource("SystemFont_e8udk")
+theme_override_fonts/font = SubResource("SystemFont_c5rv2")
 theme_override_font_sizes/font_size = 25
 text = "Connection type: "
 vertical_alignment = 1
 
-[node name="OpenClose" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container"]
+[node name="WebSocket_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Connections/VBox_Connections/VBox_Content/HBox_C_Type_Container"]
 layout_mode = 2
-tooltip_text = "Change background image"
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
+tooltip_text = "Change connection type: USB Arduino Serial or ESP32 Network"
+theme_override_fonts/font = SubResource("SystemFont_0vdu2")
+theme_override_font_sizes/font_size = 25
+theme_override_icons/checked = ExtResource("9_l4aw8")
+theme_override_icons/unchecked = ExtResource("10_otdo1")
+
+[node name="OpenClose" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Connections/VBox_Connections/VBox_Content/HBox_C_Type_Container"]
+layout_mode = 2
+tooltip_text = "Open/Close  the connection"
+theme_override_fonts/font = SubResource("SystemFont_uekmy")
 theme_override_font_sizes/font_size = 25
 toggle_mode = true
 text = "Open
 "
 
-[node name="WebSocket_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container"]
+[node name="HBox_Serial_Ports_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Connections/VBox_Connections/VBox_Content"]
 layout_mode = 2
-tooltip_text = "Change connection type: USB Arduino Serial or ESP32 Network"
-theme_override_fonts/font = SubResource("SystemFont_xb6du")
-theme_override_font_sizes/font_size = 25
-theme_override_icons/checked = ExtResource("9_j1u87")
-theme_override_icons/unchecked = ExtResource("10_fn72u")
 
-[node name="HBox_Serial_Port_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-alignment = 1
-
-[node name="Serial_Port_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Serial_Port_Container"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = SubResource("SystemFont_e8udk")
-theme_override_font_sizes/font_size = 25
-text = "Serial Port: "
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="SerialList" type="OptionButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Serial_Port_Container"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = SubResource("SystemFont_wne3p")
-theme_override_font_sizes/font_size = 20
-text_overrun_behavior = 3
-clip_text = true
-
-[node name="LED_Strip_Props_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-theme_override_fonts/font = SubResource("SystemFont_bt2da")
-theme_override_font_sizes/font_size = 35
-text = "LED Strip Effects: "
-horizontal_alignment = 1
-
-[node name="HBox_L_Mode_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
-layout_mode = 2
-alignment = 1
-
-[node name="LED_Mode_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_L_Mode_Container"]
+[node name="SerialPort_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Connections/VBox_Connections/VBox_Content/HBox_Serial_Ports_Container"]
 layout_mode = 2
 size_flags_horizontal = 6
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_fonts/font = SubResource("SystemFont_t0701")
+theme_override_font_sizes/font_size = 25
+text = "Serial Port:"
+
+[node name="SerailPorts_List" type="OptionButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Connections/VBox_Connections/VBox_Content/HBox_Serial_Ports_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Select the serial port arduino device"
+
+[node name="MarginContainer_IO" type="MarginContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+
+[node name="VBox_IO" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO"]
+layout_mode = 2
+script = ExtResource("1_kapm8")
+header_title = "General IO:"
+
+[node name="HeaderButton" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "General IO:"
+
+[node name="VBox_Content" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO"]
+layout_mode = 2
+
+[node name="HBox_L_S_B_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO/VBox_Content"]
+layout_mode = 2
+
+[node name="LoadProfileButton" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO/VBox_Content/HBox_L_S_B_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Load led profile"
+theme_override_fonts/font = SubResource("SystemFont_7xyj5")
+theme_override_font_sizes/font_size = 25
+toggle_mode = true
+text = "Load"
+
+[node name="SaveProfileButton" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO/VBox_Content/HBox_L_S_B_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Save led profile"
+theme_override_fonts/font = SubResource("SystemFont_7xyj5")
+theme_override_font_sizes/font_size = 25
+toggle_mode = true
+text = "Save"
+
+[node name="HBox_B_C_B_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO/VBox_Content"]
+layout_mode = 2
+
+[node name="Change_BG_Image_Button" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO/VBox_Content/HBox_B_C_B_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Change background image"
+theme_override_fonts/font = SubResource("SystemFont_tdggg")
+theme_override_font_sizes/font_size = 25
+text = "Change BG Image
+"
+
+[node name="Clear_BG_Image_Button" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO/VBox_Content/HBox_B_C_B_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Clear  background image"
+theme_override_fonts/font = SubResource("SystemFont_tdggg")
+theme_override_font_sizes/font_size = 25
+text = "Clear BG Image
+"
+
+[node name="HBox_Fspy_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO/VBox_Content"]
+layout_mode = 2
+
+[node name="Load_Fspy_Button" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO/VBox_Content/HBox_Fspy_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Load Fspy project file"
+theme_override_fonts/font = SubResource("SystemFont_tdggg")
+theme_override_font_sizes/font_size = 25
+text = "Fspy"
+
+[node name="MarginContainer_Visiblity" type="MarginContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox_Visiblity" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity"]
+layout_mode = 2
+script = ExtResource("1_kapm8")
+header_title = "Visiblity:"
+
+[node name="HeaderButton" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Visiblity:"
+
+[node name="VBox_Content" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 2
+
+[node name="HBox_K_B_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content"]
+layout_mode = 2
+alignment = 1
+
+[node name="Virtual_Keyboard_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content/HBox_K_B_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+tooltip_text = "Toggle visibility of the virtual keyboard"
+theme_override_fonts/font = SubResource("SystemFont_vvilx")
+theme_override_font_sizes/font_size = 25
+theme_override_icons/checked = ExtResource("1_vvilx")
+theme_override_icons/unchecked = ExtResource("2_r11ad")
+button_pressed = true
+text = "Virtual Keyboard: "
+
+[node name="BG_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content/HBox_K_B_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+tooltip_text = "Toggle visibility of the background image"
+theme_override_fonts/font = SubResource("SystemFont_vvilx")
+theme_override_font_sizes/font_size = 25
+theme_override_icons/checked = ExtResource("3_tdggg")
+theme_override_icons/unchecked = ExtResource("4_7xyj5")
+button_pressed = true
+text = "Background: "
+
+[node name="HBox_N_P_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content"]
+layout_mode = 2
+alignment = 1
+
+[node name="MIDI_Notes_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content/HBox_N_P_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+tooltip_text = "Toggle visibility of the MIDI notes"
+theme_override_fonts/font = SubResource("SystemFont_r11ad")
+theme_override_font_sizes/font_size = 25
+theme_override_icons/checked = ExtResource("5_c5rv2")
+theme_override_icons/unchecked = ExtResource("6_uekmy")
+button_pressed = true
+text = "MIDI Notes: "
+
+[node name="Particles_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content/HBox_N_P_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+tooltip_text = "Toggle visibility of the particles"
+theme_override_fonts/font = SubResource("SystemFont_r11ad")
+theme_override_font_sizes/font_size = 25
+theme_override_icons/checked = ExtResource("7_0vdu2")
+theme_override_icons/unchecked = ExtResource("8_t0701")
+button_pressed = true
+text = "Particles: "
+
+[node name="HBox_BG_C_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content"]
+layout_mode = 2
+
+[node name="HBox_BG_T_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content"]
+layout_mode = 2
+
+[node name="BG_T_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content/HBox_BG_T_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_fonts/font = SubResource("SystemFont_t0701")
+theme_override_font_sizes/font_size = 25
+text = "BG Transparency"
+
+[node name="BG_Transparency_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content/HBox_BG_T_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Change the background image transparency level"
+min_value = 0.1
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="MarginContainer_Appearance" type="MarginContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox_Appearance" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance"]
+layout_mode = 2
+script = ExtResource("1_kapm8")
+header_title = "Appearance:"
+
+[node name="HeaderButton" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance/VBox_Appearance"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Appearance:"
+
+[node name="VBox_Content" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance/VBox_Appearance"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 2
+
+[node name="HBox_K_B_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance/VBox_Appearance/VBox_Content"]
+layout_mode = 2
+alignment = 1
+
+[node name="World_Color_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance/VBox_Appearance/VBox_Content/HBox_K_B_Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = SubResource("SystemFont_bt32o")
+theme_override_font_sizes/font_size = 25
+text = "World Color:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance/VBox_Appearance/VBox_Content/HBox_K_B_Container"]
+layout_mode = 2
+
+[node name="World_Color_Picker" type="ColorPickerButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance/VBox_Appearance/VBox_Content/HBox_K_B_Container/HBoxContainer"]
+layout_mode = 2
+text = "Col"
+
+[node name="Color_Surface1_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance/VBox_Appearance/VBox_Content/HBox_K_B_Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = SubResource("SystemFont_bt32o")
+theme_override_font_sizes/font_size = 25
+text = "Color 1:"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance/VBox_Appearance/VBox_Content/HBox_K_B_Container"]
+layout_mode = 2
+
+[node name="Surface1_Color_Picker" type="ColorPickerButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance/VBox_Appearance/VBox_Content/HBox_K_B_Container/HBoxContainer2"]
+layout_mode = 2
+text = "Col"
+color = Color(1, 0, 0, 1)
+
+[node name="Color_Surface2_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance/VBox_Appearance/VBox_Content/HBox_K_B_Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = SubResource("SystemFont_bt32o")
+theme_override_font_sizes/font_size = 25
+text = "Color 2:"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance/VBox_Appearance/VBox_Content/HBox_K_B_Container"]
+layout_mode = 2
+
+[node name="Surface2_Color_Picker" type="ColorPickerButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Appearance/VBox_Appearance/VBox_Content/HBox_K_B_Container/HBoxContainer3"]
+layout_mode = 2
+text = "Col"
+color = Color(1, 0, 0, 1)
+
+[node name="MarginContainer_Transforms" type="MarginContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox_Transforms" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms"]
+layout_mode = 2
+script = ExtResource("1_kapm8")
+header_title = "Transforms:"
+
+[node name="HeaderButton" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Transforms:"
+
+[node name="VBox_Content" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms"]
+layout_mode = 2
+
+[node name="HBox_Note_Speed_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms/VBox_Content"]
+layout_mode = 2
+
+[node name="MIDI_Note_speed_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms/VBox_Content/HBox_Note_Speed_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_fonts/font = SubResource("SystemFont_t0701")
+theme_override_font_sizes/font_size = 25
+text = "Note Speed:"
+
+[node name="MIDI_Speed_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms/VBox_Content/HBox_Note_Speed_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Change the speed value for midi notes"
+min_value = 0.01
+max_value = 0.85
+step = 0.025
+value = 0.16
+
+[node name="HBox_Note_Rot_X_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms/VBox_Content"]
+layout_mode = 2
+
+[node name="Canvas_Rot_X_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms/VBox_Content/HBox_Note_Rot_X_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_fonts/font = SubResource("SystemFont_t0701")
+theme_override_font_sizes/font_size = 25
+text = "Canvas Rotation X:"
+
+[node name="Canvas_Rot_X_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms/VBox_Content/HBox_Note_Rot_X_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Change the canvas x rotation"
+max_value = 90.0
+step = 10.0
+
+[node name="HBox_Pos_Z_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms/VBox_Content"]
+layout_mode = 2
+
+[node name="Pos_Z_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms/VBox_Content/HBox_Pos_Z_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_fonts/font = SubResource("SystemFont_t0701")
+theme_override_font_sizes/font_size = 25
+text = "Position Z:"
+
+[node name="Pos_Z_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms/VBox_Content/HBox_Pos_Z_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Change the overall z position"
+min_value = -0.6
+max_value = 0.6
+step = 0.05
+value = 0.4
+
+[node name="MarginContainer_LED_Controls" type="MarginContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox_Transforms" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls"]
+layout_mode = 2
+script = ExtResource("1_kapm8")
+header_title = "LED Strip Parameters"
+
+[node name="HeaderButton" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "LED Strip Parameters"
+
+[node name="VBox_Content" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms"]
+layout_mode = 2
+
+[node name="HBox_LED_Mode_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content"]
+layout_mode = 2
+
+[node name="LED_Modes_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Mode_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_fonts/font = SubResource("SystemFont_t0701")
 theme_override_font_sizes/font_size = 25
 text = "LED Mode: "
 
-[node name="ModesList" type="OptionButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_L_Mode_Container"]
-custom_minimum_size = Vector2(120, 0)
+[node name="ModesList" type="OptionButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Mode_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_fonts/font = SubResource("SystemFont_vhtrd")
-theme_override_font_sizes/font_size = 20
-text_overrun_behavior = 3
-clip_text = true
+tooltip_text = "Select LED mode"
 
-[node name="HBox_Animation_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+[node name="HBox_LED_Animations_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content"]
 layout_mode = 2
-alignment = 1
 
-[node name="Animation_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Animation_Container"]
+[node name="Animations_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Animations_Container"]
 layout_mode = 2
 size_flags_horizontal = 6
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_fonts/font = SubResource("SystemFont_t0701")
 theme_override_font_sizes/font_size = 25
-text = "Animation: "
+text = "Animations:"
 
-[node name="AnimationsList" type="OptionButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Animation_Container"]
-custom_minimum_size = Vector2(120, 0)
+[node name="AnimationsList" type="OptionButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Animations_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_fonts/font = SubResource("SystemFont_r5ntv")
-theme_override_font_sizes/font_size = 20
-text_overrun_behavior = 3
-clip_text = true
+tooltip_text = "Select LED animation"
 
-[node name="HBox_Brightness_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+[node name="HBox_LED_Brightness_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content"]
 layout_mode = 2
 
-[node name="Brightness_Slider_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Brightness_Container"]
+[node name="Brightness_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Brightness_Container"]
 layout_mode = 2
 size_flags_horizontal = 6
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_fonts/font = SubResource("SystemFont_t0701")
 theme_override_font_sizes/font_size = 25
-text = "Brightness: "
+text = "Brightness:"
 
-[node name="Brightness_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Brightness_Container"]
+[node name="Brightness_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Brightness_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -464,17 +549,17 @@ min_value = 1.0
 max_value = 255.0
 value = 255.0
 
-[node name="HBox_Fade_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+[node name="HBox_Fade_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content"]
 layout_mode = 2
 
-[node name="Fade_Slider_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Fade_Container"]
+[node name="Fade_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_Fade_Container"]
 layout_mode = 2
 size_flags_horizontal = 6
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_fonts/font = SubResource("SystemFont_t0701")
 theme_override_font_sizes/font_size = 25
 text = "Fade: "
 
-[node name="Fade_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Fade_Container"]
+[node name="Fade_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_Fade_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -483,36 +568,36 @@ tooltip_text = "Change LED strip fade value
 max_value = 255.0
 value = 255.0
 
-[node name="HBox_S_L_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+[node name="HBox_Splash Length_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content"]
 layout_mode = 2
 
-[node name="Splash_Length_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_S_L_Container"]
+[node name="SplashLength_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_Splash Length_Container"]
 layout_mode = 2
 size_flags_horizontal = 6
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_fonts/font = SubResource("SystemFont_t0701")
 theme_override_font_sizes/font_size = 25
 text = "Splash Length: "
 
-[node name="Splash_Length_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_S_L_Container"]
+[node name="Splash_Length_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_Splash Length_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-tooltip_text = "Change Splash length value"
+tooltip_text = "Change splash length value"
 min_value = 4.0
 max_value = 16.0
 value = 8.0
 
-[node name="HBox_BG_Brightness_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+[node name="HBox_BG Brightness_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content"]
 layout_mode = 2
 
-[node name="BG_Brightness_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_BG_Brightness_Container"]
+[node name="BG_Brightness_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_BG Brightness_Container"]
 layout_mode = 2
 size_flags_horizontal = 6
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_fonts/font = SubResource("SystemFont_t0701")
 theme_override_font_sizes/font_size = 25
 text = "BG Brightness: "
 
-[node name="BG_Brightness_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_BG_Brightness_Container"]
+[node name="BG_Brightness_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_BG Brightness_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -521,17 +606,17 @@ tooltip_text = "Change background light brightness *Use BG button to update the 
 min_value = 10.0
 value = 100.0
 
-[node name="HBox_Transposition_Container8" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+[node name="HBox_Transposition_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content"]
 layout_mode = 2
 
-[node name="Transposition_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Transposition_Container8"]
+[node name="Transposition_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_Transposition_Container"]
 layout_mode = 2
 size_flags_horizontal = 6
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_fonts/font = SubResource("SystemFont_t0701")
 theme_override_font_sizes/font_size = 25
 text = "Transposition: "
 
-[node name="Transposition_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Transposition_Container8"]
+[node name="Transposition_Slider" type="HSlider" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_Transposition_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -540,99 +625,175 @@ tooltip_text = "Change transposition value
 min_value = -6.0
 max_value = 6.0
 
-[node name="T_Octave_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Transposition_Container8"]
+[node name="HBox_Octave_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content"]
 layout_mode = 2
-tooltip_text = "Change background image"
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
+
+[node name="Octave_Button" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_Octave_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Change transpostion values to use octave range"
+theme_override_fonts/font = SubResource("SystemFont_tdggg")
 theme_override_font_sizes/font_size = 25
 toggle_mode = true
-text = "Open
-"
+text = "Octave"
 
-[node name="HBox_P_Size_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+[node name="HBox_P_Size_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content"]
 layout_mode = 2
 
-[node name="PianoSize_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container"]
+[node name="PianoSize_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_P_Size_Container"]
 layout_mode = 2
 size_flags_horizontal = 6
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_fonts/font = SubResource("SystemFont_l4aw8")
 theme_override_font_sizes/font_size = 25
 text = "Piano 88 Keys: "
 
-[node name="Dec_P_Size_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container"]
+[node name="Dec_P_Size_Button" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_P_Size_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Change background image"
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
+tooltip_text = "Reduce piano size value"
+theme_override_fonts/font = SubResource("SystemFont_l4aw8")
 theme_override_font_sizes/font_size = 25
 toggle_mode = true
 text = "<
 "
 
-[node name="Inc_P_Size_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container"]
+[node name="Inc_P_Size_Button" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_P_Size_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Change background image"
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
+tooltip_text = "Increase  piano size value"
+theme_override_fonts/font = SubResource("SystemFont_l4aw8")
 theme_override_font_sizes/font_size = 25
 toggle_mode = true
 text = ">
 "
 
-[node name="Update_BG_Button" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container"]
+[node name="Update_BG_Button" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_P_Size_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Change background image"
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
+tooltip_text = "Update the led background light state"
+theme_override_fonts/font = SubResource("SystemFont_l4aw8")
 theme_override_font_sizes/font_size = 25
 toggle_mode = true
 text = "BG"
 
-[node name="HBox_LED_Strip_Toggles_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+[node name="HBox_LED_Strip_Toggles_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content"]
 layout_mode = 2
 
-[node name="FixLED_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_LED_Strip_Toggles_Container"]
+[node name="FixLED_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Strip_Toggles_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Use custom offsets for LED strips with solder joints"
-theme_override_fonts/font = SubResource("SystemFont_qlnln")
+theme_override_fonts/font = SubResource("SystemFont_otdo1")
 theme_override_font_sizes/font_size = 25
 text = "Fix LED: "
 
-[node name="BGLED_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_LED_Strip_Toggles_Container"]
+[node name="BGLED_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Strip_Toggles_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Turn background light on/off"
-theme_override_fonts/font = SubResource("SystemFont_qlnln")
+theme_override_fonts/font = SubResource("SystemFont_otdo1")
 theme_override_font_sizes/font_size = 25
 text = "BG LED: "
 
-[node name="REVLED_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_LED_Strip_Toggles_Container"]
+[node name="REVLED_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Strip_Toggles_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Invert led strip direction *Useful when positioning start of led strip on the right instead on the left"
-theme_override_fonts/font = SubResource("SystemFont_qlnln")
+theme_override_fonts/font = SubResource("SystemFont_otdo1")
 theme_override_font_sizes/font_size = 25
 text = "Rev LED: "
 
-[node name="HBox_Profile_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/VBox_Root"]
+[node name="MarginContainer_Controls" type="MarginContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox_Controls" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls"]
+layout_mode = 2
+script = ExtResource("1_kapm8")
+header_title = "Controls:"
+is_open = false
+
+[node name="HeaderButton" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Controls:"
+
+[node name="VBox_Content" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 2
+
+[node name="VBox_Controls_Root" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls/VBox_Content"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HBox_Piano_K_Click_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls/VBox_Content/VBox_Controls_Root"]
 layout_mode = 2
 alignment = 1
 
-[node name="LoadProfileButton" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Profile_Container"]
+[node name="Piano_K_Click_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls/VBox_Content/VBox_Controls_Root/HBox_Piano_K_Click_Container"]
 layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "Change background image"
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
-theme_override_font_sizes/font_size = 25
-toggle_mode = true
-text = "Load"
+size_flags_horizontal = 4
+theme_override_fonts/font = SubResource("SystemFont_b7a1a")
+theme_override_font_sizes/font_size = 30
+text = "Piano Keyboard Click: "
+horizontal_alignment = 1
 
-[node name="SaveProfileButton" type="Button" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Profile_Container"]
+[node name="HBox_Inner_Piano_K_Click_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls/VBox_Content/VBox_Controls_Root/HBox_Piano_K_Click_Container"]
 layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "Change background image"
-theme_override_fonts/font = SubResource("SystemFont_32ltq")
-theme_override_font_sizes/font_size = 25
-toggle_mode = true
-text = "Save"
+
+[node name="M_L" type="TextureRect" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls/VBox_Content/VBox_Controls_Root/HBox_Piano_K_Click_Container/HBox_Inner_Piano_K_Click_Container"]
+layout_mode = 2
+texture = ExtResource("13_wfnh2")
+expand_mode = 3
+
+[node name="HBox_Piano_K_LED_O_Click_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls/VBox_Content/VBox_Controls_Root"]
+layout_mode = 2
+alignment = 1
+
+[node name="Piano_K_LED_O_Click_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls/VBox_Content/VBox_Controls_Root/HBox_Piano_K_LED_O_Click_Container"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = SubResource("SystemFont_b7a1a")
+theme_override_font_sizes/font_size = 30
+text = "Piano Key LED Offset Click: "
+horizontal_alignment = 1
+
+[node name="HBox_Inner_Piano_K_Click_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls/VBox_Content/VBox_Controls_Root/HBox_Piano_K_LED_O_Click_Container"]
+layout_mode = 2
+
+[node name="M_R" type="TextureRect" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls/VBox_Content/VBox_Controls_Root/HBox_Piano_K_LED_O_Click_Container/HBox_Inner_Piano_K_Click_Container"]
+layout_mode = 2
+texture = ExtResource("14_fdae3")
+expand_mode = 3
+
+[node name="FPS_Mode_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls/VBox_Content/VBox_Controls_Root"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_b7a1a")
+theme_override_font_sizes/font_size = 35
+text = "First Person Mode "
+horizontal_alignment = 1
+
+[node name="HBox_FPS_Toggle_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls/VBox_Content/VBox_Controls_Root"]
+layout_mode = 2
+alignment = 1
+
+[node name="FPS_Toggle_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls/VBox_Content/VBox_Controls_Root/HBox_FPS_Toggle_Container"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = SubResource("SystemFont_b7a1a")
+theme_override_font_sizes/font_size = 30
+text = "Toggle: "
+horizontal_alignment = 1
+
+[node name="HBox_Inner_FPS_Toggle_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls/VBox_Content/VBox_Controls_Root/HBox_FPS_Toggle_Container"]
+layout_mode = 2
+
+[node name="F" type="TextureRect" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Controls/VBox_Controls/VBox_Content/VBox_Controls_Root/HBox_FPS_Toggle_Container/HBox_Inner_FPS_Toggle_Container"]
+layout_mode = 2
+texture = ExtResource("15_ivl3i")
+expand_mode = 3

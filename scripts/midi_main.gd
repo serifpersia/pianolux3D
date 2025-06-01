@@ -7,26 +7,17 @@ extends Node3D
 @onready var midi_black_notes: Node3D = $MIDI_Black_Notes
 @onready var midi_bg: Node3D = $MIDI_BG
 
-@onready var position_z_slider: HSlider = $CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Pos_Z_Container/Pos_Z_Slider
+@onready var position_z_slider: HSlider = $CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms/VBox_Content/HBox_Pos_Z_Container/Pos_Z_Slider
 
-@onready var controls_menu: MarginContainer = $CanvasLayer/Controls_Menu
-
-@onready var controls_button: Button = $CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container/Controls_Button
-
-var max_z_offset: float
 var base_z_position: float
 
 var pause_menu: bool = false
-
-func _ready() -> void:
-	base_z_position = position.z
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_pause_menu"):
 		pause_menu = !pause_menu
 		canvas_layer.visible = pause_menu
-		controls_button.button_pressed = false
-		controls_menu.visible = false
+
 
 func _on_virtual_keyboard_toggle_toggled(toggled_on: bool) -> void:
 	midi_keyboard.visible = toggled_on
@@ -41,17 +32,6 @@ func _on_bg_toggle_toggled(toggled_on: bool) -> void:
 func _on_particles_toggle_toggled(toggled_on: bool) -> void:
 	Global.particles_state = toggled_on
 
-func _on_scale_slider_value_changed(value: float) -> void:
-	scale = Vector3(value, value, value)
-	
-	position_z_slider.set_value_no_signal(0)
-	var z_offset = (1.0 - value) * max_z_offset
-	base_z_position = z_offset
-	position.z = base_z_position
 
 func _on_pos_z_slider_value_changed(value: float) -> void:
 	position.z = base_z_position + value
-
-
-func _on_controls_button_toggled(toggled_on: bool) -> void:
-	controls_menu.visible = toggled_on

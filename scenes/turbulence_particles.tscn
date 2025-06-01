@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://c3tjgx3nnog3b"]
 
-[ext_resource type="Material" uid="uid://cqws2khr22k4k" path="res://materials/turbulence_particle_material.tres" id="1_aagfw"]
+[ext_resource type="Material" uid="uid://c3fdrglqiofdi" path="res://materials/turbulence_particle_material.tres" id="1_aagfw"]
 
 [sub_resource type="Curve" id="Curve_17v84"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]

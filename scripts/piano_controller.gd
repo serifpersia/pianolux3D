@@ -1,17 +1,16 @@
 extends Node
 
-@onready var serial_list: OptionButton = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Serial_Port_Container/SerialList"
-@onready var open_close: Button = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container/OpenClose"
-@onready var modes_list: OptionButton = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_L_Mode_Container/ModesList"
-@onready var animations_list: OptionButton = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Animation_Container/AnimationsList"
-@onready var brightness_slider: HSlider = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Brightness_Container/Brightness_Slider"
-@onready var fade_rate_slider: HSlider = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Fade_Container/Fade_Slider"
-@onready var splash_length_slider: HSlider = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_S_L_Container/Splash_Length_Slider"
-@onready var bg_brightness_slider: HSlider = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_Brightness_Container/BG_Brightness_Slider"
+@onready var serial_list: OptionButton = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Connections/VBox_Connections/VBox_Content/HBox_Serial_Ports_Container/SerailPorts_List"
+@onready var open_close: Button = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Connections/VBox_Connections/VBox_Content/HBox_C_Type_Container/OpenClose"
+@onready var modes_list: OptionButton = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Mode_Container/ModesList"
+@onready var animations_list: OptionButton = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Animations_Container/AnimationsList"
+@onready var brightness_slider: HSlider = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_LED_Brightness_Container/Brightness_Slider"
+@onready var fade_rate_slider: HSlider = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_Fade_Container/Fade_Slider"
+@onready var splash_length_slider: HSlider = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_Splash Length_Container/Splash_Length_Slider"
+@onready var bg_brightness_slider: HSlider = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_BG Brightness_Container/BG_Brightness_Slider"
 
-@onready var piano_size_label: Label = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_P_Size_Container/PianoSize_Label"
-@onready var web_socket_toggle: CheckButton = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_C_Type_Container/WebSocket_Toggle"
-
+@onready var piano_size_label: Label = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_LED_Controls/VBox_Transforms/VBox_Content/HBox_P_Size_Container/PianoSize_Label"
+@onready var web_socket_toggle: CheckButton = $"../CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Connections/VBox_Connections/VBox_Content/HBox_C_Type_Container/WebSocket_Toggle"
 @onready var load_profile_file_dialog: FileDialog = $"../CanvasLayer/LoadProfileFileDialog"
 @onready var save_profile_file_dialog: FileDialog = $"../CanvasLayer/SaveProfileFileDialog"
 
@@ -415,7 +414,7 @@ func update_serial():
 	port = serial_list.get_item_text(serial_list.selected)
 	serial.port = port
 
-func _on_serial_list_item_selected(index):
+func _on_serail_ports_list_item_selected(index: int) -> void:
 	port = serial_list.get_item_text(index)
 
 func _on_open_close_toggled(button_pressed):
@@ -708,8 +707,7 @@ func _on_transposition_slider_value_changed(value):
 	else:
 		transposition = -value
 
-func _on_t_octave_button_toggled(toggled_on: bool) -> void:
-	print('tasetase')
+func _on_octave_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		octaveShift_Toggle = true
 	else:
@@ -819,7 +817,7 @@ func update_note_surface_color(surface_idx: int, new_color: Color) -> void:
 					if material is ShaderMaterial:
 						material.set_shader_parameter("surface_color", new_color)
 
-func _on_note_surface_1_color_picker_color_changed(color: Color) -> void:
+func _on_surface_1_color_picker_color_changed(color: Color) -> void:
 	stop_all_notes_and_particles()
 
 	_update_keyboard_and_light_visuals(color)
@@ -828,7 +826,7 @@ func _on_note_surface_1_color_picker_color_changed(color: Color) -> void:
 	currentColor = color
 	send_command_update_color(color)
 
-func _on_note_surface_2_color_picker_color_changed(color: Color) -> void:
+func _on_surface_2_color_picker_color_changed(color: Color) -> void:
 	update_note_surface_color(1, color)
 
 func stop_all_notes_and_particles() -> void:
@@ -917,7 +915,7 @@ func _on_load_profile_file_dialog_file_selected(path: String) -> void:
 	else:
 		print("Error opening file for reading.")
 
-func _on_note_rot_x_slider_value_changed(value: float) -> void:
+func _on_canvas_rot_x_slider_value_changed(value: float) -> void:
 	midi_bg.rotation_degrees.x = value
 		
 	midi_white_notes.rotation_degrees.x = value
@@ -932,5 +930,5 @@ func _on_midi_speed_slider_value_changed(value: float) -> void:
 	midi_white_notes.speed = value
 	midi_black_notes.speed = value
 
-func _on_load_fspy_pressed() -> void:
+func _on_load_fspy_button_pressed() -> void:
 	Global.player.handle_fspy()
