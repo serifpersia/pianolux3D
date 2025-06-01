@@ -756,43 +756,83 @@ func send_midi_note_off(note: int):
 		udp_peer.put_packet(message)
 		#print("MIDI message sent:", message)
 		
-func _on_color_picker_color_changed(color: Color) -> void:
-	var dark_color = Color(color.r * 0.8, color.g * 0.8, color.b * 0.8, color.a)
 
+func _update_keyboard_and_light_visuals(primary_color: Color) -> void:
+	var dark_color = Color(primary_color.r * 0.8, primary_color.g * 0.8, primary_color.b * 0.8, primary_color.a)
+
+	if midi_keyboard:
+		midi_keyboard.white_note_mesh_color = primary_color
+		midi_keyboard.black_note_mesh_color = dark_color
+
+		if midi_keyboard.white_notes_on_mat:
+			midi_keyboard.white_notes_on_mat.emission = primary_color
+			midi_keyboard.white_notes_on_mat.albedo_color = primary_color
+		
+		if midi_keyboard.black_notes_on_mat:
+			midi_keyboard.black_notes_on_mat.emission = dark_color
+			midi_keyboard.black_notes_on_mat.albedo_color = dark_color
+
+		for key_name in midi_keyboard.light_nodes.keys():
+			var light_holder = midi_keyboard.light_nodes[key_name]
+			if light_holder:
+				var is_black = midi_keyboard.is_black_key(int(key_name))
+				var light: OmniLight3D = light_holder.get_child(0) if light_holder.get_child_count() > 0 else null
+				if light:
+					light.light_color = midi_keyboard.black_note_mesh_color if is_black else midi_keyboard.white_note_mesh_color
+
+func update_note_surface_color(surface_idx: int, new_color: Color) -> void:
+	if surface_idx < 0 or surface_idx >= 2: 
+		printerr("update_note_surface_color: Invalid surface index %d. Expected 0 or 1." % surface_idx)
+		return
+
+	if midi_white_notes:
+		if midi_white_notes.surface_colors.size() > surface_idx:
+			midi_white_notes.surface_colors[surface_idx] = new_color
+		else:
+			midi_white_notes.surface_colors.resize(surface_idx + 1) 
+			for i in range(midi_white_notes.surface_colors.size()):
+				if midi_white_notes.surface_colors[i] == null: # Fill potential gaps if resized from smaller
+					midi_white_notes.surface_colors[i] = Color.WHITE 
+			midi_white_notes.surface_colors[surface_idx] = new_color
+
+
+	if midi_black_notes:
+		if midi_black_notes.surface_colors.size() > surface_idx:
+			midi_black_notes.surface_colors[surface_idx] = new_color
+		else:
+			midi_black_notes.surface_colors.resize(surface_idx + 1)
+			for i in range(midi_black_notes.surface_colors.size()):
+				if midi_black_notes.surface_colors[i] == null: # Fill potential gaps
+					midi_black_notes.surface_colors[i] = Color.WHITE
+			midi_black_notes.surface_colors[surface_idx] = new_color
+
+	if midi_white_notes:
+		for note_array_w in midi_white_notes.active_notes.values():
+			for note_data in note_array_w: 
+				if note_data and note_data.shader_materials.size() > surface_idx:
+					var material = note_data.shader_materials[surface_idx]
+					if material is ShaderMaterial:
+						material.set_shader_parameter("surface_color", new_color)
+	
+	if midi_black_notes:
+		for note_array_b in midi_black_notes.active_notes.values():
+			for note_data in note_array_b:
+				if note_data and note_data.shader_materials.size() > surface_idx:
+					var material = note_data.shader_materials[surface_idx]
+					if material is ShaderMaterial:
+						material.set_shader_parameter("surface_color", new_color)
+
+func _on_note_surface_1_color_picker_color_changed(color: Color) -> void:
 	stop_all_notes_and_particles()
 
-	midi_keyboard.white_note_mesh_color = color
-	midi_keyboard.black_note_mesh_color = dark_color
-
-	midi_keyboard.white_notes_on_mat.emission = color
-	midi_keyboard.black_notes_on_mat.emission = dark_color
-	
-	midi_keyboard.white_notes_on_mat.albedo_color = color
-	midi_keyboard.black_notes_on_mat.albedo_color = dark_color
-
-	for key_name in midi_keyboard.light_nodes.keys():
-		var light_holder = midi_keyboard.light_nodes[key_name]
-		var is_black = midi_keyboard.is_black_key(int(key_name))
-
-		var light: OmniLight3D = light_holder.get_child(0)
-		if light:
-			light.light_color = midi_keyboard.black_note_mesh_color if is_black else midi_keyboard.white_note_mesh_color
-
-	for note_array_w in midi_white_notes.active_notes.values():
-		for note_data in note_array_w:
-			var shader_material = note_data.shader_material
-			if shader_material:
-				shader_material.set_shader_parameter("white_key_color", midi_keyboard.white_note_mesh_color)
-				shader_material.set_shader_parameter("black_key_color", midi_keyboard.black_note_mesh_color)
-	for note_array_b in midi_black_notes.active_notes.values():
-		for note_data in note_array_b:
-			var shader_material = note_data.shader_material
-			if shader_material:
-				shader_material.set_shader_parameter("white_key_color", midi_keyboard.white_note_mesh_color)
-				shader_material.set_shader_parameter("black_key_color", midi_keyboard.black_note_mesh_color)
+	_update_keyboard_and_light_visuals(color)
+	update_note_surface_color(0, color)
 
 	currentColor = color
 	send_command_update_color(color)
+
+func _on_note_surface_2_color_picker_color_changed(color: Color) -> void:
+	update_note_surface_color(1, color)
 
 func stop_all_notes_and_particles() -> void:
 	var all_active_note_pitches = []

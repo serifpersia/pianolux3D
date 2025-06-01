@@ -59,8 +59,8 @@ font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
 [node name="Menu" type="MarginContainer"]
-offset_right = 532.0
-offset_bottom = 1096.0
+offset_right = 703.0
+offset_bottom = 1104.0
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
@@ -214,15 +214,30 @@ tooltip_text = "Change color"
 text = "       "
 metadata/_edit_use_anchors_ = true
 
-[node name="Color_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
+[node name="Surface_1_Color_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_fonts/font = SubResource("SystemFont_32ltq")
 theme_override_font_sizes/font_size = 25
-text = "Color: 
+text = "Color 1: 
 "
 
-[node name="ColorPicker" type="ColorPickerButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
+[node name="Note_Surface_1_Color_Picker" type="ColorPickerButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
+layout_mode = 2
+tooltip_text = "Change color"
+text = "       "
+color = Color(1, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Surface_2_Color_Label" type="Label" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = SubResource("SystemFont_32ltq")
+theme_override_font_sizes/font_size = 25
+text = "Color 2: 
+"
+
+[node name="Note_Surface_2_Color_Picker" type="ColorPickerButton" parent="Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container"]
 layout_mode = 2
 tooltip_text = "Change color"
 text = "       "

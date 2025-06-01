@@ -1,0 +1,68 @@
+[gd_scene load_steps=12 format=3 uid="uid://xej6533bxm88"]
+
+[ext_resource type="Material" uid="uid://c1rq57qln30jh" path="res://materials/particles_mat.tres" id="1_quc5v"]
+
+[sub_resource type="Curve" id="Curve_khm15"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.139881, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_c7ggg"]
+curve = SubResource("Curve_khm15")
+
+[sub_resource type="Curve" id="Curve_j137c"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1e-05, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_8ahvh"]
+min_value = -2.0
+max_value = 2.0
+_data = [Vector2(0, -2), 0.0, 0.0, 0, 0, Vector2(0.116071, 2), 0.0, 0.0, 0, 0, Vector2(0.872024, 2), 0.0, 0.0, 0, 0, Vector2(1, -2), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_vrlo0"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_s6poc"]
+curve_x = SubResource("Curve_j137c")
+curve_y = SubResource("Curve_8ahvh")
+curve_z = SubResource("Curve_vrlo0")
+
+[sub_resource type="Curve" id="Curve_ttod1"]
+_data = [Vector2(0, 0.368267), 0.0, 0.0, 0, 0, Vector2(0.372024, 0.649883), -2.55738, -2.55738, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_acvxc"]
+curve = SubResource("Curve_ttod1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_oyigc"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.525
+emission_ring_inner_radius = 0.425
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 0.85
+initial_velocity_max = 8.0
+orbit_velocity_min = 0.25
+orbit_velocity_max = 0.35
+orbit_velocity_curve = SubResource("CurveXYZTexture_s6poc")
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_acvxc")
+alpha_curve = SubResource("CurveTexture_c7ggg")
+turbulence_noise_strength = 0.0
+turbulence_noise_scale = 0.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_4rp35"]
+material = ExtResource("1_quc5v")
+size = Vector2(0.25, 0.25)
+
+[node name="SpiralParticles" type="GPUParticles3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+amount = 64
+lifetime = 0.85
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_oyigc")
+draw_pass_1 = SubResource("QuadMesh_4rp35")

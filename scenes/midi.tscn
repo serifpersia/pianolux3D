@@ -88,7 +88,7 @@ shader = ExtResource("15_nsxvj")
 
 [node name="MIDI_Black_Notes" type="Node3D" parent="."]
 script = ExtResource("7_vkw6h")
-white_note_mesh_scene = ExtResource("12_75xkg")
+black_note_mesh_scene = ExtResource("12_75xkg")
 shader = ExtResource("15_nsxvj")
 
 [node name="MIDI_WhiteNoteParticles" type="Node3D" parent="."]
@@ -127,7 +127,8 @@ material_override = ExtResource("18_slsuw")
 [connection signal="toggled" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_C_Container/Controls_Button" to="." method="_on_controls_button_toggled"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_BG_T_Container/BGTransparency_Slider" to="MIDI_BG" method="_on_bg_transparency_slider_value_changed"]
 [connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/World_ColorPicker" to="PianoController" method="_on_world_color_picker_color_changed"]
-[connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/ColorPicker" to="PianoController" method="_on_color_picker_color_changed"]
+[connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/Note_Surface_1_Color_Picker" to="PianoController" method="_on_note_surface_1_color_picker_color_changed"]
+[connection signal="color_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/Note_Surface_2_Color_Picker" to="PianoController" method="_on_note_surface_2_color_picker_color_changed"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Color_Picker_Container/MIDI_Speed_Slider" to="PianoController" method="_on_midi_speed_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container/Scale_Slider" to="." method="_on_scale_slider_value_changed"]
 [connection signal="pressed" from="CanvasLayer/Menu/Panel_Container/Margin_Sub/VBox_Root/HBox_Scale_Container/LoadFspy" to="PianoController" method="_on_load_fspy_pressed"]
