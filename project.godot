@@ -18,7 +18,6 @@ boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
 config/icon="res://img/pianolux.png"
 config/windows_native_icon="res://img/icon.ico"
-run/vsync/vsync_mode=1
 
 [autoload]
 
