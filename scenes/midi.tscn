@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=25 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_abfrr"]
 [ext_resource type="Shader" path="res://shaders/pause_menu_blur.gdshader" id="2_vs6fs"]
@@ -6,8 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dk6exixm516jr" path="res://scenes/controls_menu.tscn" id="4_d1bqq"]
 [ext_resource type="Script" path="res://scripts/white_note.gd" id="6_a7al4"]
 [ext_resource type="Script" path="res://scripts/black_note.gd" id="7_vkw6h"]
-[ext_resource type="PackedScene" uid="uid://dtacf6kg6rwxg" path="res://scenes/spiral_particles.tscn" id="10_e3ntp"]
-[ext_resource type="Material" uid="uid://b5qeey5ruelw1" path="res://materials/particles_mat.tres" id="10_mr4d0"]
+[ext_resource type="PackedScene" uid="uid://c4uh5cgssrayp" path="res://models/black_note_cube_mesh.blend" id="12_75xkg"]
 [ext_resource type="Script" path="res://scripts/white_note_particle.gd" id="12_fm631"]
 [ext_resource type="Material" uid="uid://cu3axujswfcr1" path="res://materials/white_notes_on.tres" id="12_kiwm3"]
 [ext_resource type="Script" path="res://scripts/Virtual_Keyboard.gd" id="12_nnbsg"]
@@ -15,7 +14,9 @@
 [ext_resource type="Script" path="res://scripts/black_note_particle.gd" id="13_02uts"]
 [ext_resource type="Material" uid="uid://dgmbakuidedwe" path="res://materials/black_notes_on.tres" id="13_bekje"]
 [ext_resource type="PackedScene" uid="uid://d37ndahl7hm8g" path="res://models/white_note_cube_mesh.blend" id="14_44per"]
-[ext_resource type="PackedScene" uid="uid://cc4kfg8o58vw3" path="res://models/piano_bed2.blend" id="14_oselt"]
+[ext_resource type="Material" uid="uid://cqws2khr22k4k" path="res://materials/turbulence_particle_material.tres" id="14_jorto"]
+[ext_resource type="PackedScene" uid="uid://cc4kfg8o58vw3" path="res://models/piano_bed.blend" id="14_oselt"]
+[ext_resource type="PackedScene" uid="uid://c3tjgx3nnog3b" path="res://scenes/turbulence_particles.tscn" id="15_5cjbl"]
 [ext_resource type="Shader" path="res://shaders/rounded_note_mesh.gdshader" id="15_nsxvj"]
 [ext_resource type="Material" uid="uid://cj3ujrwh48kgc" path="res://materials/white_keys_mat.tres" id="16_0hsau"]
 [ext_resource type="PackedScene" uid="uid://hd5kkgj1fc5j" path="res://models/piano_bg.blend" id="16_t544d"]
@@ -82,25 +83,23 @@ script = ExtResource("13_0vjy6")
 
 [node name="MIDI_White_Notes" type="Node3D" parent="."]
 script = ExtResource("6_a7al4")
-white_notes_on_mat = ExtResource("12_kiwm3")
 white_note_mesh_scene = ExtResource("14_44per")
 shader = ExtResource("15_nsxvj")
 
 [node name="MIDI_Black_Notes" type="Node3D" parent="."]
 script = ExtResource("7_vkw6h")
-black_notes_on_mat = ExtResource("13_bekje")
-white_note_mesh_scene = ExtResource("14_44per")
+white_note_mesh_scene = ExtResource("12_75xkg")
 shader = ExtResource("15_nsxvj")
 
 [node name="MIDI_WhiteNoteParticles" type="Node3D" parent="."]
 script = ExtResource("12_fm631")
-note_on_white_key_particles_material = ExtResource("10_mr4d0")
-particle_scene = ExtResource("10_e3ntp")
+note_on_white_key_particles_material = ExtResource("14_jorto")
+particle_scene = ExtResource("15_5cjbl")
 
 [node name="MIDI_BlackNoteParticles" type="Node3D" parent="."]
 script = ExtResource("13_02uts")
-note_on_black_key_particles_material = ExtResource("10_mr4d0")
-particle_scene = ExtResource("10_e3ntp")
+note_on_black_key_particles_material = ExtResource("14_jorto")
+particle_scene = ExtResource("15_5cjbl")
 
 [node name="MIDI_Keyboard" parent="." instance=ExtResource("14_oselt")]
 script = ExtResource("12_nnbsg")

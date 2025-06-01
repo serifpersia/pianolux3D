@@ -2,7 +2,6 @@ extends Node3D
 
 @onready var midi_keyboard: Node3D = $"../MIDI_Keyboard"
 
-@export var white_notes_on_mat: StandardMaterial3D
 @export var white_note_mesh_scene: PackedScene
 @export var shader: Shader
 @export var speed: float = 0.35

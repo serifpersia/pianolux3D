@@ -18,11 +18,9 @@ func spawn_particle(pitch: int) -> void:
 	var particle_instance = particle_scene.instantiate()
 	var note_mesh := midi_keyboard.get_node(str(pitch))
 	
-	var key_scale = Vector3(0.035, 0.035, 0.035)
-	particle_instance.scale = key_scale
-	particle_instance.position = Vector3(note_mesh.position.x, note_mesh.position.y, note_mesh.position.z)
+	particle_instance.position = Vector3(note_mesh.position.x, note_mesh.position.y + 0.015, note_mesh.position.z)
 
-	note_on_white_key_particles_material.emission = midi_keyboard.white_note_mesh_color
+	note_on_white_key_particles_material.albedo_color = midi_keyboard.white_note_mesh_color
 
 	add_child(particle_instance)
 	particle_instance.emitting = true

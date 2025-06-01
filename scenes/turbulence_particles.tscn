@@ -1,0 +1,49 @@
+[gd_scene load_steps=8 format=3 uid="uid://c3tjgx3nnog3b"]
+
+[ext_resource type="Material" uid="uid://cqws2khr22k4k" path="res://materials/turbulence_particle_material.tres" id="1_aagfw"]
+
+[sub_resource type="Curve" id="Curve_17v84"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_x54tg"]
+curve = SubResource("Curve_17v84")
+
+[sub_resource type="Curve" id="Curve_vudjk"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_xt86l"]
+curve = SubResource("Curve_vudjk")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_257vs"]
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 0.15
+initial_velocity_max = 0.15
+radial_velocity_min = 0.0999776
+radial_velocity_max = 0.0999776
+gravity = Vector3(0, 0, 0)
+scale_min = 0.8
+scale_curve = SubResource("CurveTexture_xt86l")
+alpha_curve = SubResource("CurveTexture_x54tg")
+turbulence_enabled = true
+turbulence_noise_strength = 0.1
+turbulence_noise_speed = Vector3(1, 0, 0)
+turbulence_noise_speed_random = 0.0
+turbulence_influence_min = 0.005
+turbulence_influence_max = 0.008
+turbulence_initial_displacement_min = -0.299999
+turbulence_initial_displacement_max = 0.500001
+
+[sub_resource type="QuadMesh" id="QuadMesh_1uxue"]
+material = ExtResource("1_aagfw")
+size = Vector2(0.015, 0.015)
+
+[node name="Particles_Root" type="GPUParticles3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+amount = 512
+lifetime = 1.5
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_257vs")
+draw_pass_1 = SubResource("QuadMesh_1uxue")
