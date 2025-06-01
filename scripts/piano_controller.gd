@@ -761,9 +761,6 @@ func _update_keyboard_and_light_visuals(primary_color: Color) -> void:
 	var dark_color = Color(primary_color.r * 0.8, primary_color.g * 0.8, primary_color.b * 0.8, primary_color.a)
 
 	if midi_keyboard:
-		midi_keyboard.white_note_mesh_color = primary_color
-		midi_keyboard.black_note_mesh_color = dark_color
-
 		if midi_keyboard.white_notes_on_mat:
 			midi_keyboard.white_notes_on_mat.emission = primary_color
 			midi_keyboard.white_notes_on_mat.albedo_color = primary_color
@@ -778,7 +775,7 @@ func _update_keyboard_and_light_visuals(primary_color: Color) -> void:
 				var is_black = midi_keyboard.is_black_key(int(key_name))
 				var light: OmniLight3D = light_holder.get_child(0) if light_holder.get_child_count() > 0 else null
 				if light:
-					light.light_color = midi_keyboard.black_note_mesh_color if is_black else midi_keyboard.white_note_mesh_color
+					light.light_color = midi_keyboard.black_notes_on_mat.albedo_color if is_black else midi_keyboard.white_notes_on_mat.albedo_color
 
 func update_note_surface_color(surface_idx: int, new_color: Color) -> void:
 	if surface_idx < 0 or surface_idx >= 2: 
@@ -791,7 +788,7 @@ func update_note_surface_color(surface_idx: int, new_color: Color) -> void:
 		else:
 			midi_white_notes.surface_colors.resize(surface_idx + 1) 
 			for i in range(midi_white_notes.surface_colors.size()):
-				if midi_white_notes.surface_colors[i] == null: # Fill potential gaps if resized from smaller
+				if midi_white_notes.surface_colors[i] == null:
 					midi_white_notes.surface_colors[i] = Color.WHITE 
 			midi_white_notes.surface_colors[surface_idx] = new_color
 
@@ -802,7 +799,7 @@ func update_note_surface_color(surface_idx: int, new_color: Color) -> void:
 		else:
 			midi_black_notes.surface_colors.resize(surface_idx + 1)
 			for i in range(midi_black_notes.surface_colors.size()):
-				if midi_black_notes.surface_colors[i] == null: # Fill potential gaps
+				if midi_black_notes.surface_colors[i] == null:
 					midi_black_notes.surface_colors[i] = Color.WHITE
 			midi_black_notes.surface_colors[surface_idx] = new_color
 

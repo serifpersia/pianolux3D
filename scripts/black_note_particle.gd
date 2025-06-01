@@ -24,7 +24,7 @@ func spawn_particle(pitch: int) -> void:
 		if note_on_black_key_particles_material:
 			var new_material = note_on_black_key_particles_material.duplicate(true) as StandardMaterial3D
 			if new_material:
-				new_material.albedo_color = midi_keyboard.black_note_mesh_color
+				new_material.albedo_color = midi_keyboard.black_notes_on_mat.albedo_color
 				if particle_instance is GPUParticles3D:
 					particle_instance.material_override = new_material
 				elif particle_instance is CPUParticles3D:

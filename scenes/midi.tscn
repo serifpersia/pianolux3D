@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://demetbmmfc3sm"]
+[gd_scene load_steps=26 format=3 uid="uid://demetbmmfc3sm"]
 
 [ext_resource type="Script" path="res://scripts/midi_main.gd" id="1_abfrr"]
 [ext_resource type="Shader" path="res://shaders/pause_menu_blur.gdshader" id="2_vs6fs"]
@@ -23,6 +23,7 @@
 [ext_resource type="Material" uid="uid://cj7e5yhxqclf5" path="res://materials/black_keys_mat.tres" id="17_7crw1"]
 [ext_resource type="Script" path="res://scripts/bg.gd" id="17_8chow"]
 [ext_resource type="Material" uid="uid://c87r7xa3yubcp" path="res://materials/bg_mat.tres" id="18_slsuw"]
+[ext_resource type="Shader" path="res://shaders/material_swap.gdshader" id="21_2pg13"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ep5ho"]
 shader = ExtResource("2_vs6fs")
@@ -109,6 +110,7 @@ white_notes_on_mat = ExtResource("12_kiwm3")
 black_notes_on_mat = ExtResource("13_bekje")
 light_offset = Vector3(0, 0.015, 0.015)
 light_attenuation = 0.25
+shader = ExtResource("21_2pg13")
 
 [node name="MIDI_BG" parent="." instance=ExtResource("16_t544d")]
 script = ExtResource("17_8chow")
