@@ -15,7 +15,8 @@ Supports Windows, Linux and macOS x64 bit
 
 *Only network-connected (ESP32) devices can be used on macOS, as the serial library does not support macOS.
 
-![image](https://github.com/user-attachments/assets/6a532e6a-6f25-4389-82c1-04f52caa7a41)
+![image](https://github.com/user-attachments/assets/162c60b5-3d3b-4256-a331-1e37c5332c02)
+
 
 ## Demo
 <div align="center">
