@@ -12,7 +12,7 @@ func _ready():
 		push_error("CollapsibleTab is missing 'HeaderButton' or 'ContentPanel' child node!")
 		return
 
-	header_button.text = "▼ " + header_title
+	header_button.text = ("▼ " if is_open else "▶ ") + header_title
 	header_button.pressed.connect(_on_header_pressed)
 
 func _on_header_pressed():

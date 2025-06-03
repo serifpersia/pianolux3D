@@ -1,19 +1,19 @@
 [gd_scene load_steps=28 format=3 uid="uid://bvpdalfa4v51x"]
 
 [ext_resource type="Script" uid="uid://ofqlptrkuhag" path="res://scripts/ui_tab_colappse.gd" id="1_kapm8"]
-[ext_resource type="Texture2D" uid="uid://dvkvev083q7qt" path="res://img/v_keyboard_checked.png" id="1_vvilx"]
-[ext_resource type="Texture2D" uid="uid://bsu3ol74f7ixr" path="res://img/v_keyboard_unchecked.png" id="2_r11ad"]
-[ext_resource type="Texture2D" uid="uid://c4klp75k0rlqg" path="res://img/bg_checked.png" id="3_tdggg"]
-[ext_resource type="Texture2D" uid="uid://dsh3mxlbufiju" path="res://img/bg_unchecked.png" id="4_7xyj5"]
-[ext_resource type="Texture2D" uid="uid://v6w5sppvfhwa" path="res://img/midi_note_checked.png" id="5_c5rv2"]
-[ext_resource type="Texture2D" uid="uid://dockwnky0j771" path="res://img/midi_note_unchecked.png" id="6_uekmy"]
-[ext_resource type="Texture2D" uid="uid://b2ebw55rwqeq0" path="res://img/midi_particles_checked.png" id="7_0vdu2"]
-[ext_resource type="Texture2D" uid="uid://bt82dqalb6en2" path="res://img/midi_particles_unchecked.png" id="8_t0701"]
-[ext_resource type="Texture2D" uid="uid://dquhecks205vo" path="res://img/esp32_checked.png" id="9_l4aw8"]
-[ext_resource type="Texture2D" uid="uid://6rynodvhqltn" path="res://img/esp32_unchecked.png" id="10_otdo1"]
-[ext_resource type="Texture2D" uid="uid://ee2neefwwyyv" path="res://img/mouse_left.png" id="13_wfnh2"]
-[ext_resource type="Texture2D" uid="uid://bsa70n3vstess" path="res://img/mouse_right.png" id="14_fdae3"]
-[ext_resource type="Texture2D" uid="uid://b3xte8kh60ql1" path="res://img/keyboard_f.png" id="15_ivl3i"]
+[ext_resource type="Texture2D" uid="uid://ds6mhl38m8i7i" path="res://img/v_keyboard_checked.png" id="1_vvilx"]
+[ext_resource type="Texture2D" uid="uid://cvq5sexuhk0t5" path="res://img/v_keyboard_unchecked.png" id="2_r11ad"]
+[ext_resource type="Texture2D" uid="uid://d0dpuk4n62b4k" path="res://img/bg_checked.png" id="3_tdggg"]
+[ext_resource type="Texture2D" uid="uid://bgwbtxkyih2wf" path="res://img/bg_unchecked.png" id="4_7xyj5"]
+[ext_resource type="Texture2D" uid="uid://cf7aq4r8tlsbi" path="res://img/midi_note_checked.png" id="5_c5rv2"]
+[ext_resource type="Texture2D" uid="uid://bblfuxv6uo12d" path="res://img/midi_note_unchecked.png" id="6_uekmy"]
+[ext_resource type="Texture2D" uid="uid://bj1g8wgkurtoa" path="res://img/midi_particles_checked.png" id="7_0vdu2"]
+[ext_resource type="Texture2D" uid="uid://bayu8v86dwu0o" path="res://img/midi_particles_unchecked.png" id="8_t0701"]
+[ext_resource type="Texture2D" uid="uid://efjao7eji03e" path="res://img/esp32_checked.png" id="9_l4aw8"]
+[ext_resource type="Texture2D" uid="uid://b8wbil7tc2ts" path="res://img/esp32_unchecked.png" id="10_otdo1"]
+[ext_resource type="Texture2D" uid="uid://c0rf3kpxck0gj" path="res://img/mouse_left.png" id="13_wfnh2"]
+[ext_resource type="Texture2D" uid="uid://b0myspb8ncff8" path="res://img/mouse_right.png" id="14_fdae3"]
+[ext_resource type="Texture2D" uid="uid://msmoubw4qlu2" path="res://img/keyboard_f.png" id="15_ivl3i"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gviss"]
 bg_color = Color(0.129412, 0.145098, 0.196078, 1)
@@ -413,6 +413,7 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 script = ExtResource("1_kapm8")
 header_title = "Transforms:"
+is_open = false
 
 [node name="HeaderButton" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms"]
 layout_mode = 2
@@ -420,6 +421,7 @@ size_flags_horizontal = 3
 text = "Transforms:"
 
 [node name="VBox_Content" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms"]
+visible = false
 layout_mode = 2
 
 [node name="HBox_Note_Speed_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Transforms/VBox_Transforms/VBox_Content"]

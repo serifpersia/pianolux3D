@@ -24,9 +24,6 @@ func _input(event):
 			if event.is_released():
 				if not player.is_paused:
 					show_offset_dialog()
-					player.mouse_lock = true
-					player.set_mouse_lock_and_texture_visibility()
-
 func detect_key():
 	var raycast_result = shoot_ray()
 	if raycast_result and raycast_result.collider:

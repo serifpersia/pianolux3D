@@ -47,15 +47,9 @@ func _on_led_offset_dropdown_item_selected(index: int) -> void:
 
 func _on_close_dialog_button_pressed() -> void:
 	queue_free()
-	handle_player()
 
 func _on_reset_all_offsets_button_pressed() -> void:
 	for note in range(21, 109):
 		Global.offset_map[note] = 0
 	led_offset_dropdown.select(12)
 	queue_free()
-	handle_player()
-
-func handle_player():
-	if player.fps_mode: player.mouse_lock = false
-	player.set_mouse_lock_and_texture_visibility()
