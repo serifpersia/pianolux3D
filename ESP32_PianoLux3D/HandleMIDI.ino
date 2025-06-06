@@ -1,16 +1,13 @@
-// Updated function to handle MIDI NOTE_ON
 void handleNoteOn(byte* packetBuffer) {
-  byte note = packetBuffer[0];
+  byte note = packetBuffer[0] & 0x7F;
   byte velocity = packetBuffer[1];
   noteOn(note, velocity);
   if (numConnectedClients != 0)
   {
     sendESP32Log("UDP MIDI IN: LED ON INDEX: " + String(note) + " Velocity: " + String(velocity));
-
   }
 }
 
-// Updated function to handle MIDI NOTE_OFF
 void handleNoteOff(byte* packetBuffer) {
   byte note = packetBuffer[0];
   noteOff(note);
