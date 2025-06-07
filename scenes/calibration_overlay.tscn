@@ -1,0 +1,79 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6a2pv1wfjso0"]
+
+[ext_resource type="PackedScene" uid="uid://cxgvtyaps6c5e" path="res://scenes/draggable_point.tscn" id="1_ifobg"]
+[ext_resource type="Script" path="res://scripts/lines.gd" id="1_uqrw3"]
+
+[node name="CalibrationOverlay" type="CanvasLayer"]
+script = ExtResource("1_uqrw3")
+
+[node name="XLineA" type="Line2D" parent="."]
+width = 2.0
+default_color = Color(1, 0, 0, 1)
+
+[node name="XLineB" type="Line2D" parent="."]
+width = 2.0
+default_color = Color(1, 0, 0, 1)
+
+[node name="YLineA" type="Line2D" parent="."]
+width = 2.0
+default_color = Color(0, 1, 0.0156863, 1)
+
+[node name="YLineB" type="Line2D" parent="."]
+width = 2.0
+default_color = Color(0, 1, 0, 1)
+
+[node name="DragPoint1" parent="." instance=ExtResource("1_ifobg")]
+offset_left = 209.0
+offset_top = 461.0
+offset_right = 209.0
+offset_bottom = 461.0
+point_color = Color(1, 1, 1, 1)
+
+[node name="DragPoint2" parent="." instance=ExtResource("1_ifobg")]
+offset_left = 507.0
+offset_top = 494.0
+offset_right = 507.0
+offset_bottom = 494.0
+point_color = Color(1, 0, 0, 1)
+
+[node name="DragPoint3" parent="." instance=ExtResource("1_ifobg")]
+offset_left = 262.0
+offset_top = 610.0
+offset_right = 262.0
+offset_bottom = 610.0
+point_color = Color(1, 0, 0, 1)
+
+[node name="DragPoint4" parent="." instance=ExtResource("1_ifobg")]
+offset_left = 512.0
+offset_top = 647.0
+offset_right = 512.0
+offset_bottom = 647.0
+point_color = Color(1, 0, 0, 1)
+
+[node name="DragPoint5" parent="." instance=ExtResource("1_ifobg")]
+offset_left = 833.0
+offset_top = 393.0
+offset_right = 833.0
+offset_bottom = 393.0
+point_color = Color(0, 1, 0, 1)
+
+[node name="DragPoint6" parent="." instance=ExtResource("1_ifobg")]
+offset_left = 818.0
+offset_top = 126.0
+offset_right = 818.0
+offset_bottom = 126.0
+point_color = Color(0, 1, 0, 1)
+
+[node name="DragPoint7" parent="." instance=ExtResource("1_ifobg")]
+offset_left = 1035.0
+offset_top = 427.0
+offset_right = 1035.0
+offset_bottom = 427.0
+point_color = Color(0, 1, 0, 1)
+
+[node name="DragPoint8" parent="." instance=ExtResource("1_ifobg")]
+offset_left = 1109.0
+offset_top = 157.0
+offset_right = 1109.0
+offset_bottom = 157.0
+point_color = Color(0, 1, 0, 1)

@@ -8,7 +8,7 @@ var pitch: int
 
 var note_names = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
-@export var player : CharacterBody3D
+@onready var player : CharacterBody3D
 
 # Function to convert pitch to note name
 func pitch_to_note_name(note_pitch: int) -> String:

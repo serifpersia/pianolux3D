@@ -1,19 +1,128 @@
-[gd_scene load_steps=5 format=3 uid="uid://kf6tjtr76ly2"]
+[gd_scene load_steps=11 format=3 uid="uid://wcx5rx1sckqy"]
 
+[ext_resource type="Script" uid="uid://bex7xx43apy4y" path="res://scripts/capture.gd" id="1_3ib68"]
 [ext_resource type="PackedScene" uid="uid://demetbmmfc3sm" path="res://scenes/midi.tscn" id="1_gd7mg"]
 [ext_resource type="PackedScene" uid="uid://dqk2cq5exa12w" path="res://scenes/world_environment.tscn" id="1_o1vt1"]
-[ext_resource type="Script" uid="uid://c1ndvt128j2kg" path="res://scripts/discord-rpc.gd" id="2_l1ve6"]
+[ext_resource type="Script" uid="uid://cxwfr38p3sekr" path="res://scripts/discord-rpc.gd" id="2_l1ve6"]
+[ext_resource type="Shader" uid="uid://hhn5bk2ur2n4" path="res://shaders/camera_brg-to-rgb.gdshader" id="2_rxfrv"]
+[ext_resource type="PackedScene" uid="uid://b6a2pv1wfjso0" path="res://scenes/calibration_overlay.tscn" id="2_uxxgw"]
+[ext_resource type="Script" uid="uid://bhlhgt26i2fva" path="res://scripts/sub_viewport.gd" id="3_3sdg1"]
 [ext_resource type="PackedScene" uid="uid://bgfampmcitsjy" path="res://scenes/fps.tscn" id="4_jleid"]
+[ext_resource type="Script" uid="uid://dl2msbvo7mqfi" path="res://scripts/calibration-manager.gd" id="9_xm1m1"]
 
-[node name="main" type="Node3D"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_85g3d"]
+shader = ExtResource("2_rxfrv")
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3ib68")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_85g3d")
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+
+[node name="CalibrationOverlay" parent="." instance=ExtResource("2_uxxgw")]
+visible = false
+
+[node name="DragPoint1" parent="CalibrationOverlay" index="4"]
+offset_left = 328.0
+offset_top = 857.0
+offset_right = 328.0
+offset_bottom = 857.0
+
+[node name="DragPoint2" parent="CalibrationOverlay" index="5"]
+offset_left = 1615.0
+offset_top = 459.0
+offset_right = 1615.0
+offset_bottom = 459.0
+
+[node name="DragPoint3" parent="CalibrationOverlay" index="6"]
+offset_left = 366.0
+offset_top = 673.0
+offset_right = 366.0
+offset_bottom = 673.0
+
+[node name="DragPoint4" parent="CalibrationOverlay" index="7"]
+offset_left = 1492.0
+offset_top = 393.0
+offset_right = 1492.0
+offset_bottom = 393.0
+
+[node name="DragPoint5" parent="CalibrationOverlay" index="8"]
+offset_left = 429.0
+offset_top = 680.0
+offset_right = 429.0
+offset_bottom = 680.0
+
+[node name="DragPoint6" parent="CalibrationOverlay" index="9"]
+offset_left = 402.0
+offset_top = 829.0
+offset_right = 402.0
+offset_bottom = 829.0
+
+[node name="DragPoint7" parent="CalibrationOverlay" index="10"]
+offset_left = 1397.0
+offset_top = 431.0
+offset_right = 1397.0
+offset_bottom = 431.0
+
+[node name="DragPoint8" parent="CalibrationOverlay" index="11"]
+offset_left = 1495.0
+offset_top = 497.0
+offset_right = 1495.0
+offset_bottom = 497.0
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_3sdg1")
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="MIDI" parent="SubViewportContainer/SubViewport" instance=ExtResource("1_gd7mg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.158)
+
+[node name="FPS" parent="SubViewportContainer/SubViewport" instance=ExtResource("4_jleid")]
+transform = Transform3D(0.93294, 0.238082, -0.270073, 0, 0.750138, 0.661281, 0.360031, -0.616936, 0.699834, 0.3249, 0.467115, 0.356645)
+
+[node name="WorldEnvironment" parent="SubViewportContainer/SubViewport" instance=ExtResource("1_o1vt1")]
 
 [node name="discord-rpc" type="Node" parent="."]
 script = ExtResource("2_l1ve6")
 
-[node name="MIDI" parent="." instance=ExtResource("1_gd7mg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.158)
+[node name="calibration-manager" type="Node" parent="."]
+script = ExtResource("9_xm1m1")
+reference_3d_distance = 1.273
 
-[node name="FPS" parent="." instance=ExtResource("4_jleid")]
-transform = Transform3D(0.982929, 0.147224, -0.110347, 0, 0.599752, 0.800186, 0.183987, -0.786526, 0.589513, 0.454596, 0.465959, 0.209439)
+[connection signal="item_selected" from="SubViewportContainer/SubViewport/MIDI/CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content/HBox_Webcam_Container/WebcamList" to="." method="_on_webcam_list_item_selected"]
+[connection signal="toggled" from="SubViewportContainer/SubViewport/MIDI/CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content/HBox_Webcam_Container/StartStop" to="." method="_on_start_stop_toggled"]
+[connection signal="toggled" from="SubViewportContainer/SubViewport/MIDI/CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content/HBox_Webcam_Controls_Container/SubViewPortFlip_X_Toggle" to="." method="_on_sub_view_port_flip_x_toggle_toggled"]
+[connection signal="toggled" from="SubViewportContainer/SubViewport/MIDI/CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content/HBox_Webcam_Controls_Container/SubViewPortFlip_Y_Toggle" to="." method="_on_sub_view_port_flip_y_toggle_toggled"]
+[connection signal="toggled" from="SubViewportContainer/SubViewport/MIDI/CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content/HBox_Webcam_Controls_Container/SubViewPortBG_Transparency_Toggle" to="SubViewportContainer" method="_on_sub_view_port_bg_transparency_toggle_toggled"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/MIDI/CanvasLayer/Menu/Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content/HBox_Perspective_Container/PerspectiveButton" to="SubViewportContainer/SubViewport/MIDI/PianoController" method="_on_perspective_button_pressed"]
 
-[node name="WorldEnvironment" parent="." instance=ExtResource("1_o1vt1")]
+[editable path="CalibrationOverlay"]
+[editable path="SubViewportContainer/SubViewport/MIDI"]
+[editable path="SubViewportContainer/SubViewport/MIDI/CanvasLayer/Menu"]
+[editable path="SubViewportContainer/SubViewport/MIDI/MIDI_Keyboard"]
+[editable path="SubViewportContainer/SubViewport/MIDI/MIDI_BG"]
+[editable path="SubViewportContainer/SubViewport/FPS"]

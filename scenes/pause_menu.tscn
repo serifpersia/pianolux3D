@@ -1,19 +1,19 @@
 [gd_scene load_steps=28 format=3 uid="uid://bvpdalfa4v51x"]
 
-[ext_resource type="Script" uid="uid://ofqlptrkuhag" path="res://scripts/ui_tab_colappse.gd" id="1_kapm8"]
-[ext_resource type="Texture2D" uid="uid://ds6mhl38m8i7i" path="res://img/v_keyboard_checked.png" id="1_vvilx"]
-[ext_resource type="Texture2D" uid="uid://cvq5sexuhk0t5" path="res://img/v_keyboard_unchecked.png" id="2_r11ad"]
-[ext_resource type="Texture2D" uid="uid://d0dpuk4n62b4k" path="res://img/bg_checked.png" id="3_tdggg"]
-[ext_resource type="Texture2D" uid="uid://bgwbtxkyih2wf" path="res://img/bg_unchecked.png" id="4_7xyj5"]
-[ext_resource type="Texture2D" uid="uid://cf7aq4r8tlsbi" path="res://img/midi_note_checked.png" id="5_c5rv2"]
-[ext_resource type="Texture2D" uid="uid://bblfuxv6uo12d" path="res://img/midi_note_unchecked.png" id="6_uekmy"]
-[ext_resource type="Texture2D" uid="uid://bj1g8wgkurtoa" path="res://img/midi_particles_checked.png" id="7_0vdu2"]
-[ext_resource type="Texture2D" uid="uid://bayu8v86dwu0o" path="res://img/midi_particles_unchecked.png" id="8_t0701"]
-[ext_resource type="Texture2D" uid="uid://efjao7eji03e" path="res://img/esp32_checked.png" id="9_l4aw8"]
-[ext_resource type="Texture2D" uid="uid://b8wbil7tc2ts" path="res://img/esp32_unchecked.png" id="10_otdo1"]
-[ext_resource type="Texture2D" uid="uid://c0rf3kpxck0gj" path="res://img/mouse_left.png" id="13_wfnh2"]
-[ext_resource type="Texture2D" uid="uid://b0myspb8ncff8" path="res://img/mouse_right.png" id="14_fdae3"]
-[ext_resource type="Texture2D" uid="uid://msmoubw4qlu2" path="res://img/keyboard_f.png" id="15_ivl3i"]
+[ext_resource type="Script" uid="uid://bhe6ywp7boe8r" path="res://scripts/ui_tab_collapse.gd" id="1_kapm8"]
+[ext_resource type="Texture2D" uid="uid://dvkvev083q7qt" path="res://img/v_keyboard_checked.png" id="1_vvilx"]
+[ext_resource type="Texture2D" uid="uid://bsu3ol74f7ixr" path="res://img/v_keyboard_unchecked.png" id="2_r11ad"]
+[ext_resource type="Texture2D" uid="uid://c4klp75k0rlqg" path="res://img/bg_checked.png" id="3_tdggg"]
+[ext_resource type="Texture2D" uid="uid://dsh3mxlbufiju" path="res://img/bg_unchecked.png" id="4_7xyj5"]
+[ext_resource type="Texture2D" uid="uid://v6w5sppvfhwa" path="res://img/midi_note_checked.png" id="5_c5rv2"]
+[ext_resource type="Texture2D" uid="uid://dockwnky0j771" path="res://img/midi_note_unchecked.png" id="6_uekmy"]
+[ext_resource type="Texture2D" uid="uid://b2ebw55rwqeq0" path="res://img/midi_particles_checked.png" id="7_0vdu2"]
+[ext_resource type="Texture2D" uid="uid://bt82dqalb6en2" path="res://img/midi_particles_unchecked.png" id="8_t0701"]
+[ext_resource type="Texture2D" uid="uid://dquhecks205vo" path="res://img/esp32_checked.png" id="9_l4aw8"]
+[ext_resource type="Texture2D" uid="uid://6rynodvhqltn" path="res://img/esp32_unchecked.png" id="10_otdo1"]
+[ext_resource type="Texture2D" uid="uid://ee2neefwwyyv" path="res://img/mouse_left.png" id="13_wfnh2"]
+[ext_resource type="Texture2D" uid="uid://bsa70n3vstess" path="res://img/mouse_right.png" id="14_fdae3"]
+[ext_resource type="Texture2D" uid="uid://b3xte8kh60ql1" path="res://img/keyboard_f.png" id="15_ivl3i"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gviss"]
 bg_color = Color(0.129412, 0.145098, 0.196078, 1)
@@ -50,11 +50,11 @@ subpixel_positioning = 0
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
-[sub_resource type="SystemFont" id="SystemFont_vvilx"]
+[sub_resource type="SystemFont" id="SystemFont_r11ad"]
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
-[sub_resource type="SystemFont" id="SystemFont_r11ad"]
+[sub_resource type="SystemFont" id="SystemFont_vvilx"]
 font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
@@ -75,7 +75,7 @@ font_names = PackedStringArray("Impact")
 subpixel_positioning = 0
 
 [node name="Menu" type="MarginContainer"]
-offset_right = 567.0
+offset_right = 639.0
 offset_bottom = 1080.0
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 15
@@ -224,16 +224,92 @@ theme_override_font_sizes/font_size = 25
 text = "Clear BG Image
 "
 
-[node name="HBox_Fspy_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO/VBox_Content"]
+[node name="MarginContainer_WebcamControls" type="MarginContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+
+[node name="VBox_IO" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls"]
+layout_mode = 2
+script = ExtResource("1_kapm8")
+header_title = "Webcam:"
+
+[node name="HeaderButton" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Webcam:"
+
+[node name="VBox_Content" type="VBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO"]
 layout_mode = 2
 
-[node name="Load_Fspy_Button" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_IO/VBox_IO/VBox_Content/HBox_Fspy_Container"]
+[node name="HBox_Webcam_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content"]
+layout_mode = 2
+
+[node name="Webcam_Label" type="Label" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content/HBox_Webcam_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_fonts/font = SubResource("SystemFont_t0701")
+theme_override_font_sizes/font_size = 25
+text = "Webcam:"
+
+[node name="WebcamList" type="OptionButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content/HBox_Webcam_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Select LED mode"
+
+[node name="StartStop" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content/HBox_Webcam_Container"]
+layout_mode = 2
+tooltip_text = "Open/Close  the connection"
+theme_override_fonts/font = SubResource("SystemFont_uekmy")
+theme_override_font_sizes/font_size = 25
+toggle_mode = true
+text = "Start
+"
+
+[node name="HBox_Webcam_Controls_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content"]
+layout_mode = 2
+
+[node name="SubViewPortFlip_X_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content/HBox_Webcam_Controls_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+tooltip_text = "Flip webcam x"
+theme_override_fonts/font = SubResource("SystemFont_r11ad")
+theme_override_font_sizes/font_size = 25
+theme_override_icons/checked = ExtResource("5_c5rv2")
+theme_override_icons/unchecked = ExtResource("6_uekmy")
+text = "Flip X: "
+
+[node name="SubViewPortFlip_Y_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content/HBox_Webcam_Controls_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+tooltip_text = "Flip webcam y"
+theme_override_fonts/font = SubResource("SystemFont_r11ad")
+theme_override_font_sizes/font_size = 25
+theme_override_icons/checked = ExtResource("5_c5rv2")
+theme_override_icons/unchecked = ExtResource("6_uekmy")
+text = "Flip Y: "
+
+[node name="SubViewPortBG_Transparency_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content/HBox_Webcam_Controls_Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+tooltip_text = "Toggle the subviewport bg transparency"
+theme_override_fonts/font = SubResource("SystemFont_r11ad")
+theme_override_font_sizes/font_size = 25
+theme_override_icons/checked = ExtResource("5_c5rv2")
+theme_override_icons/unchecked = ExtResource("6_uekmy")
+text = "Sub BG: "
+
+[node name="HBox_Perspective_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content"]
+layout_mode = 2
+
+[node name="PerspectiveButton" type="Button" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_WebcamControls/VBox_IO/VBox_Content/HBox_Perspective_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Load Fspy project file"
 theme_override_fonts/font = SubResource("SystemFont_tdggg")
 theme_override_font_sizes/font_size = 25
-text = "Fspy"
+text = "Webcam Perspective"
 
 [node name="MarginContainer_Visiblity" type="MarginContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -270,7 +346,7 @@ theme_override_font_sizes/font_size = 25
 theme_override_icons/checked = ExtResource("1_vvilx")
 theme_override_icons/unchecked = ExtResource("2_r11ad")
 button_pressed = true
-text = "Virtual Keyboard: "
+text = "Keys: "
 
 [node name="BG_Toggle" type="CheckButton" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content/HBox_K_B_Container"]
 layout_mode = 2
@@ -308,9 +384,6 @@ theme_override_icons/checked = ExtResource("7_0vdu2")
 theme_override_icons/unchecked = ExtResource("8_t0701")
 button_pressed = true
 text = "Particles: "
-
-[node name="HBox_BG_C_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content"]
-layout_mode = 2
 
 [node name="HBox_BG_T_Container" type="HBoxContainer" parent="Panel_Container/Margin_Sub/ScrollContainer/VBoxContainer/MarginContainer_Visiblity/VBox_Visiblity/VBox_Content"]
 layout_mode = 2

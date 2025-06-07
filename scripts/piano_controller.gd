@@ -38,10 +38,10 @@ var serial = SerialPort.new()
 var port
 var baudrate = 115200
 
+const MIDI_NOTE_OFF_UDP: int = 0x80
+
 var udp_peer: PacketPeerUDP = PacketPeerUDP.new()
 var udp_port: int = 12345
-
-const MIDI_NOTE_OFF_UDP: int = 0x80
 
 const COMMAND_BYTE1 = 0
 const COMMAND_BYTE2 = 1
@@ -94,6 +94,20 @@ var lastNoteSelected: int = 108
 var fixLED_Toggle = false
 var bgLED_Toggle = false
 var octaveShift_Toggle = false
+
+@onready var calibration_manager = $"../../../../calibration-manager"
+@onready var calibration_overlay = $"../../../../CalibrationOverlay"
+
+@onready var drag_points := [
+	$"../../../../CalibrationOverlay/DragPoint1",
+	$"../../../../CalibrationOverlay/DragPoint2",
+	$"../../../../CalibrationOverlay/DragPoint3",
+	$"../../../../CalibrationOverlay/DragPoint4",
+	$"../../../../CalibrationOverlay/DragPoint5",
+	$"../../../../CalibrationOverlay/DragPoint6",
+	$"../../../../CalibrationOverlay/DragPoint7",
+	$"../../../../CalibrationOverlay/DragPoint8"
+]
 
 func send_command(command_byte: int, args: Array):
 	var message = PackedByteArray()
@@ -272,8 +286,7 @@ func _ready():
 	update_serial()
 
 	var broadcast_ip := get_broadcast_address()
-
-
+	
 	udp_peer.set_broadcast_enabled(true)
 	udp_peer.set_dest_address(broadcast_ip, udp_port)
 
@@ -285,7 +298,6 @@ func _ready():
 
 func get_broadcast_address() -> String:
 	for ip in IP.get_local_addresses():
-		# Skip IPv6 and loopbacks
 		if ip.is_valid_ip_address() and ip.contains(".") and not ip.begins_with("127."):
 			var parts := ip.split(".")
 			if parts.size() == 4:
@@ -295,7 +307,6 @@ func get_broadcast_address() -> String:
 				return broadcast_ip
 	push_error("No valid local IPv4 address found")
 	return "255.255.255.255"
-
 
 func _exit_tree():
 	if serial.is_open():
@@ -403,6 +414,19 @@ func _process(_delta):
 				print("WebSocket is open.")
 				has_printed_open_message = true
 			
+			#while web_socket.get_available_packet_count() > 0:
+
+			#	var packet = web_socket.get_packet()
+			#	var json_string = packet.get_string_from_utf8()
+				
+			#	var json = JSON.new()
+			#	var error = json.parse(json_string)
+			#	if error == OK:
+			#		var json_data = json.data
+			#		print("Parsed JSON Data: ", json_data)
+			#	else:
+			#		print("Failed to parse JSON: ", json.get_error_message(), " at line ", json.get_error_line())
+
 		elif state == WebSocketPeer.STATE_CLOSED:
 			var code = web_socket.get_close_code()
 			var reason = web_socket.get_close_reason()
@@ -754,6 +778,7 @@ func send_midi_note_off(note: int):
 		var note_byte = note - 1
 		var message := PackedByteArray([note_byte])
 		udp_peer.put_packet(message)
+		
 
 func _update_keyboard_and_light_visuals(primary_color: Color) -> void:
 	var dark_color = Color(primary_color.r * 0.8, primary_color.g * 0.8, primary_color.b * 0.8, primary_color.a)
@@ -861,7 +886,6 @@ func _on_save_profile_button_pressed() -> void:
 func _on_save_profile_file_dialog_file_selected(path: String) -> void:
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	if file:
-		
 		var position_z = midi.position.z
 		var scale = midi.scale
 
@@ -869,20 +893,28 @@ func _on_save_profile_file_dialog_file_selected(path: String) -> void:
 		for pitch in Global.offset_map.keys():
 			offsets[str(pitch)] = Global.offset_map[pitch]
 
+		# Collect drag point positions
+		var drag_point_positions = []
+		for point in drag_points:
+			drag_point_positions.append({
+				"x": point.position.x,
+				"y": point.position.y
+			})
+
 		var data = {
 			"position": {"z": position_z},
 			"scale": {"x": scale.x, "y": scale.y, "z": scale.z},
-			"offsets": offsets
+			"offsets": offsets,
+			"drag_points": drag_point_positions
 		}
 
 		var json_data = JSON.stringify(data)
-
 		file.store_string(json_data)
 		file.close()
-
 		print("Profile saved successfully to:", path)
 	else:
 		print("Error opening file for writing.")
+
 
 func _on_load_profile_button_pressed() -> void:
 	load_profile_file_dialog.visible = true
@@ -895,7 +927,7 @@ func _on_load_profile_file_dialog_file_selected(path: String) -> void:
 
 		var json_parser = JSON.new()
 		var error_code = json_parser.parse(file_content)
-		
+
 		if error_code == OK:
 			var data = json_parser.get_data()
 
@@ -909,11 +941,19 @@ func _on_load_profile_file_dialog_file_selected(path: String) -> void:
 				var offset = int(data["offsets"][pitch])
 				Global.offset_map[int(pitch)] = offset
 
+			if data.has("drag_points"):
+				for i in range(min(drag_points.size(), data["drag_points"].size())):
+					var pos_data = data["drag_points"][i]
+					drag_points[i].position = Vector2(pos_data["x"], pos_data["y"])
+					calibration_overlay.update_lines()
+					calibration_manager._on_calibrate_pressed()
+					
 			print("Profile loaded successfully from:", path)
 		else:
 			print("Error parsing JSON from file. Error: ", json_parser.error_message())
 	else:
 		print("Error opening file for reading.")
+
 
 func _on_canvas_rot_x_slider_value_changed(value: float) -> void:
 	midi_bg.rotation_degrees.x = value
@@ -930,5 +970,5 @@ func _on_midi_speed_slider_value_changed(value: float) -> void:
 	midi_white_notes.speed = value
 	midi_black_notes.speed = value
 
-func _on_load_fspy_button_pressed() -> void:
-	Global.player.handle_fspy()
+func _on_perspective_button_pressed():
+	Global.player.handle_perspective()

@@ -1,10 +1,10 @@
 extends Camera3D
 
-@onready var midi_keyboard: Node3D = $"../../MIDI/MIDI_Keyboard"
-@onready var midi_white_notes: Node3D = $"../../MIDI/MIDI_White_Notes"
-@onready var midi_black_notes: Node3D = $"../../MIDI/MIDI_Black_Notes"
-@onready var midi_white_note_particles: Node3D = $"../../MIDI/MIDI_WhiteNoteParticles"
-@onready var midi_black_note_particles: Node3D = $"../../MIDI/MIDI_BlackNoteParticles"
+@onready var midi_keyboard: Node3D
+@onready var midi_white_notes: Node3D
+@onready var midi_black_notes: Node3D
+@onready var midi_white_note_particles: Node3D
+@onready var midi_black_note_particles: Node3D
 
 const LEFT_OFFSET_DIALOG = preload("res://scenes/left_offset_dialog.tscn")
 
@@ -12,6 +12,24 @@ var current_pressed_keys: Array[int] = []
 
 @onready var player: CharacterBody3D = $".."
 
+func _ready():
+	var base_path = "Main/SubViewportContainer/SubViewport/MIDI/"
+	var paths = {
+		"midi_keyboard": "MIDI_Keyboard",
+		"midi_white_notes": "MIDI_White_Notes",
+		"midi_black_notes": "MIDI_Black_Notes",
+		"midi_white_note_particles": "MIDI_WhiteNoteParticles",
+		"midi_black_note_particles": "MIDI_BlackNoteParticles",
+	}
+
+	for key in paths.keys():
+		var full_path = base_path + paths[key]
+		if get_tree().get_root().has_node(full_path):
+			self.set(key, get_tree().get_root().get_node(full_path))
+		else:
+			return
+
+		
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
@@ -24,6 +42,7 @@ func _input(event):
 			if event.is_released():
 				if not player.is_paused:
 					show_offset_dialog()
+
 func detect_key():
 	var raycast_result = shoot_ray()
 	if raycast_result and raycast_result.collider:

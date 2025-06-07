@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bgfampmcitsjy"]
 
-[ext_resource type="Script" uid="uid://dbpqnx5bxyjbg" path="res://scripts/player.gd" id="1_4648u"]
-[ext_resource type="Script" uid="uid://bf0vg0kqu50aa" path="res://scripts/camera_3d.gd" id="2_h84py"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_4648u"]
+[ext_resource type="Script" path="res://scripts/camera_3d.gd" id="2_h84py"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_schgr"]
 
