@@ -2,48 +2,53 @@
 WiFiUDP udp;
 
 void taskWiFiCommunication(void* parameter) {
+  // Initialize UDP server here
   udp.begin(udpPort);
+  Serial.println("UDP server started, listening on port " + String(udpPort));
+
   while (true) {
+    // WiFi communication logic goes here
     receiveUDPData();
-    vTaskDelay(1 / portTICK_PERIOD_MS);
+    vTaskDelay(1 / portTICK_PERIOD_MS); // Slight delay to avoid CPU hogging
   }
 }
 
 void receiveUDPData() {
+  // Check if data is available to read
   int packetSize = udp.parsePacket();
-  if (packetSize > 0) {
-    byte packetBuffer[packetSize];
-    udp.read(packetBuffer, packetSize);
+  if (packetSize) {
+    byte packetBuffer[packetSize]; // Create a buffer to hold the packet data
+    udp.read(packetBuffer, packetSize); // Read the packet into packetBuffer
 
-    if (packetSize == 11 && strncmp((char*)packetBuffer, "ScanRequest", 11) == 0) {
-      sendESP32IPInfo();
-      return;
-    }
-
-    byte first_byte = packetBuffer[0];
-
-    // Check if the Note On flag (MSB) is set
-    if (first_byte & 0x80) {
-      if (packetSize == 2) {
-        // Pass the entire buffer to the handler
-        handleNoteOn(packetBuffer);
-      }
-    } else {
-      if (packetSize == 1) {
-        // Pass the entire buffer to the handler
+    // Process the packet based on its type
+    switch (packetSize) {
+      case 1:
         handleNoteOff(packetBuffer);
-      }
+        break;
+      case 2:
+        handleNoteOn(packetBuffer);
+        break;
+      case 11: // Special packet size for requesting ESP32 IP info
+        sendESP32IPInfo(); // Send ESP32 IP info in response
+        break;
+      default:
+        break;
     }
   }
 }
+
 void sendESP32IPInfo() {
   IPAddress localIP = WiFi.localIP();
-  byte responseBuffer[4];
+
+  byte responseBuffer[4]; // Assuming IPv4 address
   responseBuffer[0] = localIP[0];
   responseBuffer[1] = localIP[1];
   responseBuffer[2] = localIP[2];
   responseBuffer[3] = localIP[3];
+
   udp.beginPacket(udp.remoteIP(), udp.remotePort());
-  udp.write(responseBuffer, 4);
+  udp.write(responseBuffer, 4); // Assuming IPv4 address
   udp.endPacket();
+  //  WebSerial.println("Requested ESP32's IP sent");
+  //  WebSerial.println(localIP);
 }

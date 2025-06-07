@@ -41,8 +41,6 @@ var baudrate = 115200
 var udp_peer: PacketPeerUDP = PacketPeerUDP.new()
 var udp_port: int = 12345
 
-const MIDI_NOTE_OFF_UDP: int = 0x80
-
 const COMMAND_BYTE1 = 0
 const COMMAND_BYTE2 = 1
 
@@ -271,31 +269,14 @@ func _ready():
 
 	update_serial()
 
-	var broadcast_ip := get_broadcast_address()
-
-
 	udp_peer.set_broadcast_enabled(true)
-	udp_peer.set_dest_address(broadcast_ip, udp_port)
+	udp_peer.set_dest_address("255.255.255.255", udp_port)
 
 	_request_esp32_ip()
 
 	serial_thread.start(_thread_serial_handler)
 
 	OS.open_midi_inputs()
-
-func get_broadcast_address() -> String:
-	for ip in IP.get_local_addresses():
-		# Skip IPv6 and loopbacks
-		if ip.is_valid_ip_address() and ip.contains(".") and not ip.begins_with("127."):
-			var parts := ip.split(".")
-			if parts.size() == 4:
-				parts[3] = "255"
-				var broadcast_ip := String(".").join(parts)
-				print("Local IP: ", ip, ", Broadcast IP: ", broadcast_ip)
-				return broadcast_ip
-	push_error("No valid local IPv4 address found")
-	return "255.255.255.255"
-
 
 func _exit_tree():
 	if serial.is_open():
@@ -403,6 +384,19 @@ func _process(_delta):
 				print("WebSocket is open.")
 				has_printed_open_message = true
 			
+			#while web_socket.get_available_packet_count() > 0:
+
+			#	var packet = web_socket.get_packet()
+			#	var json_string = packet.get_string_from_utf8()
+				
+			#	var json = JSON.new()
+			#	var error = json.parse(json_string)
+			#	if error == OK:
+			#		var json_data = json.data
+			#		print("Parsed JSON Data: ", json_data)
+			#	else:
+			#		print("Failed to parse JSON: ", json.get_error_message(), " at line ", json.get_error_line())
+
 		elif state == WebSocketPeer.STATE_CLOSED:
 			var code = web_socket.get_close_code()
 			var reason = web_socket.get_close_reason()
@@ -744,16 +738,22 @@ func _parse_ip_from_packet(packet: PackedByteArray):
 		return ""
 
 func send_midi_note_on(note: int, velocity: int):
+
 	if MODE != 4:
-		var note_byte = 0x80 | (note - 1)
-		var message := PackedByteArray([note_byte, velocity])
+		var message: PackedByteArray = PackedByteArray()
+		message.append(note-1)
+		message.append(velocity)
+		
 		udp_peer.put_packet(message)
+		#print("MIDI message sent:", message)
 
 func send_midi_note_off(note: int):
 	if MODE != 4:
-		var note_byte = note - 1
-		var message := PackedByteArray([note_byte])
+		var message: PackedByteArray = PackedByteArray()
+		message.append(note-1)
 		udp_peer.put_packet(message)
+		#print("MIDI message sent:", message)
+		
 
 func _update_keyboard_and_light_visuals(primary_color: Color) -> void:
 	var dark_color = Color(primary_color.r * 0.8, primary_color.g * 0.8, primary_color.b * 0.8, primary_color.a)
