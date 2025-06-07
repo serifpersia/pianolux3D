@@ -163,7 +163,7 @@ You can auto install esp32 firmware by going to auto install [page](https://seri
 
 ## Loading the Godot Project
 
-*This branch works only with godot source compile from this (fork)[https://github.com/0xafbf/godot]. Until Godot main branch gets these changes merged and new stable version of Godot is out only then will this branch be merged to main
+*This branch works only with godot source compile from this [fork](https://github.com/0xafbf/godot). Until Godot main branch gets these changes merged and new stable version of Godot is out only then will this branch be merged to main
 To get started with the project, follow these steps:
 
 1. **Requirements**: Ensure you have Godot 4.2 installed. You will also need the following addons:
