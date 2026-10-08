@@ -6,7 +6,6 @@
 
   [![Release](https://img.shields.io/github/release/serifpersia/pianolux-godot.svg?style=flat-square)](https://github.com/serifpersia/pianolux-godot/releases)
   [![License](https://img.shields.io/github/license/serifpersia/pianolux-godot?color=blue&style=flat-square)](https://raw.githubusercontent.com/serifpersia/pianolux-godot/master/LICENSE)
-  [![Discord](https://img.shields.io/discord/1077195120950120458.svg?colorB=blue&label=discord&style=flat-square)](https://discord.gg/MAypyD7k86)
 </div>
 
 PianoLux3D is Godot Game Engine port of PianoLux Java and ESP32 versions of the application. Midi visualization and WS2812B led strip controller application.
@@ -24,12 +23,6 @@ Supports Windows, Linux and macOS x64 bit
 https://github.com/user-attachments/assets/9e596e92-1543-4f85-b95d-3ffbcf5fbea2
 
 </div>
-
-## Join Our Community
-
-Be part of the PianoLux Discord Server Community where you can connect with fellow users, ask questions, and share your experiences:
-
-[![Discord Server](https://discordapp.com/api/guilds/1077195120950120458/widget.png?style=banner2)](https://discord.gg/MAypyD7k86)
 
 ## LED Strip Compatibility
 
